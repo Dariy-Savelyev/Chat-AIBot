@@ -5,7 +5,7 @@ namespace ChatBot.Application.MapperProfiles;
 
 public class WeatherForecastProfile: Profile
 {
-    protected WeatherForecastProfile()
+    public WeatherForecastProfile()
     {
         CreateMap<WeatherForecast, WeatherForecast>()
             .ForMember(

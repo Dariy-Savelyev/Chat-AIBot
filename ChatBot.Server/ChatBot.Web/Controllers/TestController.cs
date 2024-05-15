@@ -6,12 +6,12 @@ namespace ChatBot.Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class WeatherForecastController(IWeatherForecastService weatherForecastService)
+public class TestController(ITestService service)
     : ControllerBase
 {
     [HttpGet]
-    public IEnumerable<WeatherForecast> Get()
+    public async Task<IEnumerable<TestModel>> Get()
     {
-        return weatherForecastService.GetForecast();
+        return await service.GetAllAsync();
     }    
 }

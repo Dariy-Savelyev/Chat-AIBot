@@ -1,6 +1,6 @@
 
-using ChatBot.Application.ServiceInterfaces;
-using ChatBot.Application.Services;
+using ChatBot.Application.MapperProfiles;
+using ChatBot.Container;
 
 namespace ChatBot.Web
 {
@@ -12,12 +12,15 @@ namespace ChatBot.Web
 
             builder.Services.AddControllers();
 
-            builder.Services.AddScoped<IWeatherForecastService, WeatherForecastService>();
+            builder.LoadDomainModule();
+            builder.LoadApplicationModule();
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+
+            app.Migrate();
 
             app.UseDefaultFiles();
             app.UseStaticFiles();

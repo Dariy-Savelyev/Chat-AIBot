@@ -5,7 +5,8 @@ namespace ChatBot.Domain;
 
 public sealed class ApplicationContext : DbContext
 {
-    public ApplicationContext(DbContextOptions<ApplicationContext> builder) : base(builder)
+    public ApplicationContext(DbContextOptions<ApplicationContext> builder)
+        : base(builder)
     {
     }
 
@@ -15,11 +16,5 @@ public sealed class ApplicationContext : DbContext
     {
         modelBuilder.Seed();
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationContext).Assembly);
-    }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        //optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable("ConnectionStrings:AppConnectionString"));
-        base.OnConfiguring(optionsBuilder);
     }
 }

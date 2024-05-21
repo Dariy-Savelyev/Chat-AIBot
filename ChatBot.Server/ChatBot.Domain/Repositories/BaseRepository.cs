@@ -49,6 +49,7 @@ public abstract class BaseRepository<TEntity, TKey> : IBaseRepository<TEntity, T
         {
             queryable = queryable.AsNoTracking();
         }
+
         return await queryable.Where(x => ids.Contains(x.Id)).ToListAsync().ConfigureAwait(false);
     }
 
@@ -59,6 +60,7 @@ public abstract class BaseRepository<TEntity, TKey> : IBaseRepository<TEntity, T
         {
             queryable = queryable.AsNoTracking();
         }
+
         return await queryable.ToListAsync().ConfigureAwait(false);
     }
 

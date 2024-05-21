@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace ChatBot.Domain.RepositoryInterfaces;
 
-public interface IBaseRepository<TEntity, in TKey>: IRepository
+public interface IBaseRepository<TEntity, in TKey> : IRepository
     where TEntity : IBaseDomainModel<TKey>
 {
     Task<TEntity?> GetByIdAsync(TKey id);

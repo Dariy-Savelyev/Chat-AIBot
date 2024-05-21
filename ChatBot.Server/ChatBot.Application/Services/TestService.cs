@@ -11,7 +11,6 @@ public class TestService(ITestRepository testRepository, IMapper mapper) : ITest
     {
         var tests = await testRepository.GetAllAsync();
         var result = mapper.Map<IEnumerable<TestModel>>(tests);
-
         return result;
     }
 }

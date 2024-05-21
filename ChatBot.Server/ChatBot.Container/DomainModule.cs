@@ -13,8 +13,7 @@ public static class DomainModule
         var configuration = builder.Configuration;
 
         builder.Services.AddDbContext<ApplicationContext>(options =>
-            options.UseSqlServer(configuration["ConnectionStrings_App"],
-                contextOptionsBuilder => contextOptionsBuilder.CommandTimeout(6000)));
+            options.UseSqlServer(configuration["ConnectionStrings_App"], contextOptionsBuilder => contextOptionsBuilder.CommandTimeout(6000)));
 
         builder.Services.Scan(scan => scan
             .FromAssemblyOf<IRepository>()

@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using ChatBot.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using ChatBot.Domain.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ChatBot.Domain.Configurations;
 

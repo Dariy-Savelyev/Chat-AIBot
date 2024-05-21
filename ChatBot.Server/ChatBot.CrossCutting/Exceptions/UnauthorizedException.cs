@@ -2,6 +2,7 @@
 
 namespace ChatBot.CrossCutting.Exceptions;
 
+[Serializable]
 public sealed class UnauthorizedException : BaseException
 {
     public UnauthorizedException(IReadOnlyCollection<ResponseError> errors)

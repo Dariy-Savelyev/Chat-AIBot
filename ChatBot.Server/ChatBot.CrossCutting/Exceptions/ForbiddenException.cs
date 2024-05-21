@@ -2,6 +2,7 @@
 
 namespace ChatBot.CrossCutting.Exceptions;
 
+[Serializable]
 public sealed class ForbiddenException : BaseException
 {
     public ForbiddenException(IReadOnlyCollection<ResponseError> errors)

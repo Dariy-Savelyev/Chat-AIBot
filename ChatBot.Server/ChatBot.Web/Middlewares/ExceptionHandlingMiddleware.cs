@@ -61,12 +61,14 @@ internal sealed class ExceptionHandlingMiddleware
 
         if (statusCode == StatusCodes.Status500InternalServerError)
         {
+#pragma warning disable CA2254 // Template should be a static expression
             _logger.LogCritical(exception, null);
         }
         else
         {
             _logger.LogDebug(exception, null);
         }
+#pragma warning restore CA2254 // Template should be a static expression
 
         httpContext.Response.ContentType = "application/json";
         httpContext.Response.StatusCode = statusCode;

@@ -14,7 +14,7 @@ public static class ApplicationModule
             .AddClasses(classes => classes.AssignableTo(typeof(IBaseService)))
             .AsImplementedInterfaces()
             .WithScopedLifetime());
-        
+
         builder.Services.AddAutoMapper(typeof(TestProfile));
 
         return builder;

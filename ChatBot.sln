@@ -7,13 +7,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBot.Web", "ChatBot.Serv
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "chatbot.client", "chatbot.client\chatbot.client.esproj", "{2F5D5978-8CDB-48D9-9B0E-C54A53680399}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.Application", "ChatBot.Server\ChatBot.Application\ChatBot.Application.csproj", "{36A170E4-12FD-4075-B4FA-5992B55AC175}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBot.Application", "ChatBot.Server\ChatBot.Application\ChatBot.Application.csproj", "{36A170E4-12FD-4075-B4FA-5992B55AC175}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.Domain", "ChatBot.Server\ChatBot.Domain\ChatBot.Domain.csproj", "{35A0995B-F408-4F27-8FB7-2EF538B52DFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBot.Domain", "ChatBot.Server\ChatBot.Domain\ChatBot.Domain.csproj", "{35A0995B-F408-4F27-8FB7-2EF538B52DFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.CrossCutting", "ChatBot.Server\ChatBot.CrossCutting\ChatBot.CrossCutting.csproj", "{4FCF7F43-87DA-41DF-83C9-EA88DF362EE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBot.CrossCutting", "ChatBot.Server\ChatBot.CrossCutting\ChatBot.CrossCutting.csproj", "{4FCF7F43-87DA-41DF-83C9-EA88DF362EE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.Container", "ChatBot.Server\ChatBot.Container\ChatBot.Container.csproj", "{532F4208-DED1-448B-889E-E5B8E94F6174}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBot.Container", "ChatBot.Server\ChatBot.Container\ChatBot.Container.csproj", "{532F4208-DED1-448B-889E-E5B8E94F6174}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9CD3A9ED-3A0E-41E4-85CA-33AA402D2EBE}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		StyleCop.ruleset = StyleCop.ruleset
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

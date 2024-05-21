@@ -370,6 +370,4 @@ LocalFileStorage
 
 # Sonar
 SonarLint.xml
-*.ruleset
 .sonarlint/
-

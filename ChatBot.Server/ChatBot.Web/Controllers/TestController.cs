@@ -1,4 +1,4 @@
-using ChatBot.Application.Models;
+﻿using ChatBot.Application.Models;
 using ChatBot.Application.ServiceInterfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,5 +13,5 @@ public class TestController(ITestService service)
     public async Task<IEnumerable<TestModel>> Get()
     {
         return await service.GetAllAsync();
-    }    
+    }
 }

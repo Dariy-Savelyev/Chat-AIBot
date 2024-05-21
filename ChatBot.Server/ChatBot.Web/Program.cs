@@ -1,5 +1,3 @@
-
-using ChatBot.Application.MapperProfiles;
 using ChatBot.Container;
 
 namespace ChatBot.Web

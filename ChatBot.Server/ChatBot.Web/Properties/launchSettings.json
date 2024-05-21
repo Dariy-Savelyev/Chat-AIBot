@@ -17,7 +17,8 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
+        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy",
+        "ConnectionStrings_App": "Data Source=.;Initial Catalog=ChatBot;Integrated Security=True;TrustServerCertificate=True"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7286;http://localhost:5225"

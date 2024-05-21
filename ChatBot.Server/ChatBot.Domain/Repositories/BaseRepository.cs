@@ -1,5 +1,6 @@
 ﻿using ChatBot.Domain.Models.Base;
 using ChatBot.Domain.RepositoryInterfaces;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -112,9 +113,10 @@ public abstract class BaseRepository<TEntity, TKey> : IBaseRepository<TEntity, T
 
     public async Task ResetIdAsync()
     {
-        //var sql = $"DBCC CHECKIDENT ('{TableOriginal.EntityType.GetTableName()}', RESEED, 1)"; //MS SQL
-        var sql = $"ALTER SEQUENCE public.\"{TableOriginal.EntityType.GetTableName()}_Id_seq\" RESTART WITH 1"; //PSQL
-        await Context.Database.ExecuteSqlRawAsync(sql);
+        var tableName = TableOriginal.EntityType.GetTableName();
+        var parameter = new SqlParameter("@tableName", tableName);
+        const string Sql = "ALTER SEQUENCE public.\"@tableName\" RESTART WITH 1";
+        await Context.Database.ExecuteSqlRawAsync(Sql, parameter);
         await Context.SaveChangesAsync().ConfigureAwait(false);
     }
 

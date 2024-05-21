@@ -99,7 +99,7 @@ build:
   # path to the directory where it is located (e.g. 'dotnet build ./src/ConsoleApp').
   # Only one project path can be passed as a parameter to 'dotnet build' command.
   script:
-    - 'dotnet build ChatBot.sln --no-restore'
+    - 'dotnet build ChatBot.sln -p:BuildInParallel=false -m:1 --no-restore'
 
 tests:
   stage: test
@@ -112,7 +112,7 @@ tests:
   # You may want to define separate testing jobs for different types of testing
   # (e.g. integration tests, unit tests etc).
   script:
-    - 'dotnet test ChatBot.sln --no-restore'
+    - 'dotnet test ChatBot.sln -p:BuildInParallel=false -m:1 --no-restore '
 
 sonarqube-check:
   image: mcr.microsoft.com/dotnet/sdk:latest
@@ -126,7 +126,7 @@ sonarqube-check:
   script: 
       - 'dotnet tool install --global dotnet-sonarscanner'
       - 'dotnet sonarscanner begin /k:"excernal_chat-with-ai-bot_AY-bPrZTbKUBYCTsi-TK" /d:sonar.login="${SONAR_TOKEN}" /d:"sonar.host.url=${SONAR_HOST_URL}"'
-      - 'dotnet build ChatBot.sln --no-restore'
+      - 'dotnet build ChatBot.sln -p:BuildInParallel=false -m:1 --no-restore'
       - 'dotnet sonarscanner end /d:sonar.login="${SONAR_TOKEN}"'
       - |
         $reportTaskContent = Get-Content "${CI_PROJECT_DIR}/.sonarqube/out/.sonar/report-task.txt"
@@ -150,7 +150,7 @@ sonarqube-check:
           Write-Host "Quality Gate passed."
         }
         } else {
-        Write-Host "CE Task did not complete successfully."
+        Write-Host "CE Task did not complete successfully!"
         exit 1
         }
   allow_failure: false

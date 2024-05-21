@@ -2,6 +2,7 @@
 
 namespace ChatBot.CrossCutting.Exceptions;
 
+[Serializable]
 public sealed class ArgumentValidationException : BaseException
 {
     public ArgumentValidationException(IReadOnlyCollection<ResponseError> errors)

@@ -15,29 +15,34 @@ public class UserService(IUserRepository userRepository, IMapper mapper) : IUser
         {
             return false;
         }
+
         if (string.IsNullOrEmpty(model.Email))
         {
             return false;
         }
+
         if (!model.Password.Equals(model.ConfirmPassword))
         {
             return false;
         }
+
         if (!EmailValidator.IsValidEmail(model.Email))
         {
             return false;
         }
+
         if (!await userRepository.IsUniqueEmailAsync(model.Email))
         {
             return false;
         }
+
         if (!await userRepository.IsUniqueNameAsync(model.UserName))
         {
             return false;
         }
 
         model.Password = PasswordHasher.HashPassword(model.Password);
-       
+
         var user = mapper.Map<User>(model);
 
         await userRepository.AddAsync(user);

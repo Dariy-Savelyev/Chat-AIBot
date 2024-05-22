@@ -1,5 +1,7 @@
 ﻿using ChatBot.Application.MapperProfiles;
 using ChatBot.Application.ServiceInterfaces;
+using ChatBot.Application.Validators;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,6 +18,8 @@ public static class ApplicationModule
             .WithScopedLifetime());
 
         builder.Services.AddAutoMapper(typeof(TestProfile));
+
+        builder.Services.AddValidatorsFromAssemblyContaining<TestValidator>();
 
         return builder;
     }

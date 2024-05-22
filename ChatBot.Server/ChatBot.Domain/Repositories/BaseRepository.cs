@@ -70,6 +70,17 @@ public abstract class BaseRepository<TEntity, TKey> : IBaseRepository<TEntity, T
         return await Table.Include(include).ToListAsync().ConfigureAwait(false);
     }
 
+    public IEnumerable<TEntity> GetAll(bool asNoTracking = false)
+    {
+        var queryable = Table;
+        if (asNoTracking)
+        {
+            queryable = queryable.AsNoTracking();
+        }
+
+        return queryable.ToList();
+    }
+
     public virtual async Task<List<TEntity>> GetAllWithExpressionAsync(Expression<Func<TEntity, bool>> @where, bool asNoTracking = false)
     {
         var queryable = Table.Where(where);

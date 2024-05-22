@@ -2,6 +2,7 @@
 
 namespace ChatBot.CrossCutting.Exceptions;
 
+[Serializable]
 public sealed class GoneException : BaseException
 {
     public GoneException(IReadOnlyCollection<ResponseError> errors)

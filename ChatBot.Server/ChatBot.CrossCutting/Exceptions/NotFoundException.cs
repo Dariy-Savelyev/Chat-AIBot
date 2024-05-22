@@ -2,6 +2,7 @@
 
 namespace ChatBot.CrossCutting.Exceptions;
 
+[Serializable]
 public sealed class NotFoundException : BaseException
 {
     public NotFoundException(IReadOnlyCollection<ResponseError> errors)

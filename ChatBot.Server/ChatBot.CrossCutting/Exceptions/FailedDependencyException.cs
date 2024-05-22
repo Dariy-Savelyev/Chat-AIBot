@@ -2,6 +2,7 @@
 
 namespace ChatBot.CrossCutting.Exceptions;
 
+[Serializable]
 public sealed class FailedDependencyException : BaseException
 {
     public FailedDependencyException(IReadOnlyCollection<ResponseError> errors)

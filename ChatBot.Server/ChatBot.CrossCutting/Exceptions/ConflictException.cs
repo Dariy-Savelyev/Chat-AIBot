@@ -2,6 +2,7 @@
 
 namespace ChatBot.CrossCutting.Exceptions;
 
+[Serializable]
 public sealed class ConflictException : BaseException
 {
     public ConflictException(IReadOnlyCollection<ResponseError> errors)

@@ -1,6 +1,3 @@
 ﻿namespace ChatBot.Application.ServiceInterfaces;
 
-public interface IBaseService
-{
-    
-}
+public interface IBaseService;

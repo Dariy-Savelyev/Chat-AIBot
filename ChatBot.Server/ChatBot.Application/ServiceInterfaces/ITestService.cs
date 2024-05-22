@@ -1,5 +1,4 @@
-﻿
-using ChatBot.Application.Models;
+﻿using ChatBot.Application.Models;
 
 namespace ChatBot.Application.ServiceInterfaces;
 

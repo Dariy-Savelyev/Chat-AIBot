@@ -20,6 +20,8 @@ namespace ChatBot.Web
 
             app.Migrate();
 
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
+
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
@@ -34,7 +36,7 @@ namespace ChatBot.Web
             app.UseAuthorization();
 
             app.MapControllers();
-            
+
             app.MapFallbackToFile("/index.html");
 
             app.Run();

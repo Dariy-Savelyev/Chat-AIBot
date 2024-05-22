@@ -41,8 +41,6 @@ public class UserService(IUserRepository userRepository, IMapper mapper) : IUser
             return false;
         }
 
-        model.Password = PasswordHasher.HashPassword(model.Password);
-
         var user = mapper.Map<User>(model);
 
         await userRepository.AddAsync(user);

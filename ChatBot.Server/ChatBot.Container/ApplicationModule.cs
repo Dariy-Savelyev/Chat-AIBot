@@ -16,7 +16,6 @@ public static class ApplicationModule
             .WithScopedLifetime());
 
         builder.Services.AddAutoMapper(typeof(TestProfile));
-        builder.Services.AddAutoMapper(typeof(UserProfile));
 
         return builder;
     }

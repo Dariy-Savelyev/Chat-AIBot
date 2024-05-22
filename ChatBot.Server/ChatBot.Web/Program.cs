@@ -1,4 +1,5 @@
-using ChatBot.Container;
+﻿using ChatBot.Container;
+using ChatBot.Web.Middlewares;
 
 namespace ChatBot.Web
 {

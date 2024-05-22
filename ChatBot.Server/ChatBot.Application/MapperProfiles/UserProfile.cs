@@ -9,6 +9,9 @@ public class UserProfile : Profile
     public UserProfile()
     {
         CreateMap<RegistrationModel, User>()
+            .ForMember(
+                dest => dest.PasswordHash,
+                opt => opt.MapFrom(s => s.Password))
             ;
     }
 }

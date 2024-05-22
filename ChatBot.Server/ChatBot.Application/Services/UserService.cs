@@ -36,8 +36,7 @@ public class UserService(IUserRepository userRepository, IMapper mapper) : IUser
             return false;
         }
 
-        var hashedPassword = PasswordHasher.HashPassword(model.Password);
-        model.PasswordHash = hashedPassword;
+        model.Password = PasswordHasher.HashPassword(model.Password);
        
         var user = mapper.Map<User>(model);
 

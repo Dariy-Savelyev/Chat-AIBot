@@ -1,5 +1,6 @@
 ﻿using ChatBot.Container;
 using ChatBot.Web.Middlewares;
+using FluentValidation.AspNetCore;
 
 namespace ChatBot.Web
 {
@@ -10,6 +11,7 @@ namespace ChatBot.Web
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllers();
+            builder.Services.AddFluentValidationAutoValidation();
 
             builder.LoadDomainModule();
             builder.LoadApplicationModule();

@@ -9,9 +9,9 @@ namespace ChatBot.Web.Controllers;
 public class TestController(ITestService service)
     : ControllerBase
 {
-    [HttpGet]
-    public async Task<IEnumerable<TestModel>> Get()
+    [HttpPost]
+    public async Task<IEnumerable<TestModel>> Get(TestModel model)
     {
-        return await service.GetAllAsync();
+        return await service.GetAllAsync(model);
     }
 }

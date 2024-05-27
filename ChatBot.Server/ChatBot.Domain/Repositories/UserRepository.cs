@@ -6,13 +6,13 @@ namespace ChatBot.Domain.Repositories;
 
 public class UserRepository(ApplicationContext context) : BaseRepository<User, int>(context), IUserRepository
 {
-    public Task<bool> IsUniqueEmailAsync(string email)
+    public bool IsUniqueEmail(string email)
     {
-        return Table.AllAsync(x => x.Email != email);
+        return Table.All(x => x.Email != email);
     }
 
-    public Task<bool> IsUniqueNameAsync(string userName)
+    public bool IsUniqueName(string userName)
     {
-        return Table.AllAsync(y => y.UserName != userName);
+        return Table.All(y => y.UserName != userName);
     }
 }

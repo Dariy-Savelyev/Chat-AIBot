@@ -7,7 +7,7 @@ using ChatBot.Domain.RepositoryInterfaces;
 
 namespace ChatBot.Application.Services;
 
-public class UserService(IUserRepository userRepository, IMapper mapper) : IUserService
+public class AccountService(IUserRepository userRepository, IMapper mapper) : IAccountService
 {
     public async Task<bool> RegistrationAsync(RegistrationModel model)
     {
@@ -16,5 +16,19 @@ public class UserService(IUserRepository userRepository, IMapper mapper) : IUser
         await userRepository.AddAsync(user);
 
         return true;
+    }
+
+    public async Task<bool> LoginAsync(LoginModel model)
+    {
+        var user = await userRepository.GetUserByEmailAsync(model.Email);
+
+        if (user == null)
+        {
+            return false;
+        }
+
+        var passwordHash = PasswordHasher.HashPassword(model.Password);
+
+        return passwordHash == user.PasswordHash;
     }
 }

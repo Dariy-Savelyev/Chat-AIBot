@@ -15,4 +15,9 @@ public class UserRepository(ApplicationContext context) : BaseRepository<User, i
     {
         return Table.All(y => y.UserName != userName);
     }
+
+    public Task<User?> GetUserByEmailAsync(string email)
+    {
+        return Table.SingleOrDefaultAsync(x => x.Email == email);
+    }
 }

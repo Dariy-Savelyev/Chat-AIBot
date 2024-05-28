@@ -1,6 +1,5 @@
 ﻿using ChatBot.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Numerics;
 
 namespace ChatBot.Domain
 {

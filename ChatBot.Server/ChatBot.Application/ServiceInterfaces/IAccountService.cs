@@ -2,7 +2,8 @@
 
 namespace ChatBot.Application.ServiceInterfaces;
 
-public interface IUserService : IBaseService
+public interface IAccountService : IBaseService
 {
     Task<bool> RegistrationAsync(RegistrationModel model);
+    Task<bool> LoginAsync(LoginModel model);
 }

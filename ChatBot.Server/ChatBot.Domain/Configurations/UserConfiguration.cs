@@ -25,10 +25,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .UsingEntity<Dictionary<string, object>>(
                 "UserChat",
                 j => j.HasOne<Chat>().WithMany().HasForeignKey("ChatId"),
-                j => j.HasOne<User>().WithMany().HasForeignKey("UserId"),
+                j => j.HasOne<User>().WithMany().HasForeignKey("CreaterId"),
                 j =>
                 {
-                    j.HasKey("ChatId", "UserId");
+                    j.HasKey("ChatId", "CreaterId");
                 });
     }
 }

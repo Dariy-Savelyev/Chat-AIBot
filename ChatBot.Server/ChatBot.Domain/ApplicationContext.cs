@@ -12,6 +12,7 @@ public sealed class ApplicationContext : DbContext
 
     public DbSet<Test> Tests { get; set; } = null!;
     public DbSet<User> Users { get; set; } = null!;
+    public DbSet<Chat> Chats { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

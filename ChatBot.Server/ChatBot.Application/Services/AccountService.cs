@@ -9,8 +9,6 @@ namespace ChatBot.Application.Services;
 
 public class AccountService(IUserRepository userRepository, IMapper mapper) : IAccountService
 {
-    public static int UserId { get; set; }
-
     public async Task<bool> RegistrationAsync(RegistrationModel model)
     {
         var user = mapper.Map<User>(model);
@@ -30,11 +28,6 @@ public class AccountService(IUserRepository userRepository, IMapper mapper) : IA
         }
 
         var passwordHash = PasswordHasher.HashPassword(model.Password);
-
-        if (passwordHash == user.PasswordHash)
-        {
-            UserId = user.Id;
-        }
 
         return passwordHash == user.PasswordHash;
     }

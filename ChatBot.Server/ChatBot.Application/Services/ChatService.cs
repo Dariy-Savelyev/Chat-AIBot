@@ -11,7 +11,7 @@ public class ChatService(IChatRepository chatRepository, IMapper mapper) : IChat
     public async Task CreateChatAsync(ChatModel model)
     {
         var chat = mapper.Map<Chat>(model);
-        chat.CreatorId = AccountService.UserId;
+        chat.CreatorId = 1;
 
         await chatRepository.AddAsync(chat);
     }

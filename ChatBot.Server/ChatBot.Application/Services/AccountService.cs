@@ -9,9 +9,7 @@ namespace ChatBot.Application.Services;
 
 public class AccountService(IUserRepository userRepository, IMapper mapper) : IAccountService
 {
-#pragma warning disable SA1401
-    public static int UserId;
-#pragma warning restore SA1401
+    public static int UserId { get; set; }
 
     public async Task<bool> RegistrationAsync(RegistrationModel model)
     {

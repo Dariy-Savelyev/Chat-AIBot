@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChatBot.Domain.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240601113442_AddChat")]
-    partial class AddChat
+    [Migration("20240603112327_AddChatWithManytoManyUser")]
+    partial class AddChatWithManytoManyUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,9 @@ namespace ChatBot.Domain.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CreatorId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("datetime2");
 
@@ -42,6 +45,8 @@ namespace ChatBot.Domain.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("Chats");
                 });
@@ -130,19 +135,35 @@ namespace ChatBot.Domain.Migrations
                     b.ToTable("UserChat");
                 });
 
+            modelBuilder.Entity("ChatBot.Domain.Models.Chat", b =>
+                {
+                    b.HasOne("ChatBot.Domain.Models.User", "Creator")
+                        .WithMany("CreatedChats")
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Creator");
+                });
+
             modelBuilder.Entity("UserChat", b =>
                 {
                     b.HasOne("ChatBot.Domain.Models.Chat", null)
                         .WithMany()
                         .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ChatBot.Domain.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ChatBot.Domain.Models.User", b =>
+                {
+                    b.Navigation("CreatedChats");
                 });
 #pragma warning restore 612, 618
         }

@@ -13,5 +13,9 @@ public class ChatConfiguration : IEntityTypeConfiguration<Chat>
         builder.Property(p => p.Name).HasMaxLength(100);
 
         builder.Property(p => p.DateCreate);
+
+        builder.HasOne(c => c.Creator)
+            .WithMany(u => u.CreatedChats)
+            .HasForeignKey(c => c.CreatorId);
     }
 }

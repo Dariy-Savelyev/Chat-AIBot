@@ -24,11 +24,12 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .WithMany(c => c.Users)
             .UsingEntity<Dictionary<string, object>>(
                 "UserChat",
-                j => j.HasOne<Chat>().WithMany().HasForeignKey("ChatId"),
-                j => j.HasOne<User>().WithMany().HasForeignKey("CreaterId"),
-                j =>
-                {
-                    j.HasKey("ChatId", "CreaterId");
-                });
+                j => j.HasOne<Chat>().WithMany().HasForeignKey("ChatId").OnDelete(DeleteBehavior.Restrict),
+                j => j.HasOne<User>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.Restrict),
+                j => j.HasKey("ChatId", "UserId"));
+
+        builder.HasMany(u => u.CreatedChats)
+            .WithOne(c => c.Creator)
+            .HasForeignKey(c => c.CreatorId);
     }
 }

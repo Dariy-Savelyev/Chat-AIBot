@@ -19,5 +19,17 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasIndex(x => new { x.UserName }).IsUnique();
 
         builder.HasIndex(x => new { x.Email }).IsUnique();
+
+        builder.HasMany(u => u.Chats)
+            .WithMany(c => c.Users)
+            .UsingEntity<Dictionary<string, object>>(
+                "UserChat",
+                j => j.HasOne<Chat>().WithMany().HasForeignKey("ChatId").OnDelete(DeleteBehavior.Restrict),
+                j => j.HasOne<User>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.Restrict),
+                j => j.HasKey("ChatId", "UserId"));
+
+        builder.HasMany(u => u.CreatedChats)
+            .WithOne(c => c.Creator)
+            .HasForeignKey(c => c.CreatorId);
     }
 }

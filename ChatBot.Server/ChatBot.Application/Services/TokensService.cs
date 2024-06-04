@@ -1,9 +1,8 @@
-﻿using ChatBot.Application.ComponentInterfaces;
+﻿using Azure.Core;
+using ChatBot.Application.ComponentInterfaces;
 using ChatBot.Application.Models.Tokens;
 using ChatBot.Application.ServiceInterfaces;
-using ChatBot.CrossCutting.Exceptions;
 using ChatBot.CrossCutting.Extensions;
-using ChatBot.CrossCutting.Models;
 using ChatBot.Domain.Models;
 using ChatBot.Domain.RepositoryInterfaces;
 using Microsoft.AspNetCore.Identity;
@@ -18,7 +17,7 @@ public class TokensService(
     TokenValidationParameters tokenValidationParameters,
     ITokenComponent tokenComponent) : ITokensService
 {
-    public async Task<User?> ValidateTokenAsync(ValidateTokenModel request)
+    public async Task<string> ValidateAndGetUserIdTokenAsync(ValidateTokenModel request)
     {
         var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
         var claims = jwtSecurityTokenHandler.ValidateToken(
@@ -39,12 +38,18 @@ public class TokensService(
             throw ExceptionHelper.GetArgumentException(nameof(request), "Invalid token");
         }
 
-        return await userManager.FindByIdAsync(userId);
+        return userId;
     }
 
-    public async Task<RefreshTokenModel> RefreshTokenAsync(User user)
+    public async Task<RefreshTokenModel> RefreshTokenAsync(string userId)
     {
-        return await tokenComponent.RefreshTokenAsync(user);
+        var user = await userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            throw ExceptionHelper.GetArgumentException(nameof(userId), "Invalid token");
+        }
+
+        return await tokenComponent.RefreshTokenAsync(user!);
     }
 
     public async Task RevokeTokenAsync(string userId)

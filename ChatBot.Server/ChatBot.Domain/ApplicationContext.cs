@@ -14,12 +14,11 @@ public sealed class ApplicationContext : IdentityDbContext<User>
     public DbSet<Chat> Chats { get; set; } = null!;
     public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        modelBuilder.Seed();
-        modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(x => new { x.LoginProvider, x.ProviderKey, x.UserId });
-        modelBuilder.Entity<IdentityUserRole<string>>().HasKey(x => new { x.RoleId, x.UserId });
-        modelBuilder.Entity<IdentityUserToken<string>>().HasKey(x => new { x.LoginProvider, x.UserId, x.Name });
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationContext).Assembly);
+        builder.Entity<IdentityUserLogin<string>>().HasKey(x => new { x.LoginProvider, x.ProviderKey, x.UserId });
+        builder.Entity<IdentityUserRole<string>>().HasKey(x => new { x.RoleId, x.UserId });
+        builder.Entity<IdentityUserToken<string>>().HasKey(x => new { x.LoginProvider, x.UserId, x.Name });
+        builder.ApplyConfigurationsFromAssembly(typeof(ApplicationContext).Assembly);
     }
 }

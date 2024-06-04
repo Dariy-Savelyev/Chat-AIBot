@@ -13,14 +13,9 @@ public class TokensController(ITokensService service) : BaseController
     [AllowAnonymous]
     public async Task<ActionResult> Refresh(ValidateTokenModel request)
     {
-        var user = await service.ValidateTokenAsync(request);
+        var userId = await service.ValidateAndGetUserIdTokenAsync(request);
 
-        if (user == null)
-        {
-            return StatusCode(StatusCodes.Status401Unauthorized);
-        }
-
-        var result = await service.RefreshTokenAsync(user);
+        var result = await service.RefreshTokenAsync(userId);
 
         return new JsonResult(result);
     }

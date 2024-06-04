@@ -2,7 +2,7 @@
 
 namespace ChatBot.Domain.RepositoryInterfaces;
 
-public interface IUserRepository : IBaseRepository<User, int>
+public interface IUserRepository : IBaseRepository<User, string>
 {
     bool IsUniqueEmail(string email);
     bool IsUniqueName(string userName);

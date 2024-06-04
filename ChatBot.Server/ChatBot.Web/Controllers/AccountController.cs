@@ -1,21 +1,22 @@
 ﻿using ChatBot.Application.Models;
+using ChatBot.Application.Models.Tokens;
 using ChatBot.Application.ServiceInterfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatBot.Web.Controllers;
 
-[ApiController]
-[Route("api/[controller]/[action]")]
-public class AccountController(IAccountService service) : ControllerBase
+[AllowAnonymous]
+public class AccountController(IAccountService service) : BaseController
 {
     [HttpPost]
-    public async Task<bool> Registration(RegistrationModel model)
+    public async Task Registration(RegistrationModel model)
     {
-        return await service.RegistrationAsync(model);
+        await service.RegistrationAsync(model);
     }
 
     [HttpPost]
-    public async Task<bool> Login(LoginModel model)
+    public async Task<RefreshTokenModel> Login(LoginModel model)
     {
         return await service.LoginAsync(model);
     }

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ChatBot.Domain.Repositories;
 
-public class UserRepository(ApplicationContext context) : BaseRepository<User, int>(context), IUserRepository
+public class UserRepository(ApplicationContext context) : BaseRepository<User, string>(context), IUserRepository
 {
     public bool IsUniqueEmail(string email)
     {

@@ -8,10 +8,10 @@ namespace ChatBot.Application.Services;
 
 public class ChatService(IChatRepository chatRepository, IMapper mapper) : IChatService
 {
-    public async Task CreateChatAsync(ChatModel model)
+    public async Task CreateChatAsync(ChatModel model, string userId)
     {
         var chat = mapper.Map<Chat>(model);
-        chat.CreatorId = 1;
+        chat.CreatorId = userId;
 
         await chatRepository.AddAsync(chat);
     }

@@ -1,6 +1,12 @@
 ﻿using ChatBot.Container;
+using ChatBot.CrossCutting.Constants;
+using ChatBot.CrossCutting.Extensions;
 using ChatBot.Web.Middlewares;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
 
 namespace ChatBot.Web
 {
@@ -17,11 +23,12 @@ namespace ChatBot.Web
             builder.LoadApplicationModule();
 
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
             app.Migrate();
+
+            app.Services.SeedRoles();
 
             app.UseMiddleware<ExceptionHandlingMiddleware>();
 

@@ -12,24 +12,6 @@ namespace ChatBot.Domain
 
         private static void SeedVendors(ModelBuilder modelBuilder)
         {
-            modelBuilder
-                .Entity<Test>()
-                .HasData(
-                    new Test
-                    {
-                        Id = 1,
-                        Field = "Test1"
-                    },
-                    new Test
-                    {
-                        Id = 2,
-                        Field = "Test2"
-                    },
-                    new Test
-                    {
-                        Id = 3,
-                        Field = "Test3"
-                    });
         }
     }
 }

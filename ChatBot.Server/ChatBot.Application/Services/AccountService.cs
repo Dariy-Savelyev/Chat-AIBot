@@ -1,4 +1,5 @@
-﻿using Azure.Core;
+﻿using AutoMapper;
+using Azure.Core;
 using ChatBot.Application.ComponentInterfaces;
 using ChatBot.Application.Models;
 using ChatBot.Application.Models.Tokens;
@@ -14,27 +15,57 @@ namespace ChatBot.Application.Services;
 public class AccountService(
     UserManager<User> userManager,
     SignInManager<User> signInManager,
-    ITokenComponent tokenComponent) : IAccountService
+    ITokenComponent tokenComponent,
+    IMapper mapper) : IAccountService
 {
     public async Task RegistrationAsync(RegistrationModel model)
     {
         var email = model.Email.Trim();
+        var userName = model.UserName.Trim();
         var user = await userManager.FindByEmailAsync(email);
         if (user != null)
         {
             ExceptionHelper.ThrowArgumentException(nameof(model.Email), "The user is already registered with this email.");
         }
 
-        _ = await userManager.CreateAsync(new User { UserName = email, Email = email, EmailConfirmed = true });
+        user = await userManager.FindByNameAsync(userName);
+        if (user != null)
+        {
+            ExceptionHelper.ThrowArgumentException(nameof(model.Email), "The user is already registered with this UserName.");
+        }
+
+        user = mapper.Map<User>(model);
+
+        var identityResult = await userManager.CreateAsync(user);
+        if (!identityResult.Succeeded)
+        {
+            _ = await userManager.DeleteAsync(user!);
+            var identityResultErrors = string.Join("; ", identityResult.Errors.Select(x => x.Description));
+            ExceptionHelper.ThrowArgumentException(nameof(model.Email), identityResultErrors);
+        }
+
         user = await userManager.FindByEmailAsync(email);
-        await userManager.AddPasswordAsync(user!, model.Password);
+        identityResult = await userManager.AddPasswordAsync(user!, model.Password);
+        if (!identityResult.Succeeded)
+        {
+            _ = await userManager.DeleteAsync(user!);
+            var identityResultErrors = string.Join("; ", identityResult.Errors.Select(x => x.Description));
+            ExceptionHelper.ThrowArgumentException(nameof(model.Email), identityResultErrors);
+        }
+
         await userManager.AddToRoleAsync(user!, UserRoles.User);
         await userManager.UpdateSecurityStampAsync(user!);
     }
 
     public async Task<RefreshTokenModel> LoginAsync(LoginModel model)
     {
-        var user = await userManager.FindByEmailAsync(model.Email) ?? await FindByEmailAsync(model.Email);
+        var email = model.Email.Trim();
+        var user = await userManager.FindByEmailAsync(email) ?? await userManager.FindByNameAsync(email);
+
+        if (user == null)
+        {
+            throw ExceptionHelper.GetArgumentException(nameof(LoginModel), "Incorrect credentials");
+        }
 
         var signInResult = await signInManager.CheckPasswordSignInAsync(user!, model.Password, lockoutOnFailure: true);
         if (signInResult.Succeeded)
@@ -48,12 +79,5 @@ public class AccountService(
         }
 
         throw ExceptionHelper.GetArgumentException(nameof(LoginModel), "Incorrect credentials");
-    }
-
-    private async Task<User?> FindByEmailAsync(string email)
-    {
-        return await userManager.Users.IgnoreQueryFilters()
-            .Where(x => x.NormalizedEmail == userManager.NormalizeEmail(email))
-            .SingleOrDefaultAsync();
     }
 }

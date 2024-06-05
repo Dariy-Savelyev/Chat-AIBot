@@ -49,7 +49,7 @@ public class TokensService(
             throw ExceptionHelper.GetArgumentException(nameof(userId), "Invalid token");
         }
 
-        return await tokenComponent.RefreshTokenAsync(user!);
+        return await tokenComponent.RefreshTokenAsync(user);
     }
 
     public async Task RevokeTokenAsync(string userId)

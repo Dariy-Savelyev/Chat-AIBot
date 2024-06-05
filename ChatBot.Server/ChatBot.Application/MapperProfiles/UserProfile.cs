@@ -11,8 +11,8 @@ public class UserProfile : Profile
     {
         CreateMap<RegistrationModel, User>()
             .ForMember(
-                dest => dest.PasswordHash,
-                opt => opt.MapFrom(s => PasswordHasher.HashPassword(s.Password)))
+                dest => dest.EmailConfirmed,
+                opt => opt.MapFrom(s => true))
             ;
     }
 }

@@ -6,7 +6,7 @@ using ChatBot.Domain.RepositoryInterfaces;
 
 namespace ChatBot.Application.Services;
 
-public class ChatService(IChatRepository chatRepository, IUserRepository userRepository, IMapper mapper) : IChatService
+public class ChatService(IChatRepository chatRepository, IMapper mapper) : IChatService
 {
     public async Task CreateChatAsync(ChatModel model, string userId)
     {
@@ -18,13 +18,6 @@ public class ChatService(IChatRepository chatRepository, IUserRepository userRep
 
     public async Task JoinChatAsync(JoinToChatModel model, string userId)
     {
-        var chatMapper = mapper.Map<JoinToChatModel>(model);
-
-        var user = await userRepository.GetByIdAsync(userId);
-        var chat = await chatRepository.GetByIdAsync(model.ChatId);
-
-        user!.Chats.Add(chat!);
-
-        await userRepository.SaveChangesAsync();
+        await chatRepository.JoinUserAsync(userId, model.ChatId);
     }
 }

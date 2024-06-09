@@ -15,4 +15,9 @@ public class ChatService(IChatRepository chatRepository, IMapper mapper) : IChat
 
         await chatRepository.AddAsync(chat);
     }
+
+    public async Task JoinChatAsync(JoinToChatModel model, string userId)
+    {
+        await chatRepository.JoinUserAsync(userId, model.ChatId);
+    }
 }

@@ -8,5 +8,5 @@ public class Chat : BaseEntity
     public DateTime DateCreate { get; set; }
     public string CreatorId { get; set; } = string.Empty;
     public User Creator { get; set; }
-    public ICollection<User> Users { get; set; }
+    public ICollection<User> Users { get; set; } = [];
 }

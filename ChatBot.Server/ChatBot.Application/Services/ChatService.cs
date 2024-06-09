@@ -16,10 +16,12 @@ public class ChatService(IChatRepository chatRepository, IUserRepository userRep
         await chatRepository.AddAsync(chat);
     }
 
-    public async Task JoinChatAsync(string userId, int chatId)
+    public async Task JoinChatAsync(JoinToChatModel model, string userId)
     {
+        var chatMapper = mapper.Map<JoinToChatModel>(model);
+
         var user = await userRepository.GetByIdAsync(userId);
-        var chat = await chatRepository.GetByIdAsync(chatId);
+        var chat = await chatRepository.GetByIdAsync(model.ChatId);
 
         user!.Chats.Add(chat!);
 

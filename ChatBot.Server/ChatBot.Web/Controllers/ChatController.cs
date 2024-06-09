@@ -16,6 +16,6 @@ public class ChatController(IChatService service) : BaseController
     [HttpPost]
     public async Task Join(JoinToChatModel model)
     {
-        await service.JoinChatAsync(User.GetUserId(), model.ChatId);
+        await service.JoinChatAsync(model, User.GetUserId());
     }
 }

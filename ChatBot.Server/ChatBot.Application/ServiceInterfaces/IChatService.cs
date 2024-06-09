@@ -5,4 +5,5 @@ namespace ChatBot.Application.ServiceInterfaces;
 public interface IChatService : IBaseService
 {
     Task CreateChatAsync(ChatModel model, string userId);
+    Task JoinChatAsync(string userId, int chatId);
 }

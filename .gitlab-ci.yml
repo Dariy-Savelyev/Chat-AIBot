@@ -125,7 +125,7 @@ sonarqube-check:
       - .sonar/cache
   script: 
       - 'dotnet tool install --global dotnet-sonarscanner'
-      - 'dotnet sonarscanner begin /k:"excernal_chat-with-ai-bot_AY-bPrZTbKUBYCTsi-TK" /d:sonar.login="${SONAR_TOKEN}" /d:"sonar.host.url=${SONAR_HOST_URL}"'
+      - 'dotnet sonarscanner begin /k:"excernal_chat-with-ai-bot_AZBV7DgPFWPbam7Flh52" /d:sonar.login="${SONAR_TOKEN}" /d:"sonar.host.url=${SONAR_HOST_URL}"'
       - 'dotnet build ChatBot.sln -p:BuildInParallel=false -m:1 --no-restore'
       - 'dotnet sonarscanner end /d:sonar.login="${SONAR_TOKEN}"'
       - |

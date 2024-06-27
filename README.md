@@ -2,46 +2,46 @@
 
 #**Organization of architecture**
 
-chatbot.client/
-├── src/
-│   ├── assets/
-│   │   ├── images/
-│   │   ├── styles/
-│   │   └── ...
-│   ├── components/
-│   │   ├── common/
-│   │   │   └── Button.js
-│   │   ├── layout/
-│   │   │   └── Header.js
-│   │   └── ...
-│   ├── hooks/
-│   │   └── useCustomHook.js
-│   ├── pages/
-│   │   ├── Home.js
-│   │   ├── About.js
-│   │   └── ...
-│   ├── services/
-│   │   ├── api.js
-│   │   └── auth.js
-│   ├── store/
-│   │   ├── actions/
-│   │   ├── reducers/
-│   │   ├── types/
-│   │   │   ├── userTypes.ts
-│   │   │   └── productTypes.ts
-│   │   └── index.ts
-│   ├── types/  // или models/
-│   │   ├── User.ts
-│   │   └── Product.ts
-│   ├── utils/
-│   │   └── helpers.js
-│   ├── App.js
-│   ├── index.js
-│   └── ...
-├── .gitignore
-├── index.html
-├── package.json
-├── README.md
+chatbot.client/  
+├── src/  
+│   ├── assets/  
+│   │   ├── images/  
+│   │   ├── styles/  
+│   │   └── ...  
+│   ├── components/  
+│   │   ├── common/  
+│   │   │   └── Button.js  
+│   │   ├── layout/  
+│   │   │   └── Header.js  
+│   │   └── ...  
+│   ├── hooks/  
+│   │   └── useCustomHook.js  
+│   ├── pages/  
+│   │   ├── Home.js  
+│   │   ├── About.js  
+│   │   └── ...  
+│   ├── services/  
+│   │   ├── api.js  
+│   │   └── auth.js  
+│   ├── store/  
+│   │   ├── actions/  
+│   │   ├── reducers/  
+│   │   ├── types/  
+│   │   │   ├── userTypes.ts  
+│   │   │   └── productTypes.ts  
+│   │   └── index.ts  
+│   ├── types/  // или models/  
+│   │   ├── User.ts  
+│   │   └── Product.ts  
+│   ├── utils/  
+│   │   └── helpers.js  
+│   ├── App.js  
+│   ├── index.js  
+│   └── ...  
+├── .gitignore  
+├── index.html  
+├── package.json  
+├── README.md  
 └── ...
 
 1. `src/`:

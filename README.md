@@ -10,19 +10,19 @@ chatbot.client/
 │   │   └── ...  
 │   ├── components/  
 │   │   ├── common/  
-│   │   │   └── Button.js  
+│   │   │   └── Button.ts  
 │   │   ├── layout/  
-│   │   │   └── Header.js  
+│   │   │   └── Header.ts  
 │   │   └── ...  
 │   ├── hooks/  
-│   │   └── useCustomHook.js  
+│   │   └── useCustomHook.ts  
 │   ├── pages/  
-│   │   ├── Home.js  
-│   │   ├── About.js  
+│   │   ├── Home.ts  
+│   │   ├── About.ts  
 │   │   └── ...  
 │   ├── services/  
-│   │   ├── api.js  
-│   │   └── auth.js  
+│   │   ├── api.ts  
+│   │   └── auth.ts  
 │   ├── store/  
 │   │   ├── actions/  
 │   │   ├── reducers/  
@@ -34,13 +34,13 @@ chatbot.client/
 │   │   ├── User.ts  
 │   │   └── Product.ts  
 │   ├── utils/  
-│   │   └── helpers.js  
-│   ├── App.js  
-│   ├── index.js  
+│   │   └── helpers.ts  
+│   ├── App.ts  
+│   ├── main.ts  
 │   └── ...  
 ├── .gitignore  
 ├── index.html  
-├── package.json  
+├── package.tson  
 ├── README.md  
 └── ...
 
@@ -76,10 +76,10 @@ chatbot.client/
     - Contains all data types and interfaces used for data transfer between the client and server.
     - Contains helper functions and utilities.
 
-10. `App.js`:
+10. `App.ts`:
     - The main component of the application.
 
-11. `index.js`:
+11. `index.ts`:
     - The entry point of the application where the main `App` component is rendered.
 
 

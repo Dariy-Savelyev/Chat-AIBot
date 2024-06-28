@@ -1,6 +1,6 @@
 import { useState, useCallback, ChangeEvent, FormEvent } from 'react';
-import { FormData } from '../models/FormData.ts';
-import { FormErrors } from '../models/FormErros.ts';
+import { FormData } from '../models/FormData';
+import { FormErrors } from '../models/FormErros';
 
 export const Registration = () => {
     const [formData, setFormData] = useState<FormData>({

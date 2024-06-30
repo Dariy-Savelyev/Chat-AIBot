@@ -1,12 +1,7 @@
 ﻿using ChatBot.Container;
-using ChatBot.CrossCutting.Constants;
 using ChatBot.CrossCutting.Extensions;
 using ChatBot.Web.Middlewares;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using System.Text;
 
 namespace ChatBot.Web
 {

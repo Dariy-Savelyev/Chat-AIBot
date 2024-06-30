@@ -1,6 +1,6 @@
-import { useState, useCallback, ChangeEvent, FormEvent } from 'react';
+import { useState, useCallback, ChangeEvent } from 'react';
 import { RegistrationFormData } from '../models/RegistrationFormData';
-import { FormErrors } from '../models/FormErros';
+import { Button, Form, Input, Typography } from 'antd';
 
 export const Registration = () => {
   const [formData, setFormData] = useState<RegistrationFormData>({
@@ -10,9 +10,7 @@ export const Registration = () => {
     confirmPassword: '',
   });
 
-  const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -22,107 +20,109 @@ export const Registration = () => {
     }));
   }, []);
 
-  const validate = (): FormErrors => {
-    let formErrors: FormErrors = {};
-    if (!formData.userName) formErrors.userName = 'Username is required';
-    if (!formData.email) {
-      formErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      formErrors.email = 'Email address is invalid';
-    }
-    if (!formData.password) formErrors.password = 'Password is required';
-    if (formData.password !== formData.confirmPassword) {
-      formErrors.confirmPassword = 'Passwords do not match';
-    }
-    return formErrors;
-  };
+  const handleSubmit = useCallback(async () => {
+    setIsSubmitting(true);
 
-  const handleSubmit = useCallback(async (e: FormEvent) => {
-    e.preventDefault();
-    const formErrors = validate();
-    if (Object.keys(formErrors).length === 0) {
-      setIsSubmitting(true);
-      setSubmitError(null);
-      try {
-        const response = await fetch('/api/account/registration', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        });
+    const response = await fetch('/api/account/registration', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
 
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-
-        const result = await response.json();
-        console.log('Form submitted successfully:', result);
-      } catch (error) {
-        console.error('There was a problem with the submission:', error);
-        setSubmitError('There was a problem submitting the form. Please try again.');
-      } finally {
-        setIsSubmitting(false);
-      }
+    if (response.status == 200) {
+      console.log('Form submitted successfully');
     } else {
-      setErrors(formErrors);
+       console.log(response.text());
     }
-  }, [formData, validate, setIsSubmitting, setSubmitError, setErrors]);
+
+    setIsSubmitting(false);
+  }, [formData, setIsSubmitting]);
 
   return (
     <>
-      <h1>Registration form</h1>
+      <Typography.Title style={{ paddingLeft: 160 }}>Registration form</Typography.Title>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="userName">Username</label>
-          <input
-            type="text"
-            name="userName"
+      <Form
+        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 14 }}
+        style={{ maxWidth: 500 }}
+        onFinish={handleSubmit}
+      >
+        <Form.Item
+          label='User Name'
+          name='userName'
+          rules={[
+            { required: true, message: 'Please enter a user name' },
+            { type: 'string', min: 3, message: 'User name must be at least 3 characters' },
+          ]}
+        >
+          <Input
+            type='userName'
+            name='userName'
             value={formData.userName}
             onChange={handleChange}
           />
-          {errors.userName && <span>{errors.userName}</span>}
-        </div>
+        </Form.Item>
 
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            name="email"
+        <Form.Item
+          label='Email'
+          name='email'
+          rules={[
+            { required: true, message: 'Please enter an email' },
+            { type: 'email', message: 'Please enter a valid email' },
+          ]}
+        >
+          <Input
+            type='email'
+            name='email'
             value={formData.email}
             onChange={handleChange}
           />
-          {errors.email && <span>{errors.email}</span>}
-        </div>
+        </Form.Item>
 
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            name="password"
+        <Form.Item
+          label='Password'
+          name='password'
+          rules={[
+            { required: true, message: 'Please enter a password' },
+            { type: 'string', min: 6, message: 'Password must be at least 6 characters' },
+          ]}
+        >
+          <Input.Password
+            type='password'
+            name='password'
             value={formData.password}
             onChange={handleChange}
           />
-          {errors.password && <span>{errors.password}</span>}
-        </div>
+        </Form.Item>
 
-        <div>
-          <label htmlFor="confirmPassword">Confirm Password</label>
-          <input
-            type="password"
-            name="confirmPassword"
+        <Form.Item
+          label='Confirm Password'
+          name='confirmPassword'
+          rules={[
+            { required: true, message: 'Please enter a password' },
+            { type: 'string', min: 6, message: 'User name must be at least 3 charachters' },
+          ]}
+        >
+          <Input.Password
+            type='confirmPassword'
+            name='confirmPassword'
             value={formData.confirmPassword}
             onChange={handleChange}
           />
-          {errors.confirmPassword && <span>{errors.confirmPassword}</span>}
-        </div>
+        </Form.Item>
 
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Registering...' : 'Register'}
-        </button>
-        {submitError && <div>{submitError}</div>}
-      </form>
+        <Form.Item wrapperCol={{ offset: 13 }}>
+          <Button
+            type='primary'
+            htmlType='submit'
+            disabled={isSubmitting}>
+            {isSubmitting ? 'Registering...' : 'Register'}
+          </Button>
+        </Form.Item>
+      </Form>
     </>
   );
 };

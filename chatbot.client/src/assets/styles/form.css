@@ -1,7 +1,7 @@
-.form-width {
-    max-width: 500px;
+.form-login-width {
+    max-width: 1040px;
 }
 
-.title-padding {
-    padding-left: 160px;
+.form-registration-width {
+    max-width: 1050px;
 }

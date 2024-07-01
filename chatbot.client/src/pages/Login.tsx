@@ -37,12 +37,11 @@ export const Login = () => {
 
     return (
         <>
-            <Typography.Title className='title-padding'>Login</Typography.Title>
+            <Typography.Title>Login</Typography.Title>
 
             <Form
-                className='form-width'
-                labelCol={{ span: 4 }}
-                wrapperCol={{ span: 14 }}
+                className='form-login-width'
+                labelCol={{ span: 17 }}
                 onFinish={handleSubmit}
             >
                 <Form.Item
@@ -74,7 +73,7 @@ export const Login = () => {
                     />
                 </Form.Item>
 
-                <Form.Item wrapperCol={{ offset: 9 }}>
+                <Form.Item wrapperCol={{ offset: 17 }}>
                     <Button
                         type='primary'
                         htmlType='submit'

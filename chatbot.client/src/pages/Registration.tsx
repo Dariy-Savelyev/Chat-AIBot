@@ -35,20 +35,26 @@ export const Registration = () => {
     if (response.status == 200) {
       console.log('Form submitted successfully');
     } else {
-       console.log(response.text());
+      console.log(response.text());
     }
 
     setIsSubmitting(false);
   }, [formData, setIsSubmitting]);
 
+  const validateConfirmPassword = (_: any, value: string) => {
+    if (!value || formData.password === value) {
+      return Promise.resolve();
+    }
+    return Promise.reject(new Error('Passwords do not match!'));
+  };
+
   return (
     <>
-      <Typography.Title className='title-padding'>Registration form</Typography.Title>
+      <Typography.Title>Registration form</Typography.Title>
 
       <Form
-        className='form-width'
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 14 }}
+        className='form-registration-width'
+        labelCol={{ span: 16 }}
         onFinish={handleSubmit}
       >
         <Form.Item
@@ -104,7 +110,8 @@ export const Registration = () => {
           name='confirmPassword'
           rules={[
             { required: true, message: 'Please enter a password' },
-            { type: 'string', min: 6, message: 'User name must be at least 3 charachters' },
+            { type: 'string', min: 6, message: 'Password must be at least 6 characters' },
+            { validator: validateConfirmPassword, },
           ]}
         >
           <Input.Password
@@ -115,7 +122,7 @@ export const Registration = () => {
           />
         </Form.Item>
 
-        <Form.Item wrapperCol={{ offset: 13 }}>
+        <Form.Item wrapperCol={{ offset: 16 }}>
           <Button
             type='primary'
             htmlType='submit'

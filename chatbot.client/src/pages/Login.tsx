@@ -37,12 +37,12 @@ export const Login = () => {
 
     return (
         <>
-            <Typography.Title style={{ paddingLeft: 160 }}>Login</Typography.Title>
+            <Typography.Title className='title-padding'>Login</Typography.Title>
 
             <Form
+                className='form-width'
                 labelCol={{ span: 4 }}
                 wrapperCol={{ span: 14 }}
-                style={{ maxWidth: 500 }}
                 onFinish={handleSubmit}
             >
                 <Form.Item

@@ -1,0 +1,15 @@
+.menu {
+    font-weight: bold;
+    justify-content: center;
+}
+
+.content {
+    background: white;
+    min-height: 819px;
+    padding: 50px;
+    text-align: center;
+}
+
+.footer {
+    text-align: center
+}

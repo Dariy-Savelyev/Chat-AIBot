@@ -1,21 +1,42 @@
-import { Typography } from 'antd';
+import { Layout, Menu, Typography } from 'antd';
+import { Content, Footer, Header } from 'antd/es/layout/layout';
+import '../assets/styles/homePage.css'
 
 export const Home = () => {
-  function Nav() {
-    return <div style={{ position: 'relative', top: 60, left: '47%', fontWeight: 'bold' }}>
-      <Typography.Link href='/registration'>Registration</Typography.Link>
-      <Typography.Link href='/login'
-        style={{ position: 'relative', left: 10 }}>Login</Typography.Link>
-    </div>;
-  }
+  const { Title, Paragraph, Link } = Typography;
+
+  const items = [
+    {
+      label: <Link href='/registration'>Registration</Link>,
+      key: 'registration',
+    },
+    {
+      label: <Link href='/login'>Login</Link>,
+      key: 'login',
+    },
+  ];
 
   return (
     <>
-      <Nav />
-      <div style={{ position: 'relative', top: 70, left: '38%' }}>
-        <Typography.Title>Welcome to the Home Page</Typography.Title>
-        <Typography.Paragraph>This is the home page of our application.</Typography.Paragraph>
-      </div >
+      <Layout>
+        <Header>
+          <Menu
+            className='menu'
+            theme='dark'
+            mode='horizontal'
+            items={items}
+          />
+        </Header>
+
+        <Content className='content'>
+          <Title>Welcome to the Home Page</Title>
+          <Paragraph>This is the home page of our application.</Paragraph>
+        </Content>
+
+        <Footer className='footer'>
+          Chat Bot ©{new Date().getFullYear()}
+        </Footer>
+      </Layout>
     </>
   );
 };

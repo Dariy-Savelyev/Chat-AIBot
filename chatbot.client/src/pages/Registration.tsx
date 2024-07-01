@@ -1,6 +1,7 @@
 import { useState, useCallback, ChangeEvent } from 'react';
 import { RegistrationFormData } from '../models/RegistrationFormData';
 import { Button, Form, Input, Typography } from 'antd';
+import '../assets/styles/form.css';
 
 export const Registration = () => {
   const [formData, setFormData] = useState<RegistrationFormData>({
@@ -42,12 +43,12 @@ export const Registration = () => {
 
   return (
     <>
-      <Typography.Title style={{ paddingLeft: 160 }}>Registration form</Typography.Title>
+      <Typography.Title className='title-padding'>Registration form</Typography.Title>
 
       <Form
+        className='form-width'
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 14 }}
-        style={{ maxWidth: 500 }}
         onFinish={handleSubmit}
       >
         <Form.Item

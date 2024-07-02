@@ -1,6 +1,7 @@
 import { useState, useCallback, ChangeEvent } from 'react';
 import { LoginFormData } from '../models/LoginFormData';
 import { Button, Form, Input, Typography } from 'antd';
+import '../assets/styles/form.css';
 
 export const Login = () => {
     const [formData, setFormData] = useState<LoginFormData>({
@@ -37,11 +38,11 @@ export const Login = () => {
 
     return (
         <>
-            <Typography.Title>Login</Typography.Title>
+            <Typography.Title className='text-align-center'>Login</Typography.Title>
 
             <Form
-                className='form-login-width'
-                labelCol={{ span: 17 }}
+                className='form-width'
+                labelCol={{ span: 16 }}
                 onFinish={handleSubmit}
             >
                 <Form.Item
@@ -73,7 +74,7 @@ export const Login = () => {
                     />
                 </Form.Item>
 
-                <Form.Item wrapperCol={{ offset: 17 }}>
+                <Form.Item wrapperCol={{ offset: 19 }}>
                     <Button
                         type='primary'
                         htmlType='submit'

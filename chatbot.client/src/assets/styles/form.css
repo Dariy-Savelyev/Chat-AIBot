@@ -1,7 +1,7 @@
-.form-login-width {
-    max-width: 1040px;
+.form-width {
+    max-width: 1000px;
 }
 
-.form-registration-width {
-    max-width: 1050px;
+.text-align-center {
+    text-align: center;
 }

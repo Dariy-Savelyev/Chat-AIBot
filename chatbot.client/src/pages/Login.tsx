@@ -1,6 +1,7 @@
-import { useState, useCallback, ChangeEvent, FormEvent } from 'react';
+import { useState, useCallback, ChangeEvent } from 'react';
 import { LoginFormData } from '../models/LoginFormData';
-import { FormErrors } from '../models/FormErros';
+import { Button, Form, Input, Typography } from 'antd';
+import '../assets/styles/form.css';
 
 export const Login = () => {
     const [formData, setFormData] = useState<LoginFormData>({
@@ -8,9 +9,7 @@ export const Login = () => {
         password: '',
     });
 
-    const [errors, setErrors] = useState<FormErrors>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submitError, setSubmitError] = useState<string | null>(null);
 
     const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -20,82 +19,70 @@ export const Login = () => {
         }));
     }, []);
 
-    const validate = (): FormErrors => {
-        const formErrors: FormErrors = {};
-        if (!formData.email) {
-            formErrors.email = 'Email is required';
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            formErrors.email = 'Email address is invalid';
-        }
-        if (!formData.password) {
-            formErrors.password = 'Password is required';
-        }
-        return formErrors;
-    };
+    const handleSubmit = useCallback(async () => {
+        setIsSubmitting(true);
 
-    const handleSubmit = useCallback(async (e: FormEvent) => {
-        e.preventDefault();
-        const formErrors = validate();
-        if (Object.keys(formErrors).length === 0) {
-            setIsSubmitting(true);
-            setSubmitError(null);
-            try {
-                const response = await fetch('/api/account/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData),
-                });
+        const response = await fetch('/api/account/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        });
 
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
+        const result = await response.json();
+        console.log('Login successful:', result);
 
-                const result = await response.json();
-                console.log('Login successful:', result);
-            } catch (error) {
-                console.error('There was a problem with the login:', error);
-                setSubmitError('There was a problem logging in. Please try again.');
-            } finally {
-                setIsSubmitting(false);
-            }
-        } else {
-            setErrors(formErrors);
-        }
-    }, [formData, validate, setIsSubmitting, setSubmitError, setErrors]);
+        setIsSubmitting(false);
+    }, [formData, setIsSubmitting]);
 
     return (
         <>
-            <h1>Login</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="email">Email</label>
-                    <input
-                        type="email"
-                        name="email"
+            <Typography.Title className='text-align-center'>Login</Typography.Title>
+
+            <Form
+                className='form-width'
+                labelCol={{ span: 16 }}
+                onFinish={handleSubmit}
+            >
+                <Form.Item
+                    label='Email'
+                    name='email'
+                    rules={[
+                        { required: true, message: 'Please enter an email' },
+                        { type: 'email', message: 'Please enter a valid email' },
+                    ]}
+                >
+                    <Input
+                        type='email'
+                        name='email'
                         value={formData.email}
                         onChange={handleChange}
                     />
-                    {errors.email && <span>{errors.email}</span>}
-                </div>
+                </Form.Item>
 
-                <div>
-                    <label htmlFor="password">Password</label>
-                    <input
-                        type="password"
-                        name="password"
+                <Form.Item
+                    label='Password'
+                    name='password'
+                    rules={[{ required: true, message: 'Please enter a password' }]}
+                >
+                    <Input.Password
+                        type='password'
+                        name='password'
                         value={formData.password}
                         onChange={handleChange}
                     />
-                    {errors.password && <span>{errors.password}</span>}
-                </div>
+                </Form.Item>
 
-                <button type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? 'Logging in...' : 'Login'}
-                </button>
-                {submitError && <div>{submitError}</div>}
-            </form>
+                <Form.Item wrapperCol={{ offset: 19 }}>
+                    <Button
+                        type='primary'
+                        htmlType='submit'
+                        disabled={isSubmitting}>
+                        {isSubmitting ? 'Logging in...' : 'Login'}
+                    </Button>
+                </Form.Item>
+            </Form>
         </>
     );
 };

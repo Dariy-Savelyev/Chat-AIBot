@@ -1,22 +1,15 @@
-import { Link } from 'react-router-dom';
+import { Typography } from 'antd';
+import '../assets/styles/appLayout.css'
 
 export const Home = () => {
-  function Nav() {
-    return <nav>
-      <div>
-        <Link to="/registration">Registration</Link>
-        <Link to="/login">Login</Link>
-      </div>
-    </nav>;
-  }
+  const { Title, Paragraph } = Typography;
 
   return (
     <>
-      <Nav />
-      <div className="home">
-        <h1>Welcome to the Home Page</h1>
-        <p>This is the home page of our application.</p>
-      </div >
+      <div className='text-align-center'>
+        <Title> Welcome to the Home Page</Title>
+        <Paragraph>This is the home page of our application.</Paragraph>
+      </div>
     </>
   );
 };

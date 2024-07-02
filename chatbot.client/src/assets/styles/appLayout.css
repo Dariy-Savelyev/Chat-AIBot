@@ -1,0 +1,18 @@
+body {
+    margin: 0;
+}
+
+.menu {
+    font-weight: bold;
+    justify-content: center;
+}
+
+.menu-height {
+    min-height: 86.4vh;
+}
+
+.footer {
+    font-weight: bold;
+    text-align: center;
+    background-color: lightblue;
+}

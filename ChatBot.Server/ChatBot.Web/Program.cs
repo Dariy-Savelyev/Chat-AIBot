@@ -35,8 +35,6 @@ namespace ChatBot.Web
                 app.UseSwaggerUI();
             }
 
-            //app.UseHttpsRedirection();
-
             app.UseAuthorization();
 
             app.MapControllers();

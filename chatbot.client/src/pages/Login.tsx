@@ -1,6 +1,7 @@
 import { useState, useCallback, ChangeEvent } from 'react';
 import { LoginFormData } from '../models/LoginFormData';
 import { Button, Form, Input, Typography } from 'antd';
+import apiClient from '../services/apiClient';
 import '../assets/styles/form.css';
 
 export const Login = () => {
@@ -21,19 +22,16 @@ export const Login = () => {
 
     const handleSubmit = useCallback(async () => {
         setIsSubmitting(true);
+        try {
+            const response = await apiClient.post('/api/account/login', formData);
 
-        const response = await fetch('/api/account/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-        });
+            const result = response.data;
+            console.log('Login successful:', result);
+        }
+        finally {
+            setIsSubmitting(false);
+        }
 
-        const result = await response.json();
-        console.log('Login successful:', result);
-
-        setIsSubmitting(false);
     }, [formData, setIsSubmitting]);
 
     return (

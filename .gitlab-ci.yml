@@ -13,7 +13,7 @@ variables:
   OBJECTS_DIRECTORY: 'obj'
   NUGET_PACKAGES_DIRECTORY: '.nuget'
   SOURCE_CODE_PATH: '*/*/'
-  REGISTRY_URL: 'http://192.168.1.145:15000'
+  REGISTRY_URL: 'https://docker-registry.galai.co/'
 
 # Global cache rule
 cache:
@@ -33,11 +33,15 @@ build:
     - 'dotnet build ChatBot.sln -p:BuildInParallel=false -m:1 --no-restore'
   tags:
     - win
+  except:
+    - master
 
 tests:
   stage: test
   script:
     - 'dotnet test ChatBot.sln -p:BuildInParallel=false -m:1 --no-restore'
+  except:
+  - master
 
 sonarqube-check:
   image: mcr.microsoft.com/dotnet/sdk:latest
@@ -81,6 +85,8 @@ sonarqube-check:
   allow_failure: false
   tags:
     - win
+  except:
+  - master
 
 docker-login:
   stage: docker-login

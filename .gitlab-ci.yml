@@ -26,12 +26,15 @@ cache:
 
 before_script:
   - 'dotnet restore ChatBot.sln --packages $NUGET_PACKAGES_DIRECTORY'
+  tags:
+    - win
 
 build:
   stage: build
   script:
     - 'dotnet build ChatBot.sln -p:BuildInParallel=false -m:1 --no-restore'
-  tags: win
+  tags:
+    - win
 
 tests:
   stage: test
@@ -78,7 +81,8 @@ sonarqube-check:
         exit 1
       }
   allow_failure: false
-  tags: win
+  tags:
+    - win
 
 docker-login:
   stage: docker-login
@@ -87,7 +91,8 @@ docker-login:
     - echo ${CI_REGISTRY_PASSWORD} | docker login $REGISTRY.URL -u ${CI_REGISTRY_USER} --password-stdin
   only:
     - master
-  tags: linux
+  tags:
+    - linux
 
 docker-build:
   stage: docker-build
@@ -99,7 +104,8 @@ docker-build:
     - docker push $REGISTRY.URL/myproject/chatbot:$CI_COMMIT_SHA
   only:
     - master
-  tags: linux
+  tags:
+    - linux
 
 docker-deploy:
   stage: docker-deploy
@@ -114,4 +120,5 @@ docker-deploy:
     - ssh user@synology "docker run -d --name chatbot -p 8080:8080 -p 8081:8081 -e ASPNETCORE_ENVIRONMENT=Production $REGISTRY.URL/myproject/chatbot:$CI_COMMIT_SHA"
   only:
     - master
-  tags: linux
+  tags:
+    - linux

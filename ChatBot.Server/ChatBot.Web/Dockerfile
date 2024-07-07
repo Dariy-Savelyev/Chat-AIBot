@@ -17,11 +17,9 @@ RUN apt-get -y install nodejs
 FROM with-node AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["ChatBot.Web/ChatBot.Web.csproj", "ChatBot.Web/"]
-COPY ["chatbot.client/chatbot.client.esproj", "chatbot.client/"]
-RUN dotnet restore "./ChatBot.Web/ChatBot.Web.csproj"
-COPY . .
-WORKDIR "/src/ChatBot.Web"
+COPY ./ .
+RUN dotnet restore "./ChatBot.Server/ChatBot.Web/ChatBot.Web.csproj"
+WORKDIR "/src/ChatBot.Server/ChatBot.Web"
 RUN dotnet build "./ChatBot.Web.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish

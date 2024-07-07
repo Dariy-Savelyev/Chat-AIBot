@@ -2,6 +2,7 @@ import { useState, useCallback, ChangeEvent } from 'react';
 import { RegistrationFormData } from '../models/RegistrationFormData';
 import { Button, Form, Input, Typography } from 'antd';
 import '../assets/styles/form.css';
+import apiClient from '../services/apiClient';
 
 export const Registration = () => {
   const [formData, setFormData] = useState<RegistrationFormData>({
@@ -23,22 +24,18 @@ export const Registration = () => {
 
   const handleSubmit = useCallback(async () => {
     setIsSubmitting(true);
+    try {
+      const response = await apiClient.post('/api/account/registration', formData);
 
-    const response = await fetch('/api/account/registration', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    });
-
-    if (response.status == 200) {
-      console.log('Form submitted successfully');
-    } else {
-      console.log(response.text());
+      if (response.status == 200) {
+        console.log('Form submitted successfully');
+      } else {
+        console.log(response.data);
+      }
     }
-
-    setIsSubmitting(false);
+    finally {
+      setIsSubmitting(false);
+    }
   }, [formData, setIsSubmitting]);
 
   const validateConfirmPassword = (_: any, value: string) => {

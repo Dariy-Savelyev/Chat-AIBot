@@ -9,7 +9,7 @@ import { env } from 'process';
 
 const baseFolder =
     env.APPDATA !== undefined && env.APPDATA !== ''
-        ? `${env.APPDATA}/ASP.NET/https`
+        ? `${env.APPDATA}   /ASP.NET/https`
         : `${env.HOME}/.aspnet/https`;
 
 const certificateName = "chatbot.client";
@@ -42,16 +42,19 @@ export default defineConfig({
         }
     },
     server: {
-        proxy: {
-            '^/api': {
-                target,
-                secure: false
-            }
-        },
+        // proxy: {
+        //     '^/api': {
+        //         target,
+        //         secure: false
+        //     }
+        // },
         port: 5173,
         https: {
             key: fs.readFileSync(keyFilePath),
             cert: fs.readFileSync(certFilePath),
         }
+    },
+    define: {
+      'process.env': process.env
     }
 })

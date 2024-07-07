@@ -22,7 +22,6 @@ namespace ChatBot.Web
             var app = builder.Build();
 
             app.Migrate();
-
             app.Services.SeedRoles();
 
             app.UseMiddleware<ExceptionHandlingMiddleware>();
@@ -36,7 +35,7 @@ namespace ChatBot.Web
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseAuthorization();
 

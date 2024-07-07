@@ -26,8 +26,6 @@ cache:
 
 before_script:
   - 'dotnet restore ChatBot.sln --packages $NUGET_PACKAGES_DIRECTORY'
-  tags:
-    - win
 
 build:
   stage: build

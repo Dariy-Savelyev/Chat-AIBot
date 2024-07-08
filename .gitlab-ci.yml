@@ -15,6 +15,7 @@ variables:
   REGISTRY_URL: 'docker-registry.galai.co'
   PROJECT_NAME: "chat-bot"
   IMAGE_NAME: "chat-full"
+  DOCKER_DESTINATION: "dockeruser@192.168.1.125"
 
 # Global cache rule
 cache:
@@ -95,7 +96,6 @@ docker-build:
   services:
     - docker:dind
   script:
-    - echo $USER
     - echo ${CI_REGISTRY_PASSWORD} | docker login ${REGISTRY_URL} -u ${CI_REGISTRY_USER} --password-stdin
     - docker build -t ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:latest -t ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${CI_COMMIT_SHA} -f ./ChatBot.Server/ChatBot.Web/Dockerfile .
     - docker push ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:latest
@@ -111,11 +111,11 @@ docker-deploy:
   before_script:
     - apk add --no-cache openssh
   script:
-    - ssh user@synology "docker login ${REGISTRY_URL} -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}"
-    - ssh user@synology "docker pull ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${CI_COMMIT_SHA}"
-    - ssh user@synology "docker stop ${PROJECT_NAME} || true"
-    - ssh user@synology "docker rm ${PROJECT_NAME} || true"
-    - ssh user@synology "docker run -d --name ${PROJECT_NAME} -p 8080:8080 -p 8081:8081 -e ASPNETCORE_ENVIRONMENT=Production ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${CI_COMMIT_SHA}"
+    - ssh ${DOCKER_DESTINATION} "docker login ${REGISTRY_URL} -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}"
+    - ssh ${DOCKER_DESTINATION} "docker pull ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${CI_COMMIT_SHA}"
+    - ssh ${DOCKER_DESTINATION} "docker stop ${PROJECT_NAME} || true"
+    - ssh ${DOCKER_DESTINATION} "docker rm ${PROJECT_NAME} || true"
+    - ssh ${DOCKER_DESTINATION} "docker run -d --name ${PROJECT_NAME} -p 18080:8080 -p 18081:8081 -e ASPNETCORE_ENVIRONMENT=Production ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${CI_COMMIT_SHA}"
   only:
     - master
   tags:

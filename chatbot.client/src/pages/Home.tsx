@@ -7,7 +7,7 @@ export const Home = () => {
   return (
     <>
       <div className='text-align-center'>
-        <Title> Welcome to the Home Page</Title>
+        <Title>Welcome to the Home Page</Title>
         <Paragraph>This is the home page of our application.</Paragraph>
       </div>
     </>

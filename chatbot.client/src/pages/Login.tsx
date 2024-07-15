@@ -39,8 +39,8 @@ export const Login = () => {
             <Typography.Title className='text-align-center'>Login</Typography.Title>
 
             <Form
-                className='form-width'
-                labelCol={{ span: 16 }}
+                className='form-wrapper'
+                labelCol={{ span: 13 }}
                 onFinish={handleSubmit}
             >
                 <Form.Item
@@ -52,6 +52,7 @@ export const Login = () => {
                     ]}
                 >
                     <Input
+                        className='input-login-width'
                         type='email'
                         name='email'
                         value={formData.email}
@@ -65,6 +66,7 @@ export const Login = () => {
                     rules={[{ required: true, message: 'Please enter a password' }]}
                 >
                     <Input.Password
+                        className='input-login-width'
                         type='password'
                         name='password'
                         value={formData.password}
@@ -72,7 +74,7 @@ export const Login = () => {
                     />
                 </Form.Item>
 
-                <Form.Item wrapperCol={{ offset: 19 }}>
+                <Form.Item wrapperCol={{ offset: 22 }}>
                     <Button
                         type='primary'
                         htmlType='submit'

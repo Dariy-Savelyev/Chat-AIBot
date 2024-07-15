@@ -1,7 +1,16 @@
-.form-width {
-    max-width: 1000px;
-}
-
 .text-align-center {
     text-align: center;
+}
+
+.form-wrapper { 
+    position: absolute;
+    left: 40%;  
+}
+
+.input-registration-width { 
+    width: 160%;
+}
+
+.input-login-width { 
+    width: 200%;
 }

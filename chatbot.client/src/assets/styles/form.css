@@ -2,15 +2,11 @@
     text-align: center;
 }
 
-.form-wrapper { 
-    position: absolute;
-    left: 40%;  
+.form-view {
+    display: flex;
+    flex-direction: column;
 }
 
-.input-registration-width { 
-    width: 160%;
-}
-
-.input-login-width { 
-    width: 200%;
+.ant-form-item-control-input {
+    width: 300px;
 }

@@ -50,8 +50,8 @@ export const Registration = () => {
       <Typography.Title className='text-align-center'>Registration form</Typography.Title>
 
       <Form
-        className='form-wrapper'
-        labelCol={{ span: 9 }}
+        className='form-view'
+        labelCol={{ span: 10 }}
         onFinish={handleSubmit}
       >
         <Form.Item
@@ -63,7 +63,6 @@ export const Registration = () => {
           ]}
         >
           <Input
-            className='input-registration-width'
             type='userName'
             name='userName'
             value={formData.userName}
@@ -80,7 +79,6 @@ export const Registration = () => {
           ]}
         >
           <Input
-            className='input-registration-width'
             type='email'
             name='email'
             value={formData.email}
@@ -97,7 +95,6 @@ export const Registration = () => {
           ]}
         >
           <Input.Password
-            className='input-registration-width'
             type='password'
             name='password'
             value={formData.password}
@@ -115,7 +112,6 @@ export const Registration = () => {
           ]}
         >
           <Input.Password
-            className='input-registration-width'
             type='confirmPassword'
             name='confirmPassword'
             value={formData.confirmPassword}
@@ -123,7 +119,10 @@ export const Registration = () => {
           />
         </Form.Item>
 
-        <Form.Item wrapperCol={{ offset: 18 }}>
+        <Form.Item
+          className='text-align-center'
+          wrapperCol={{ offset: 10 }}
+        >
           <Button
             type='primary'
             htmlType='submit'

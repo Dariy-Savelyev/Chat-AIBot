@@ -50,8 +50,8 @@ export const Registration = () => {
       <Typography.Title className='text-align-center'>Registration form</Typography.Title>
 
       <Form
-        className='form-width'
-        labelCol={{ span: 16 }}
+        className='form-view'
+        labelCol={{ span: 10 }}
         onFinish={handleSubmit}
       >
         <Form.Item
@@ -119,7 +119,10 @@ export const Registration = () => {
           />
         </Form.Item>
 
-        <Form.Item wrapperCol={{ offset: 19 }}>
+        <Form.Item
+          className='text-align-center'
+          wrapperCol={{ offset: 10 }}
+        >
           <Button
             type='primary'
             htmlType='submit'

@@ -3,7 +3,6 @@ import { LoginFormData } from '../models/LoginFormData';
 import { Button, Form, Input, Typography } from 'antd';
 import apiClient from '../services/apiClient';
 import '../assets/styles/form.css';
-import { Tokens } from '../models/Tokens';
 
 export const Login = () => {
     const [formData, setFormData] = useState<LoginFormData>({

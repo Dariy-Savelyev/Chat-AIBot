@@ -1,7 +1,12 @@
-.form-width {
-    max-width: 1000px;
-}
-
 .text-align-center {
     text-align: center;
+}
+
+.form-view {
+    display: flex;
+    flex-direction: column;
+}
+
+.ant-form-item-control-input {
+    width: 300px;
 }

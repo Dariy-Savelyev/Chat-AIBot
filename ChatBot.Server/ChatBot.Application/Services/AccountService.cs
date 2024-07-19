@@ -57,7 +57,7 @@ public class AccountService(
         await userManager.UpdateSecurityStampAsync(user!);
     }
 
-    public async Task<RefreshTokenModel> LoginAsync(LoginModel model)
+    public async Task<string> LoginAsync(LoginModel model)
     {
         var email = model.Email.Trim();
         var user = await userManager.FindByEmailAsync(email) ?? await userManager.FindByNameAsync(email);
@@ -67,10 +67,10 @@ public class AccountService(
             throw ExceptionHelper.GetArgumentException(nameof(LoginModel), "Incorrect credentials");
         }
 
-        var signInResult = await signInManager.CheckPasswordSignInAsync(user!, model.Password, lockoutOnFailure: true);
+        var signInResult = await signInManager.CheckPasswordSignInAsync(user, model.Password, lockoutOnFailure: true);
         if (signInResult.Succeeded)
         {
-            return await tokenComponent.RefreshTokenAsync(user!);
+            return await tokenComponent.RefreshTokenAsync(user);
         }
 
         if (signInResult.IsLockedOut)

@@ -5,7 +5,7 @@ namespace ChatBot.Application.ServiceInterfaces;
 
 public interface ITokensService : IBaseService
 {
-    Task<string> ValidateAndGetUserIdTokenAsync(ValidateTokenModel request);
-    Task<RefreshTokenModel> RefreshTokenAsync(string userId);
+    Task<string> ValidateAndGetUserIdTokenAsync(string accessToken);
+    Task<string> RefreshTokenAsync(string userId);
     Task RevokeTokenAsync(string userId);
 }

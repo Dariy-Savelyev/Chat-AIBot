@@ -9,7 +9,7 @@ import { env } from 'process';
 
 const baseFolder =
     env.APPDATA !== undefined && env.APPDATA !== ''
-        ? `${env.APPDATA}   /ASP.NET/https`
+        ? `${env.APPDATA}/ASP.NET/https`
         : `${env.HOME}/.aspnet/https`;
 
 const certificateName = "chatbot.client";

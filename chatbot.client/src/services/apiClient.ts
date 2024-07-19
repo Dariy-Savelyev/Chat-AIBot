@@ -9,7 +9,7 @@ const apiClient = axios.create({
 
 // Добавление интерсептора для добавления токена авторизации перед каждым запросом
 apiClient.interceptors.request.use(config => {
-  const token = localStorage.getItem('authToken'); // Предположим, что токен хранится в localStorage
+  const token = localStorage.getItem('accessToken'); // Предположим, что токен хранится в localStorage
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

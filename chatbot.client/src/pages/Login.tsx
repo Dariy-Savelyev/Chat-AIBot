@@ -3,6 +3,7 @@ import { LoginFormData } from '../models/LoginFormData';
 import { Button, Form, Input, Typography } from 'antd';
 import apiClient from '../services/apiClient';
 import '../assets/styles/form.css';
+import { Tokens } from '../models/Tokens';
 
 export const Login = () => {
     const [formData, setFormData] = useState<LoginFormData>({
@@ -23,10 +24,12 @@ export const Login = () => {
     const handleSubmit = useCallback(async () => {
         setIsSubmitting(true);
         try {
-            const response = await apiClient.post('/api/account/login', formData);
+            const response = await apiClient.post<string>('/api/account/login', formData);
 
-            const result = response.data;
-            console.log('Login successful:', result);
+            const accessToken = response.data;
+            localStorage.setItem("accessToken", response.data)
+
+            console.log('Login successful accessToken:', accessToken);
         }
         finally {
             setIsSubmitting(false);

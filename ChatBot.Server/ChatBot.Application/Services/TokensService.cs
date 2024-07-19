@@ -17,11 +17,11 @@ public class TokensService(
     TokenValidationParameters tokenValidationParameters,
     ITokenComponent tokenComponent) : ITokensService
 {
-    public async Task<string> ValidateAndGetUserIdTokenAsync(ValidateTokenModel request)
+    public async Task<string> ValidateAndGetUserIdTokenAsync(string accessToken)
     {
         var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
         var claims = jwtSecurityTokenHandler.ValidateToken(
-            request.AccessToken,
+            accessToken,
             tokenValidationParameters,
             out var validatedAccessToken);
 
@@ -29,19 +29,19 @@ public class TokensService(
 
         if (userId is null)
         {
-            throw ExceptionHelper.GetArgumentException(nameof(request), "Invalid token");
+            throw ExceptionHelper.GetArgumentException(nameof(accessToken), "Invalid token");
         }
 
         var refreshToken = await refreshTokenRepository.GetActiveRefreshTokenAsync(userId);
-        if (validatedAccessToken is not JwtSecurityToken || refreshToken is null)
+        if (validatedAccessToken is not JwtSecurityToken || refreshToken is null || refreshToken.ExpirationDate < DateTime.UtcNow)
         {
-            throw ExceptionHelper.GetArgumentException(nameof(request), "Invalid token");
+            throw ExceptionHelper.GetArgumentException(nameof(accessToken), "Invalid token");
         }
 
         return userId;
     }
 
-    public async Task<RefreshTokenModel> RefreshTokenAsync(string userId)
+    public async Task<string> RefreshTokenAsync(string userId)
     {
         var user = await userManager.FindByIdAsync(userId);
         if (user == null)

@@ -7,6 +7,8 @@ namespace ChatBot.Web
 {
     public class Program
     {
+        private const string PolicyName = "AllowSpecificOrigin";
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +20,21 @@ namespace ChatBot.Web
             builder.LoadApplicationModule();
 
             builder.Services.AddEndpointsApiExplorer();
+
+            if (builder.Environment.IsDevelopment())
+            {
+                builder.Services.AddCors(options =>
+                {
+                    options.AddPolicy(
+                        PolicyName,
+                        corsPolicyBuilder =>
+                        {
+                            corsPolicyBuilder.WithOrigins("https://localhost:5174", "https://localhost:5173")
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                        });
+                });
+            }
 
             var app = builder.Build();
 
@@ -34,6 +51,8 @@ namespace ChatBot.Web
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseCors(PolicyName);
 
             app.UseAuthorization();
 

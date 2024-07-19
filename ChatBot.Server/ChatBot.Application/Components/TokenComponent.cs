@@ -57,7 +57,7 @@ public class TokenComponent : ITokenComponent
         };
     }
 
-    public async Task<RefreshTokenModel> RefreshTokenAsync(User user)
+    public async Task<string> RefreshTokenAsync(User user)
     {
         var refreshToken = await _refreshTokenRepository.GetActiveRefreshTokenAsync(user.Id);
 
@@ -69,7 +69,7 @@ public class TokenComponent : ITokenComponent
 
         var accessToken = await GenerateAccessTokenAsync(user);
 
-        return new RefreshTokenModel { AccessToken = accessToken, RefreshToken = refreshToken.Token };
+        return accessToken;
     }
 
     private async Task<SecurityTokenDescriptor> GetTokenDescriptorAsync(User user)

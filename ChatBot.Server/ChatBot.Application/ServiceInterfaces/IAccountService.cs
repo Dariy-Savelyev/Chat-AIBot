@@ -7,5 +7,5 @@ namespace ChatBot.Application.ServiceInterfaces;
 public interface IAccountService : IBaseService
 {
     Task RegistrationAsync(RegistrationModel model);
-    Task<RefreshTokenModel> LoginAsync(LoginModel model);
+    Task<string> LoginAsync(LoginModel model);
 }

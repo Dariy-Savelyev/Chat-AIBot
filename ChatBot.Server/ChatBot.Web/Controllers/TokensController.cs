@@ -13,7 +13,7 @@ public class TokensController(ITokensService service) : BaseController
     [AllowAnonymous]
     public async Task<ActionResult> Refresh(ValidateTokenModel request)
     {
-        var userId = await service.ValidateAndGetUserIdTokenAsync(request);
+        var userId = await service.ValidateAndGetUserIdTokenAsync(request.AccessToken);
 
         var result = await service.RefreshTokenAsync(userId);
 

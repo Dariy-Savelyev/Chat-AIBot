@@ -16,7 +16,7 @@ public class AccountController(IAccountService service) : BaseController
     }
 
     [HttpPost]
-    public async Task<RefreshTokenModel> Login(LoginModel model)
+    public async Task<string> Login(LoginModel model)
     {
         return await service.LoginAsync(model);
     }

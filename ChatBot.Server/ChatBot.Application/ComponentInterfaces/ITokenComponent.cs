@@ -7,5 +7,5 @@ public interface ITokenComponent : IBaseComponent
 {
     Task<string> GenerateAccessTokenAsync(User user);
     RefreshToken GenerateRefreshToken(string appUserId);
-    Task<RefreshTokenModel> RefreshTokenAsync(User user);
+    Task<string> RefreshTokenAsync(User user);
 }

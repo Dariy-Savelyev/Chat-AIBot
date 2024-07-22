@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { storage } from './storage';
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -7,9 +8,8 @@ const apiClient = axios.create({
   }
 });
 
-// Добавление интерсептора для добавления токена авторизации перед каждым запросом
 apiClient.interceptors.request.use(config => {
-  const token = localStorage.getItem('accessToken'); // Предположим, что токен хранится в localStorage
+  const token = storage.getAccessToken();
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

@@ -1,6 +1,7 @@
 import { useState, useCallback, ChangeEvent } from 'react';
 import { LoginFormData } from '../models/LoginFormData';
 import { Button, Form, Input, Typography } from 'antd';
+import { storage } from '../services/storage';
 import apiClient from '../services/apiClient';
 import '../assets/styles/form.css';
 
@@ -26,7 +27,7 @@ export const Login = () => {
             const response = await apiClient.post<string>('/api/account/login', formData);
 
             const accessToken = response.data;
-            localStorage.setItem("accessToken", response.data)
+            storage.saveAccessToken(accessToken);
 
             console.log('Login successful accessToken:', accessToken);
         }

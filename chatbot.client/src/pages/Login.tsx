@@ -1,8 +1,8 @@
 import { useState, useCallback, ChangeEvent } from 'react';
 import { LoginFormData } from '../models/LoginFormData';
 import { Button, Form, Input, Typography } from 'antd';
-import { storage } from '../services/storage';
-import apiClient from '../services/apiClient';
+import { AccesTokenService } from '../services/AccessTokenService';
+import { post } from '../services/ApiClient';
 import '../assets/styles/form.css';
 
 export const Login = () => {
@@ -24,10 +24,10 @@ export const Login = () => {
     const handleSubmit = useCallback(async () => {
         setIsSubmitting(true);
         try {
-            const response = await apiClient.post<string>('/api/account/login', formData);
+            const response = await post<string>('/api/account/login', formData, { skipAuthHeader: true });
 
-            const accessToken = response.data;
-            storage.saveAccessToken(accessToken);
+            const accessToken = response;
+            AccesTokenService.saveAccessToken(accessToken);
 
             console.log('Login successful accessToken:', accessToken);
         }

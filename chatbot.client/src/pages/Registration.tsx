@@ -2,7 +2,7 @@ import { useState, useCallback, ChangeEvent } from 'react';
 import { RegistrationFormData } from '../models/RegistrationFormData';
 import { Button, Form, Input, Typography } from 'antd';
 import '../assets/styles/form.css';
-import apiClient from '../services/apiClient';
+import { post } from '../services/ApiClient';
 
 export const Registration = () => {
   const [formData, setFormData] = useState<RegistrationFormData>({
@@ -25,13 +25,7 @@ export const Registration = () => {
   const handleSubmit = useCallback(async () => {
     setIsSubmitting(true);
     try {
-      const response = await apiClient.post('/api/account/registration', formData);
-
-      if (response.status == 200) {
-        console.log('Form submitted successfully');
-      } else {
-        console.log(response.data);
-      }
+      await post('/api/account/registration', formData, { skipAuthHeader: true });
     }
     finally {
       setIsSubmitting(false);

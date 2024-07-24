@@ -9,7 +9,6 @@ namespace ChatBot.Web.Controllers;
 public class TokensController(ITokensService service) : BaseController
 {
     [HttpPost]
-    [Route("Refresh")]
     [AllowAnonymous]
     public async Task<ActionResult> Refresh(ValidateTokenModel request)
     {
@@ -21,7 +20,6 @@ public class TokensController(ITokensService service) : BaseController
     }
 
     [HttpPost]
-    [Route("Revoke")]
     public async Task Revoke()
     {
         await service.RevokeTokenAsync(User.GetUserId());

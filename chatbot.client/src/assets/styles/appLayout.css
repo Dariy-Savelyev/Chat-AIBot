@@ -9,10 +9,24 @@ body {
 
 .menu-height {
     min-height: 86.5vh;
+    width: 300px;
 }
 
 .footer {
     font-weight: bold;
     text-align: center;
     background-color: lightblue;
+}
+
+.ant-layout-sider-children {
+    background-color: white;
+    width: 300px;
+}
+
+.button-width {
+    width: 300px;
+}
+
+.input-width {
+    width: 224px;
 }

@@ -1,9 +1,11 @@
-import { Layout, Menu } from 'antd';
+import { Button, Input, Layout, Menu } from 'antd';
 import Sider from 'antd/es/layout/Sider';
 import Link from 'antd/es/typography/Link';
-import React, { ReactNode } from 'react';
+import React, { ChangeEvent, ReactNode, useCallback, useState } from 'react';
 import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
+import { ChatNameModel } from '../../models/ChatNameModel';
+import { post } from '../../services/ApiClient';
 
 const { Header, Content, Footer } = Layout;
 
@@ -47,6 +49,31 @@ const items2: MenuProps['items'] = [UserOutlined, LaptopOutlined, NotificationOu
 );
 
 const AppLayout = ({ children }: AppLayoutProps) => {
+  const [showInput, setShowInput] = useState(false);
+  const [chatName, setFormData] = useState<ChatNameModel>({
+    name: ''
+  });
+
+  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...chatName,
+      name: e.target.value
+    });
+  }, []);
+
+  const showChatInput = useCallback(() => {
+    setShowInput(true);
+  }, []);
+
+  const submitChatName = useCallback(async () => {
+    try {
+      await post<string>('/api/chat/create', chatName, { skipAuthHeader: true });
+    }
+    finally {
+      setShowInput(false);
+    }
+  }, [chatName]);
+
   return (
     <Layout>
       <Header>
@@ -60,10 +87,24 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
       <Content>
         <Layout>
-          <Sider >
+          <Sider>
+            {showInput ? (
+              <>
+                <Input
+                  className='input-width'
+                  type='text'
+                  value={chatName.name}
+                  onChange={handleChange}
+                  placeholder='Enter chat name'
+                />
+                <Button type='primary' htmlType='submit' onClick={submitChatName}>Create</Button>
+              </>
+            ) : (
+              <Button className='button-width' type='primary' onClick={showChatInput}>Create Chat</Button>
+            )}
             <Menu
               className='menu-height'
-              mode="inline"
+              mode='inline'
               items={items2}
             />
           </Sider>

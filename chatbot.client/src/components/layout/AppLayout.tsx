@@ -90,7 +90,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     if (isHomePage) {
       onReload();
     }
-  }, []);
+  }, [isHomePage]);
 
   return (
     <Layout>

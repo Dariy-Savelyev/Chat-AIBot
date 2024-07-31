@@ -27,7 +27,7 @@ public class ChatService(IChatRepository chatRepository, IMapper mapper) : IChat
     {
         var dataBaseChats = await chatRepository.GetAllAsync();
 
-        var chats = mapper.Map<IEnumerable<GetAllChatModel>>(dataBaseChats.Where(x => x.CreatorId == userId));
+        var chats = mapper.Map<IEnumerable<GetAllChatModel>>(dataBaseChats);
 
         var listOfChats = new List<GetAllChatModel>();
         listOfChats.AddRange(chats);

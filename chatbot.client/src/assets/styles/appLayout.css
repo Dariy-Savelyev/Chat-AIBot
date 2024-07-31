@@ -36,12 +36,19 @@ body {
     border-radius: 0;
 }
 
+:root {
+    --window-height: 100vh;
+    --header-height: 64px;
+    --footer-height: 67px;
+    --create-chat-button-height: 32px;
+}
+
 .fit-content {
-    height: calc(100vh - 64px - 67px);
+    height: calc(var(--window-height) - var(--header-height) - var(--footer-height));
 }
 
 .hover-scrollbar {
-    height: calc(100vh - 64px - 67px - 32px);
+    height: calc(var(--window-height) - var(--header-height) - var(--footer-height) - var(--create-chat-button-height));
     overflow-y: hidden;
     border-width: 0!important;
     z-index: auto;

@@ -2,12 +2,9 @@ import { useState, useCallback, ChangeEvent } from 'react';
 import { LoginFormData } from '../models/LoginFormData';
 import { Button, Form, Input, Typography } from 'antd';
 import { AccesTokenService } from '../services/AccessTokenService';
-import { get, post } from '../services/ApiClient';
+import { post } from '../services/ApiClient';
 import '../assets/styles/form.css';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { setChats } from '../store/slices/ChatSlice';
-import { Chat } from '../models/GetAllChatModel';
 
 export const Login = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -17,7 +14,6 @@ export const Login = () => {
     });
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -34,9 +30,6 @@ export const Login = () => {
 
             const accessToken = response;
             AccesTokenService.saveAccessToken(accessToken);
-
-            const chatResponse = await get<Chat[]>('/api/chat/getAllChats');
-            dispatch(setChats(chatResponse));
 
             navigate('/');
             console.log('Login successful accessToken:', accessToken);

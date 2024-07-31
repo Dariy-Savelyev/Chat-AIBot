@@ -4,14 +4,16 @@ import { Button, Form, Input, Typography } from 'antd';
 import { AccesTokenService } from '../services/AccessTokenService';
 import { post } from '../services/ApiClient';
 import '../assets/styles/form.css';
+import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState<LoginFormData>({
         email: '',
         password: '',
     });
 
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const navigate = useNavigate();
 
     const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -29,6 +31,7 @@ export const Login = () => {
             const accessToken = response;
             AccesTokenService.saveAccessToken(accessToken);
 
+            navigate('/');
             console.log('Login successful accessToken:', accessToken);
         }
         finally {
@@ -42,8 +45,8 @@ export const Login = () => {
             <Typography.Title className='text-align-center'>Login</Typography.Title>
 
             <Form
-                className='form-view'
-                labelCol={{ span: 10 }}
+                className='form-center login'
+                labelCol={{ span: 5 }}
                 onFinish={handleSubmit}
             >
                 <Form.Item
@@ -75,10 +78,7 @@ export const Login = () => {
                     />
                 </Form.Item>
 
-                <Form.Item
-                    className='text-align-center'
-                    wrapperCol={{ offset: 10 }}
-                >
+                <Form.Item wrapperCol={{ offset: 12 }}>
                     <Button
                         type='primary'
                         htmlType='submit'

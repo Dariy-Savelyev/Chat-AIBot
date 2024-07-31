@@ -7,12 +7,64 @@ body {
     justify-content: center;
 }
 
-.menu-height {
-    min-height: 86.5vh;
-}
-
 .footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
     font-weight: bold;
     text-align: center;
     background-color: lightblue;
+}
+
+.ant-layout-sider-children {
+    background-color: white;
+    width: 400px;
+}
+
+.button {
+    width: 400px;
+    border-radius: 0;
+}
+
+.input {
+    width: 300px;
+    border-radius: 0;
+}
+
+.button-input {
+    width: 100px;
+    border-radius: 0;
+}
+
+:root {
+    --window-height: 100vh;
+    --header-height: 64px;
+    --footer-height: 67px;
+    --create-chat-button-height: 32px;
+}
+
+.fit-content {
+    height: calc(var(--window-height) - var(--header-height) - var(--footer-height));
+}
+
+.hover-scrollbar {
+    height: calc(var(--window-height) - var(--header-height) - var(--footer-height) - var(--create-chat-button-height));
+    overflow-y: hidden;
+    border-width: 0!important;
+    z-index: auto;
+    padding-right: 10px;
+}
+
+.hover-scrollbar::-webkit-scrollbar {
+    width: 10px;
+    background-color: transparent;
+}
+
+.hover-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgb(184, 186, 187);
+}
+
+.hover-scrollbar:hover {
+    overflow-y: auto;
+    padding-right: 0px;
 }

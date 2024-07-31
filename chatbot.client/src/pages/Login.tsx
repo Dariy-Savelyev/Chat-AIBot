@@ -2,16 +2,22 @@ import { useState, useCallback, ChangeEvent } from 'react';
 import { LoginFormData } from '../models/LoginFormData';
 import { Button, Form, Input, Typography } from 'antd';
 import { AccesTokenService } from '../services/AccessTokenService';
-import { post } from '../services/ApiClient';
+import { get, post } from '../services/ApiClient';
 import '../assets/styles/form.css';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setChats } from '../store/slices/ChatSlice';
+import { Chat } from '../models/GetAllChatModel';
 
 export const Login = () => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState<LoginFormData>({
         email: '',
         password: '',
     });
 
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -29,6 +35,10 @@ export const Login = () => {
             const accessToken = response;
             AccesTokenService.saveAccessToken(accessToken);
 
+            const chatResponse = await get<Chat[]>('/api/chat/getAllChats');
+            dispatch(setChats(chatResponse));
+
+            navigate('/');
             console.log('Login successful accessToken:', accessToken);
         }
         finally {
@@ -42,8 +52,8 @@ export const Login = () => {
             <Typography.Title className='text-align-center'>Login</Typography.Title>
 
             <Form
-                className='form-view'
-                labelCol={{ span: 10 }}
+                className='form-center login'
+                labelCol={{ span: 5 }}
                 onFinish={handleSubmit}
             >
                 <Form.Item
@@ -75,10 +85,7 @@ export const Login = () => {
                     />
                 </Form.Item>
 
-                <Form.Item
-                    className='text-align-center'
-                    wrapperCol={{ offset: 10 }}
-                >
+                <Form.Item wrapperCol={{ offset: 12 }}>
                     <Button
                         type='primary'
                         htmlType='submit'

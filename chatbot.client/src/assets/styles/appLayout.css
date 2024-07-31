@@ -7,12 +7,10 @@ body {
     justify-content: center;
 }
 
-.menu-height {
-    min-height: 86.5vh;
-    width: 300px;
-}
-
 .footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
     font-weight: bold;
     text-align: center;
     background-color: lightblue;
@@ -20,13 +18,46 @@ body {
 
 .ant-layout-sider-children {
     background-color: white;
-    width: 300px;
+    width: 400px;
 }
 
-.button-width {
-    width: 300px;
+.button {
+    width: 400px;
+    border-radius: 0;
 }
 
-.input-width {
-    width: 224px;
+.input {
+    width: 300px;
+    border-radius: 0;
+}
+
+.button-input {
+    width: 100px;
+    border-radius: 0;
+}
+
+.fit-content {
+    height: calc(100vh - 64px - 67px);
+}
+
+.hover-scrollbar {
+    height: calc(100vh - 64px - 67px - 32px);
+    overflow-y: hidden;
+    border-width: 0!important;
+    z-index: auto;
+    padding-right: 10px;
+}
+
+.hover-scrollbar::-webkit-scrollbar {
+    width: 10px;
+    background-color: transparent;
+}
+
+.hover-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgb(184, 186, 187);
+}
+
+.hover-scrollbar:hover {
+    overflow-y: auto;
+    padding-right: 0px;
 }

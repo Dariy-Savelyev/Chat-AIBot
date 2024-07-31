@@ -3,8 +3,10 @@ import { RegistrationFormData } from '../models/RegistrationFormData';
 import { Button, Form, Input, Typography } from 'antd';
 import '../assets/styles/form.css';
 import { post } from '../services/ApiClient';
+import { useNavigate } from 'react-router-dom';
 
 export const Registration = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<RegistrationFormData>({
     userName: '',
     email: '',
@@ -12,7 +14,7 @@ export const Registration = () => {
     confirmPassword: '',
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -26,6 +28,8 @@ export const Registration = () => {
     setIsSubmitting(true);
     try {
       await post('/api/account/registration', formData, { skipAuthHeader: true });
+
+      navigate('/login');
     }
     finally {
       setIsSubmitting(false);
@@ -44,8 +48,8 @@ export const Registration = () => {
       <Typography.Title className='text-align-center'>Registration form</Typography.Title>
 
       <Form
-        className='form-view'
-        labelCol={{ span: 10 }}
+        className='form-center registration'
+        labelCol={{ span: 8 }}
         onFinish={handleSubmit}
       >
         <Form.Item
@@ -115,7 +119,7 @@ export const Registration = () => {
 
         <Form.Item
           className='text-align-center'
-          wrapperCol={{ offset: 10 }}
+          wrapperCol={{ offset: 8 }}
         >
           <Button
             type='primary'

@@ -21,4 +21,8 @@ export class AccesTokenService {
 
         return false;
     }
+
+    static revokeAccessToken() {
+        storage.revokeAccessToken();
+    }
 }

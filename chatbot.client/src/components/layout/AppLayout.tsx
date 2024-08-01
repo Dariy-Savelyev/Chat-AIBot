@@ -11,27 +11,10 @@ import { setChats } from '../../store/slices/ChatSlice';
 import { ChatStateModel } from '../../store/models/ChatStateModel';
 import { useLocation } from 'react-router-dom';
 import '../../assets/styles/appLayout.css';
+import { AccesTokenService } from '../../services/AccessTokenService';
+import { AppLayoutProps } from '../../models/AppLayoutPropsModel';
 
 const { Header, Content, Footer } = Layout;
-
-interface AppLayoutProps {
-  children: ReactNode;
-}
-
-const items = [
-  {
-    label: <Link href='/'>Home</Link>,
-    key: 'home',
-  },
-  {
-    label: <Link href='/registration'>Registration</Link>,
-    key: 'registration',
-  },
-  {
-    label: <Link href='/login'>Login</Link>,
-    key: 'login',
-  },
-];
 
 const AppLayout = ({ children }: AppLayoutProps) => {
   const [currentUrl, setCurrentUrl] = useState<ReactNode>();
@@ -39,9 +22,11 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   const [chatName, setFormData] = useState<ChatNameModel>({
     name: ''
   });
-  
-  const isHomePage = useLocation().pathname === '/';
+
   const chats = useSelector((state: ChatStateModel) => state.chats);
+  const token = AccesTokenService.getAccessToken();
+  const isHomePage = useLocation().pathname === '/';
+  const isLoggedIn = token != null;
 
   const userChats: MenuProps['items'] = Object.values(chats).flat().map(
     (chat) => {
@@ -54,6 +39,31 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       };
     },
   );
+
+  const onLogout = useCallback(async () => {
+    await post<void>('/api/tokens/revoke', {});
+
+    AccesTokenService.revokeAccessToken();
+  }, []);
+
+  const navigationItems = [
+    {
+      label: <Link href='/'>Home</Link>,
+      key: 'home',
+    },
+    {
+      label: <Link href='/registration'>Registration</Link>,
+      key: 'registration',
+    },
+    {
+      label: isLoggedIn ? (
+        <Link href='/login' onClick={onLogout}>Logout</Link>
+      ) : (
+        <Link href='/login'>Login</Link>
+      ),
+      key: 'login',
+    },
+  ];
 
   const dispatch = useDispatch();
   
@@ -87,7 +97,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   }, [chats, chatName, dispatch]);
 
   useEffect(() => {
-    if (isHomePage) {
+    if (isHomePage && isLoggedIn) {
       onReload();
     }
   }, [isHomePage]);
@@ -99,13 +109,13 @@ const AppLayout = ({ children }: AppLayoutProps) => {
           className='menu'
           theme='dark'
           mode='horizontal'
-          items={items}
+          items={navigationItems}
         />
       </Header>
 
       <Content>
         <Layout>
-          {isHomePage && (
+          {(isHomePage && isLoggedIn) && (
             <>
               <Sider>
                 {showInput ? (

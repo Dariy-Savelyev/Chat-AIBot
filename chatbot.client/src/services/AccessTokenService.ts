@@ -11,6 +11,10 @@ export class AccesTokenService {
         return storage.getAccessToken();
     }
 
+    static revokeAccessToken() {
+        storage.revokeAccessToken();
+    }
+
     static isExpired(): boolean {
         let currentTime = new Date().getTime();
         let lastRefreshAccessTokenTime = + storage.getLastRefreshAccessTokenDate()!;
@@ -20,5 +24,12 @@ export class AccesTokenService {
         }
 
         return false;
+    }
+
+    static isLoggedIn(): boolean {
+        const token = storage.getAccessToken();
+        const isLoggedIn = token != null;
+
+        return isLoggedIn;
     }
 }

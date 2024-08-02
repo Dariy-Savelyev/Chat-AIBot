@@ -23,7 +23,7 @@ apiClient.interceptors.request.use(async config => {
         accessToken: oldAccessToken!
       };
 
-      const response = await post<string>('/api/Tokens/Refresh', validateToken, { skipAuthHeader: true });
+      const response = await post<string>('/api/tokens/refresh', validateToken, { skipAuthHeader: true });
       token = response;
 
       AccesTokenService.saveAccessToken(response);

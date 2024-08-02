@@ -17,4 +17,9 @@ export class StorageService {
     static getLastRefreshAccessTokenDate(): string | null {
         return localStorage.getItem(StorageService.lastRefreshAccessTokenDate);
     }
+
+    static revokeAccessToken() {
+        localStorage.removeItem(StorageService.accessToken);
+        localStorage.removeItem(StorageService.lastRefreshAccessTokenDate);
+    }
 }

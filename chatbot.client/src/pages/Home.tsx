@@ -1,9 +1,17 @@
 import { Typography } from 'antd';
 import '../assets/styles/appLayout.css'
+import { AccesTokenService } from '../services/AccessTokenService';
+import { Navigate } from 'react-router-dom';
 
 export const Home = () => {
   const { Title, Paragraph } = Typography;
 
+  const isLoggedIn = AccesTokenService.isLoggedIn();
+
+  if (!isLoggedIn) {
+    return <Navigate to="/login" />;
+  }
+  
   return (
     <>
       <div className='text-align-center'>

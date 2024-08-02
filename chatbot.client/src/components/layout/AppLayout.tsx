@@ -24,9 +24,8 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   });
 
   const chats = useSelector((state: ChatStateModel) => state.chats);
-  const token = AccesTokenService.getAccessToken();
   const isHomePage = useLocation().pathname === '/';
-  const isLoggedIn = token != null;
+  const isLoggedIn = AccesTokenService.isLoggedIn();
 
   const userChats: MenuProps['items'] = Object.values(chats).flat().map(
     (chat) => {

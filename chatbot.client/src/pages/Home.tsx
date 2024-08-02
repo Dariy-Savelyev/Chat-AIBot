@@ -6,8 +6,7 @@ import { Navigate } from 'react-router-dom';
 export const Home = () => {
   const { Title, Paragraph } = Typography;
 
-  const token = AccesTokenService.getAccessToken();
-  const isLoggedIn = token != null;
+  const isLoggedIn = AccesTokenService.isLoggedIn();
 
   if (!isLoggedIn) {
     return <Navigate to="/login" />;

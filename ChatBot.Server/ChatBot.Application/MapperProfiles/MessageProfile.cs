@@ -14,8 +14,6 @@ public class MessageProfile : Profile
                 opt => opt.MapFrom(x => DateTime.UtcNow))
             ;
 
-        CreateMap<Message, GetAllMessageModel>()
-            .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
-            ;
+        CreateMap<Message, GetAllMessageModel>();
     }
 }

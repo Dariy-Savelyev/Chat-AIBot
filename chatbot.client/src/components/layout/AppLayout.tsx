@@ -123,7 +123,15 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                       onChange={handleChange}
                       placeholder='Enter chat name'
                     />
-                    <Button className='button-input' type='primary' htmlType='submit' onClick={submitChatName}>Create</Button>
+                    <Button
+                      className='button-input'
+                      type='primary'
+                      htmlType='submit'
+                      onClick={submitChatName}
+                      disabled={chatName.name.trim() === ''}
+                    >
+                      Create
+                    </Button>
                   </>
                 ) : (
                   <Button className='button' type='primary' onClick={showChatInput}>Create Chat</Button>

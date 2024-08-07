@@ -85,6 +85,7 @@ export const SelectedChat = () => {
                     type='primary'
                     htmlType='submit'
                     onClick={() => submitContent(Number(chatId))}
+                    disabled={content.content.trim() === ''}
                 >
                     Send
                 </Button>

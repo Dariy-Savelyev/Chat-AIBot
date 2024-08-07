@@ -50,7 +50,7 @@ body {
 .hover-scrollbar {
     height: calc(var(--window-height) - var(--header-height) - var(--footer-height) - var(--create-chat-button-height));
     overflow-y: hidden;
-    border-width: 0!important;
+    border-width: 0 !important;
     z-index: auto;
     padding-right: 10px;
 }
@@ -67,4 +67,10 @@ body {
 .hover-scrollbar:hover {
     overflow-y: auto;
     padding-right: 0px;
+}
+
+.sider-width {
+    max-width: 400px !important;
+    flex: 0 0 400px !important; 
+    width: 400px !important;
 }

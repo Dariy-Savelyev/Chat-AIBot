@@ -4,6 +4,7 @@ import { Registration } from './pages/Registration';
 import { Home } from './pages/Home';
 import { Login } from './pages/Login';
 import AppLayout from './components/layout/AppLayout';
+import { SelectedChat } from './pages/SelectedChat';
 
 const App: React.FC = () => {
   return (
@@ -13,6 +14,7 @@ const App: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="registration" element={<Registration />} />
           <Route path="login" element={<Login />} />
+          <Route path="chat/:chatId" element={<SelectedChat />} />
         </Routes>
       </AppLayout>
     </BrowserRouter>

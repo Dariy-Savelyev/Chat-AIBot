@@ -1,0 +1,73 @@
+:root {
+    --window-width: 100vw;
+    --sider-width: 400px;
+    --button-chat-width: 70px;
+}
+
+.textarea {
+    width: calc(var(--window-width) - var(--sider-width) - var(--button-chat-width));
+    border-radius: 0;
+}
+
+.button-chat {
+    border-radius: 0;
+    width: var(--button-chat-width);
+}
+
+.space-compact-position {
+    position: absolute;
+    bottom: 67px;
+}
+
+.chat-bubble {
+    background-color: #84c778;
+    border-radius: 10px;
+    padding: 15px 15px 15px 15px;
+    width: 500px;
+    height: auto;
+    margin-right: 20px;
+}
+
+.chat-bubble::before {
+    content: "";
+    position: absolute;
+    top: 70%;
+    right: -20px;
+    transform: translateY(-50%);
+    border-style: solid;
+    border-width: 8px 0 8px 20px;
+    border-color: transparent transparent transparent #84c778;
+}
+
+.ant-card-body {
+    padding: 0 !important;
+}
+
+.list-display {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.chat-scrollbar {
+    height: calc(var(--window-height) - var(--header-height) - var(--footer-height) - var(--create-chat-button-height));
+    overflow-y: hidden;
+    border-width: 0 !important;
+    z-index: auto;
+    padding-right: 13px;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.chat-scrollbar::-webkit-scrollbar {
+    width: 13px;
+    background-color: transparent;
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgb(184, 186, 187);
+}
+
+.chat-scrollbar:hover {
+    overflow-y: auto;
+    padding-right: 0px;
+}

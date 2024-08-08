@@ -23,7 +23,7 @@ public class ChatService(IChatRepository chatRepository, IMapper mapper) : IChat
         await chatRepository.JoinUserAsync(userId, model.ChatId);
     }
 
-    public async Task<IEnumerable<GetAllChatModel>> GetAllChatsAsync(string userId)
+    public async Task<IEnumerable<GetAllChatModel>> GetAllChatsAsync()
     {
         var dataBaseChats = await chatRepository.GetAllAsync();
 

@@ -13,6 +13,7 @@ public sealed class ApplicationContext : IdentityDbContext<User>
 
     public DbSet<Chat> Chats { get; set; } = null!;
     public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
+    public DbSet<Message> Messages { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

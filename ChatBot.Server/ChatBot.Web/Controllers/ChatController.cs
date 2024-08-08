@@ -22,6 +22,6 @@ public class ChatController(IChatService service) : BaseController
     [HttpGet]
     public async Task<IEnumerable<GetAllChatModel>> GetAllChats()
     {
-        return await service.GetAllChatsAsync(User.GetUserId());
+        return await service.GetAllChatsAsync();
     }
 }

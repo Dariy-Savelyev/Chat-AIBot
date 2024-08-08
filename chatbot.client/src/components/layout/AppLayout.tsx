@@ -1,7 +1,7 @@
 import { Button, Input, Layout, Menu } from 'antd';
 import Sider from 'antd/es/layout/Sider';
 import Link from 'antd/es/typography/Link';
-import { ChangeEvent, ReactNode, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import type { MenuProps } from 'antd';
 import { ChatNameModel } from '../../models/ChatNameModel';
 import { get, post } from '../../services/ApiClient';
@@ -17,27 +17,17 @@ import { AppLayoutProps } from '../../models/AppLayoutPropsModel';
 const { Header, Content, Footer } = Layout;
 
 const AppLayout = ({ children }: AppLayoutProps) => {
-  const [currentUrl, setCurrentUrl] = useState<ReactNode>();
   const [showInput, setShowInput] = useState(false);
+
   const [chatName, setFormData] = useState<ChatNameModel>({
     name: ''
   });
 
   const chats = useSelector((state: ChatStateModel) => state.chats);
-  const isHomePage = useLocation().pathname === '/';
+  const isHomePage = !['/registration', '/login'].includes(useLocation().pathname);
   const isLoggedIn = AccesTokenService.isLoggedIn();
 
-  const userChats: MenuProps['items'] = Object.values(chats).flat().map(
-    (chat) => {
-      return {
-        key: chat.id,
-        label: chat.name,
-        onClick: () => {
-          setCurrentUrl(<Link href={`/chat/${chat.id}`}>{`/chat/${chat.id}`}</Link>);
-        },
-      };
-    },
-  );
+  const dispatch = useDispatch();
 
   const onLogout = useCallback(async () => {
     await post<void>('/api/tokens/revoke', {});
@@ -45,27 +35,6 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     AccesTokenService.revokeAccessToken();
   }, []);
 
-  const navigationItems = [
-    {
-      label: <Link href='/'>Home</Link>,
-      key: 'home',
-    },
-    {
-      label: <Link href='/registration'>Registration</Link>,
-      key: 'registration',
-    },
-    {
-      label: isLoggedIn ? (
-        <Link href='/login' onClick={onLogout}>Logout</Link>
-      ) : (
-        <Link href='/login'>Login</Link>
-      ),
-      key: 'login',
-    },
-  ];
-
-  const dispatch = useDispatch();
-  
   const onReload = useCallback(async () => {
     const fetchedChats = await get<Chat[]>('/api/chat/getAllChats');
 
@@ -101,6 +70,34 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     }
   }, [isHomePage]);
 
+  const userChats: MenuProps['items'] = Object.values(chats).flat().map(
+    (chat) => {
+      return {
+        key: chat.id,
+        label: <Link href={`/chat/${chat.id}`}>{chat.name}</Link>
+      };
+    },
+  );
+
+  const navigationItems = [
+    {
+      label: <Link href='/'>Home</Link>,
+      key: 'home',
+    },
+    {
+      label: <Link href='/registration'>Registration</Link>,
+      key: 'registration',
+    },
+    {
+      label: isLoggedIn ? (
+        <Link href='/login' onClick={onLogout}>Logout</Link>
+      ) : (
+        <Link href='/login'>Login</Link>
+      ),
+      key: 'login',
+    },
+  ];
+
   return (
     <Layout>
       <Header>
@@ -116,7 +113,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         <Layout>
           {(isHomePage && isLoggedIn) && (
             <>
-              <Sider>
+              <Sider className='sider-width'>
                 {showInput ? (
                   <>
                     <Input
@@ -126,7 +123,15 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                       onChange={handleChange}
                       placeholder='Enter chat name'
                     />
-                    <Button className='button-input' type='primary' htmlType='submit' onClick={submitChatName}>Create</Button>
+                    <Button
+                      className='button-input'
+                      type='primary'
+                      htmlType='submit'
+                      onClick={submitChatName}
+                      disabled={chatName.name.trim() === ''}
+                    >
+                      Create
+                    </Button>
                   </>
                 ) : (
                   <Button className='button' type='primary' onClick={showChatInput}>Create Chat</Button>
@@ -139,12 +144,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
               </Sider>
             </>
           )}
-          <Content className='fit-content'> {currentUrl ? (
-            <div className='text-align-center'>{currentUrl}</div>
-          ) : (
-            children
-          )}
-          </Content>
+          <Content className='fit-content'>{children}</Content>
         </Layout>
       </Content>
 

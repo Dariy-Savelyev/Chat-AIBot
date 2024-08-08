@@ -20,7 +20,9 @@ public class MessageService(IMessageRepository messageRepository, IMapper mapper
     {
         var dataBaseMessages = await messageRepository.GetAllAsync();
 
-        var messages = mapper.Map<IEnumerable<GetAllMessageModel>>(dataBaseMessages.Where(x => x.ChatId == chatId));
+        var chatMessages = dataBaseMessages.Where(x => x.ChatId == chatId);
+
+        var messages = mapper.Map<IEnumerable<GetAllMessageModel>>(chatMessages);
 
         var listOfMessages = new List<GetAllMessageModel>();
         listOfMessages.AddRange(messages);

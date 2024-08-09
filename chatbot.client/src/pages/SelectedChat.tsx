@@ -1,4 +1,4 @@
-import { Button, Card, Input, List, Space, Typography } from "antd";
+import { Button, Card, ConfigProvider, Input, List, Space, Typography } from "antd";
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { MessageModel } from "../models/MessageModel";
 import { get, post } from "../services/ApiClient";
@@ -8,11 +8,21 @@ import { GetAllMessageModel } from "../models/GetAllMessageModel";
 import { useDispatch, useSelector } from "react-redux";
 import { setMessages } from "../store/slices/MessageSlice";
 import { MessageStateModel } from "../store/models/MessageStateModel";
+import likeIcon from '../assets/images/likeIcon.png';
+import dislikeIcon from '../assets/images/dislikeIcon.png';
+import { EmoteModel } from "../models/EmoteModel";
 
 export const SelectedChat = () => {
     const [content, setContent] = useState<MessageModel>({
+        id: 0,
         content: '',
         chatId: 0,
+        emote: null
+    });
+
+    const [emoteModel, setEmoteModel] = useState<EmoteModel>({
+        emote: null,
+        messageId: 0
     });
 
     const messages = useSelector((state: MessageStateModel) => state.messages);
@@ -37,9 +47,12 @@ export const SelectedChat = () => {
         try {
             contentRef.current.chatId = chatId;
 
-            await post<string>('/api/message/send', contentRef.current);
+            const messageId = await post<string>('/api/message/send', contentRef.current);
 
-            dispatch(setMessages([...Object.values(messages).flat(), { content: contentRef.current.content }]));
+            contentRef.current.id = +messageId;
+
+            dispatch(setMessages([...Object.values(messages).flat(),
+            { content: contentRef.current.content, emote: contentRef.current.emote, id: contentRef.current.id }]));
         }
         finally {
             setContent((prevContent) => ({ ...prevContent, content: '' }));
@@ -54,6 +67,27 @@ export const SelectedChat = () => {
         contentRef.current = { ...content, content: e.target.value };
     }, []);
 
+    const handleEmote = useCallback(async (emote: boolean | null, messageId: number) => {
+        let updatedEmoteModel = { ...emoteModel };
+
+        if (emote === true) {
+            updatedEmoteModel.emote = emoteModel.emote === true ? null : true;
+        } else if (emote === false) {
+            updatedEmoteModel.emote = emoteModel.emote === false ? null : false;
+        }
+
+        updatedEmoteModel.messageId = messageId;
+
+        setEmoteModel(updatedEmoteModel);
+        console.log(updatedEmoteModel)
+        await post<string>('/api/message/setEmote', updatedEmoteModel);
+
+        dispatch(setMessages(Object.values(messages).flat().map((message) => (
+            message.id === messageId ? { ...message, emote: updatedEmoteModel.emote } : message
+        ))));
+
+    }, [emoteModel, setEmoteModel, dispatch, messages]);
+
     return (
         <>
             <div className="chat-scrollbar">
@@ -65,8 +99,45 @@ export const SelectedChat = () => {
                     split={false}
                     renderItem={(item) => (
                         <List.Item>
-                            <Card className="chat-bubble">
+                            <Card
+                                className="chat-bubble"
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.classList.add("show-reactions");
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.classList.remove("show-reactions");
+                                }}
+                            >
                                 <Typography.Text>{item.content}</Typography.Text>
+                                {item.emote !== null ? (
+                                    item.emote ? (
+                                        <img src={likeIcon} alt="Like" className="icon-display" />
+                                    ) : (
+                                        <img src={dislikeIcon} alt="Dislike" className="icon-display" />
+                                    )
+                                ) : null}
+                                <div className="reactions">
+                                    <ConfigProvider wave={{ disabled: true }}>
+                                        <Button
+                                            className="button-emote"
+                                            ghost
+                                            size="small"
+                                            type="primary"
+                                            icon={<img src={likeIcon} alt="Like" className="icon-small" />}
+                                            onClick={() => handleEmote(true, item.id)}
+                                        />
+                                        <span className="divider-color">│</span>
+                                        <Button
+                                            style={{ outline: 'none', boxShadow: 'none' }}
+                                            className="button-emote"
+                                            ghost
+                                            size="small"
+                                            type="primary"
+                                            icon={<img src={dislikeIcon} alt="Dislike" className="icon-small" />}
+                                            onClick={() => handleEmote(false, item.id)}
+                                        />
+                                    </ConfigProvider>
+                                </div>
                             </Card>
                         </List.Item>
                     )}

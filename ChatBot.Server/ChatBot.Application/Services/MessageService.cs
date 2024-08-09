@@ -8,12 +8,14 @@ namespace ChatBot.Application.Services;
 
 public class MessageService(IMessageRepository messageRepository, IMapper mapper) : IMessageService
 {
-    public async Task SendMessageAsync(MessageModel model, string userId)
+    public async Task<int> SendMessageAsync(MessageModel model, string userId)
     {
         var message = mapper.Map<Message>(model);
         message.UserId = userId;
 
         await messageRepository.AddAsync(message);
+
+        return message.Id;
     }
 
     public async Task<IEnumerable<GetAllMessageModel>> GetAllMessagesAsync(int chatId)
@@ -28,5 +30,12 @@ public class MessageService(IMessageRepository messageRepository, IMapper mapper
         listOfMessages.AddRange(messages);
 
         return listOfMessages;
+    }
+
+    public async Task SetEmoteAsync(MessageEmoteModel model)
+    {
+        var emote = mapper.Map<Message>(model);
+
+        await messageRepository.AddEmoteAsync(emote.Id, emote.Emote);
     }
 }

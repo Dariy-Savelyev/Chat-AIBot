@@ -54,7 +54,7 @@
     overflow-y: hidden;
     border-width: 0 !important;
     z-index: auto;
-    padding-right: 13px;
+    scrollbar-gutter: stable;
     display: flex;
     flex-direction: column-reverse;
 }
@@ -70,7 +70,6 @@
 
 .chat-scrollbar:hover {
     overflow-y: auto;
-    padding-right: 0px;
 }
 
 .reactions {

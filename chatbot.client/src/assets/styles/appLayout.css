@@ -52,7 +52,7 @@ body {
     overflow-y: hidden;
     border-width: 0 !important;
     z-index: auto;
-    padding-right: 10px;
+    scrollbar-gutter: stable;
 }
 
 .hover-scrollbar::-webkit-scrollbar {

@@ -150,6 +150,12 @@ export const SelectedChat = () => {
                     value={content.content}
                     onChange={handleTextAreaChange}
                     placeholder="Write message..."
+                    onKeyDown={(event) => {
+                        if (event.key === 'Enter' && content.content.trim() !== '') {
+                            event.preventDefault();
+                            submitContent(Number(chatId));
+                        }
+                    }}
                 />
                 <Button
                     className='button-chat'

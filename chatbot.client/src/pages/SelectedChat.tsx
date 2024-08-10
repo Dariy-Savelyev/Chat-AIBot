@@ -20,10 +20,10 @@ export const SelectedChat = () => {
         emote: null
     });
 
-    const [emoteModel, setEmoteModel] = useState<EmoteModel>({
+    const emoteModel: EmoteModel = {
         emote: null,
         messageId: 0
-    });
+    };
 
     const messages = useSelector((state: MessageStateModel) => state.messages);
     const { chatId } = useParams();
@@ -68,25 +68,15 @@ export const SelectedChat = () => {
     }, []);
 
     const handleEmote = useCallback(async (emote: boolean | null, messageId: number) => {
-        let updatedEmoteModel = { ...emoteModel };
+        emoteModel.emote = emote;
+        emoteModel.messageId = messageId;
 
-        if (emote === true) {
-            updatedEmoteModel.emote = emoteModel.emote === true ? null : true;
-        } else if (emote === false) {
-            updatedEmoteModel.emote = emoteModel.emote === false ? null : false;
-        }
-
-        updatedEmoteModel.messageId = messageId;
-
-        setEmoteModel(updatedEmoteModel);
-        console.log(updatedEmoteModel)
-        await post<string>('/api/message/setEmote', updatedEmoteModel);
+        await post<string>('/api/message/setEmote', emoteModel);
 
         dispatch(setMessages(Object.values(messages).flat().map((message) => (
-            message.id === messageId ? { ...message, emote: updatedEmoteModel.emote } : message
+            message.id === messageId ? { ...message, emote: emote } : message
         ))));
-
-    }, [emoteModel, setEmoteModel, dispatch, messages]);
+    }, [emoteModel, dispatch, messages]);
 
     return (
         <>
@@ -109,35 +99,46 @@ export const SelectedChat = () => {
                                 }}
                             >
                                 <Typography.Text>{item.content}</Typography.Text>
-                                {item.emote !== null ? (
-                                    item.emote ? (
-                                        <img src={likeIcon} alt="Like" className="icon-display" />
-                                    ) : (
-                                        <img src={dislikeIcon} alt="Dislike" className="icon-display" />
-                                    )
+                                <ConfigProvider wave={{ disabled: true }}>
+                                    {item.emote !== null ? (
+                                        <Button
+                                            className="button-emote button-position"
+                                            ghost
+                                            size="small"
+                                            type="primary"
+                                            icon={item.emote ? (
+                                                <img src={likeIcon} alt="unLike" className="icon-small" />
+                                            ) : (
+                                                <img src={dislikeIcon} alt="dislike" className="icon-small" />
+                                            )}
+                                            onClick={() => handleEmote(null, item.id)}
+                                        />
+                                    ) : null}
+                                </ConfigProvider>
+                                {item.emote == null ? (
+                                    <div className="reactions">
+                                        <ConfigProvider wave={{ disabled: true }}>
+                                            <Button
+                                                className="button-emote"
+                                                ghost
+                                                size="small"
+                                                type="primary"
+                                                icon={<img src={likeIcon} alt="like" className="icon-small" />}
+                                                onClick={() => handleEmote(true, item.id)}
+                                            />
+                                            <span className="divider-color">│</span>
+                                            <Button
+                                                style={{ outline: 'none', boxShadow: 'none' }}
+                                                className="button-emote"
+                                                ghost
+                                                size="small"
+                                                type="primary"
+                                                icon={<img src={dislikeIcon} alt="dislike" className="icon-small" />}
+                                                onClick={() => handleEmote(false, item.id)}
+                                            />
+                                        </ConfigProvider>
+                                    </div>
                                 ) : null}
-                                <div className="reactions">
-                                    <ConfigProvider wave={{ disabled: true }}>
-                                        <Button
-                                            className="button-emote"
-                                            ghost
-                                            size="small"
-                                            type="primary"
-                                            icon={<img src={likeIcon} alt="Like" className="icon-small" />}
-                                            onClick={() => handleEmote(true, item.id)}
-                                        />
-                                        <span className="divider-color">│</span>
-                                        <Button
-                                            style={{ outline: 'none', boxShadow: 'none' }}
-                                            className="button-emote"
-                                            ghost
-                                            size="small"
-                                            type="primary"
-                                            icon={<img src={dislikeIcon} alt="Dislike" className="icon-small" />}
-                                            onClick={() => handleEmote(false, item.id)}
-                                        />
-                                    </ConfigProvider>
-                                </div>
                             </Card>
                         </List.Item>
                     )}

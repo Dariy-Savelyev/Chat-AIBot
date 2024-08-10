@@ -98,16 +98,14 @@
     border: none;
 }
 
-.button-emote:hover {
-    transform: scale(1.1);
-}
-
-.icon-display {
+.button-position {
     position: absolute;
     left: -10px;
     bottom: -10px;
-    width: 23px;
-    height: 23px;
+}
+
+.button-emote:hover {
+    transform: scale(1.1);
 }
 
 .divider-color {

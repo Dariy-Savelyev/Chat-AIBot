@@ -4,6 +4,7 @@ namespace ChatBot.Application.ServiceInterfaces;
 
 public interface IMessageService : IBaseService
 {
-    Task SendMessageAsync(MessageModel model, string userId);
+    Task<int> SendMessageAsync(MessageModel model, string userId);
     Task<IEnumerable<GetAllMessageModel>> GetAllMessagesAsync(int chatId);
+    Task SetEmoteAsync(MessageEmoteModel model);
 }

@@ -18,6 +18,8 @@ public class MessageConfiguration : IEntityTypeConfiguration<Message>
 
         builder.Property(p => p.SendDate);
 
+        builder.Property(p => p.Emote);
+
         builder.HasOne(c => c.User)
             .WithMany(u => u.Messages)
             .HasForeignKey(c => c.UserId)

@@ -15,5 +15,11 @@ public class MessageProfile : Profile
             ;
 
         CreateMap<Message, GetAllMessageModel>();
+
+        CreateMap<MessageEmoteModel, Message>()
+            .ForMember(
+                dest => dest.Id,
+                opt => opt.MapFrom(x => x.MessageId))
+            ;
     }
 }

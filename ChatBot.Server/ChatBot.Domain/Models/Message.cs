@@ -8,6 +8,7 @@ public class Message : BaseEntity
     public DateTime SendDate { get; set; }
     public string UserId { get; set; } = string.Empty;
     public int ChatId { get; set; }
+    public bool? Emote { get; set; }
 
     public Chat Chat { get; set; }
     public User User { get; set; }

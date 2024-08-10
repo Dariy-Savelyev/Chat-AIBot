@@ -22,10 +22,11 @@
 .chat-bubble {
     background-color: #84c778;
     border-radius: 10px;
-    padding: 15px 15px 15px 15px;
-    width: 500px;
+    padding: 15px;
+    width: 400px;
     height: auto;
     margin-right: 20px;
+    margin-bottom: 5px;
 }
 
 .chat-bubble::before {
@@ -53,7 +54,7 @@
     overflow-y: hidden;
     border-width: 0 !important;
     z-index: auto;
-    padding-right: 13px;
+    scrollbar-gutter: stable;
     display: flex;
     flex-direction: column-reverse;
 }
@@ -69,5 +70,44 @@
 
 .chat-scrollbar:hover {
     overflow-y: auto;
-    padding-right: 0px;
+}
+
+.reactions {
+    position: absolute;
+    border-radius: 15px;
+    height: 30px;
+    bottom: -16px;
+    left: -20px;
+    background-color: #84c778;
+    border: 1px solid #f5f5f56e;
+    padding: 4px;
+    display: none;
+}
+
+.chat-bubble.show-reactions .reactions {
+    display: flex;
+    flex-direction: row;
+}
+
+.icon-small {
+    width: 23px;
+    height: 23px;
+}
+
+.button-emote {
+    border: none;
+}
+
+.button-position {
+    position: absolute;
+    left: -10px;
+    bottom: -10px;
+}
+
+.button-emote:hover {
+    transform: scale(1.1);
+}
+
+.divider-color {
+    color: #3f3f3f;
 }

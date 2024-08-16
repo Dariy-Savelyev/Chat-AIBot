@@ -1,5 +1,5 @@
 import { Button, Card, ConfigProvider, Input, List, Space, Typography } from "antd";
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { MessageModel } from "../models/MessageModel";
 import { get, post } from "../services/ApiClient";
 import { useParams } from "react-router-dom";
@@ -13,11 +13,13 @@ import dislikeIcon from '../assets/images/dislikeIcon.png';
 import { EmoteModel } from "../models/EmoteModel";
 
 export const SelectedChat = () => {
+    const [isInChat, setIsInChat] = useState(false);
+    const [userId, setUserId] = useState('');
+
     const [content, setContent] = useState<MessageModel>({
         id: 0,
         content: '',
-        chatId: 0,
-        emote: null
+        chatId: 0
     });
 
     const emoteModel: EmoteModel = {
@@ -27,44 +29,45 @@ export const SelectedChat = () => {
 
     const messages = useSelector((state: MessageStateModel) => state.messages);
     const { chatId } = useParams();
-    const contentRef = useRef(content);
 
     const dispatch = useDispatch();
 
     const onReload = useCallback(async () => {
+        const userId = await get<string>('/api/chat/getCurrentUserId');
+        setUserId(userId);
+
         const fetchedMessages = await get<GetAllMessageModel[]>(`/api/message/getAllMessages?chatId=${chatId}`);
 
         dispatch(setMessages(fetchedMessages));
     }, [dispatch]);
 
-    useEffect(() => {
-        if (messages != null) {
-            onReload();
-        }
+    const isUserInChat = useCallback(async () => {
+        const isUserInChat = await get<boolean>(`/api/chat/isUserJoined?chatId=${chatId}`);
+
+        setIsInChat(isUserInChat);
     }, []);
 
     const submitContent = useCallback(async (chatId: number) => {
         try {
-            contentRef.current.chatId = chatId;
+            content.chatId = chatId;
 
-            const messageId = await post<string>('/api/message/send', contentRef.current);
+            const messageId = await post<string>('/api/message/send', content);
 
-            contentRef.current.id = +messageId;
+            content.id = +messageId;
 
             dispatch(setMessages([...Object.values(messages).flat(),
-            { content: contentRef.current.content, emote: contentRef.current.emote, id: contentRef.current.id }]));
+            { content: content.content, id: content.id, emote: null, userId: userId }]));
         }
         finally {
             setContent((prevContent) => ({ ...prevContent, content: '' }));
         }
-    }, [dispatch, messages]);
+    }, [content, dispatch, messages]);
 
     const handleTextAreaChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
-        setContent({
-            ...content,
+        setContent(prevContent => ({
+            ...prevContent,
             content: e.target.value
-        });
-        contentRef.current = { ...content, content: e.target.value };
+        }));
     }, []);
 
     const handleEmote = useCallback(async (emote: boolean | null, messageId: number) => {
@@ -78,27 +81,34 @@ export const SelectedChat = () => {
         ))));
     }, [emoteModel, dispatch, messages]);
 
+    useEffect(() => {
+        isUserInChat();
+
+        onReload();
+    }, []);
+
     return (
         <>
             <div className="chat-scrollbar">
                 <List
-                    className="list-display"
                     itemLayout="horizontal"
                     locale={{ emptyText: true }}
                     dataSource={Object.values(messages).flat()}
                     split={false}
                     renderItem={(item) => (
-                        <List.Item>
+                        <List.Item className={`message-display ${item.userId === userId ? 'user-display' : 'other-user-display'}`}>
                             <Card
                                 className="chat-bubble"
                                 onMouseEnter={(e) => {
-                                    e.currentTarget.classList.add("show-reactions");
+                                    if (isInChat) {
+                                        e.currentTarget.classList.add("show-reactions");
+                                    }
                                 }}
                                 onMouseLeave={(e) => {
                                     e.currentTarget.classList.remove("show-reactions");
                                 }}
                             >
-                                <Typography.Text>{item.content}</Typography.Text>
+                                <Typography.Text className="text-content-style">{item.content}</Typography.Text>
                                 <ConfigProvider wave={{ disabled: true }}>
                                     {item.emote !== null ? (
                                         <Button
@@ -112,6 +122,7 @@ export const SelectedChat = () => {
                                                 <img src={dislikeIcon} alt="dislike" className="icon-small" />
                                             )}
                                             onClick={() => handleEmote(null, item.id)}
+                                            disabled={!isInChat}
                                         />
                                     ) : null}
                                 </ConfigProvider>
@@ -147,6 +158,7 @@ export const SelectedChat = () => {
             <Space.Compact className="space-compact-position">
                 <Input.TextArea
                     className='textarea'
+                    disabled={!isInChat}
                     autoSize={{ minRows: 1, maxRows: 1 }}
                     value={content.content}
                     onChange={handleTextAreaChange}

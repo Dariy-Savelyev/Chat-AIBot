@@ -1,5 +1,5 @@
-import { Chat } from "../../models/GetAllChatModel";
+import { GetAllChatModel } from "../../models/GetAllChatModel";
 
 export interface ChatStateModel {
-    chats: Chat[];
+    chats: GetAllChatModel[];
 }

@@ -5,7 +5,7 @@ import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import type { MenuProps } from 'antd';
 import { ChatNameModel } from '../../models/ChatNameModel';
 import { get, post } from '../../services/ApiClient';
-import { Chat } from '../../models/GetAllChatModel';
+import { GetAllChatModel } from '../../models/GetAllChatModel';
 import { useDispatch, useSelector } from 'react-redux';
 import { setChats } from '../../store/slices/ChatSlice';
 import { ChatStateModel } from '../../store/models/ChatStateModel';
@@ -35,12 +35,6 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     AccesTokenService.revokeAccessToken();
   }, []);
 
-  const onReload = useCallback(async () => {
-    const fetchedChats = await get<Chat[]>('/api/chat/getAllChats');
-
-    dispatch(setChats(fetchedChats));
-  }, [dispatch]);
-
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...chatName,
@@ -56,13 +50,33 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     try {
       const response = await post<string>('/api/chat/create', chatName);
 
-      dispatch(setChats([{ id: +response, name: chatName.name }, ...Object.values(chats).flat()]));
+      const chatId = {
+        chatId: +response
+      }
+
+      await post<string>('/api/chat/join', chatId);
+
+      dispatch(setChats([{ id: +response, name: chatName.name, join: true }, ...Object.values(chats).flat()]));
     }
     finally {
       setFormData({ name: '' });
       setShowInput(false);
     }
   }, [chats, chatName, dispatch]);
+
+  const onReload = useCallback(async () => {
+    const fetchedChats = await get<GetAllChatModel[]>('/api/chat/getAllChats');
+
+    dispatch(setChats(fetchedChats));
+  }, [dispatch]);
+
+  const joinChat = useCallback(async (chatId: number) => {
+    const joinChatId = {
+      chatId: chatId
+    }
+
+    await post<string>('/api/chat/join', joinChatId);
+  }, [dispatch, chats]);
 
   useEffect(() => {
     if (isHomePage && isLoggedIn) {
@@ -74,7 +88,20 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     (chat) => {
       return {
         key: chat.id,
-        label: <Link href={`/chat/${chat.id}`}>{chat.name}</Link>
+        label:
+          <>
+            <Link href={`/chat/${chat.id}`}>{chat.name}</Link>
+            {!chat.join &&
+              <Button
+                className='button-join'
+                type='primary'
+                onClick={() => joinChat(chat.id)}
+                href={`/chat/${chat.id}`}
+              >
+                Join
+              </Button>
+            }
+          </>
       };
     },
   );

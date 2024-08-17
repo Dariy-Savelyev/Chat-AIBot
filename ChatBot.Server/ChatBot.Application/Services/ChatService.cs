@@ -25,23 +25,16 @@ public class ChatService(IChatRepository chatRepository, IMapper mapper) : IChat
 
     public async Task<IEnumerable<GetAllChatModel>> GetAllChatsAsync(string userId)
     {
-        var dataBaseChats = await chatRepository.GetAllAsync();
+        var dataBaseChats = await chatRepository.GetAllAsync(y => y.Users);
 
         var chats = mapper.Map<IEnumerable<GetAllChatModel>>(dataBaseChats);
 
-        var listOfChats = new List<GetAllChatModel>();
-        listOfChats.AddRange(chats);
-
-        foreach (var listChat in listOfChats)
+        foreach (var chat in chats)
         {
-            var chat = await chatRepository.GetByIdAsync(listChat.Id, y => y.Users.Where(x => x.Id == userId));
-
-            var usrId = chat!.Users.FirstOrDefault(y => y.Id == userId)?.Id;
-
-            listChat.Join = usrId != null;
+            chat.Joined = chat.UserIds.Contains(userId);
         }
 
-        return listOfChats.OrderByDescending(x => x.Id);
+        return chats.OrderByDescending(x => x.Id);
     }
 
     public async Task<bool> IsUserInChatAsync(int chatId, string userId)

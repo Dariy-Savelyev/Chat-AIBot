@@ -17,7 +17,6 @@ export const SelectedChat = () => {
     const [userId, setUserId] = useState('');
 
     const [content, setContent] = useState<MessageModel>({
-        id: 0,
         content: '',
         chatId: 0
     });
@@ -33,7 +32,7 @@ export const SelectedChat = () => {
     const dispatch = useDispatch();
 
     const onReload = useCallback(async () => {
-        const userId = await get<string>('/api/chat/getCurrentUserId');
+        const userId = await get<string>('/api/account/userInfo');
         setUserId(userId);
 
         const fetchedMessages = await get<GetAllMessageModel[]>(`/api/message/getAllMessages?chatId=${chatId}`);
@@ -53,10 +52,8 @@ export const SelectedChat = () => {
 
             const messageId = await post<string>('/api/message/send', content);
 
-            content.id = +messageId;
-
             dispatch(setMessages([...Object.values(messages).flat(),
-            { content: content.content, id: content.id, emote: null, userId: userId }]));
+            { content: content.content, id: +messageId, emote: null, userId: userId }]));
         }
         finally {
             setContent((prevContent) => ({ ...prevContent, content: '' }));

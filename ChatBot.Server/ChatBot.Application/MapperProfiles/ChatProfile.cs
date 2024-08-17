@@ -14,6 +14,8 @@ public class ChatProfile : Profile
                 opt => opt.MapFrom(x => DateTime.UtcNow))
             ;
 
-        CreateMap<Chat, GetAllChatModel>();
+        CreateMap<Chat, GetAllChatModel>()
+            .ForMember(dest => dest.UserIds, opt => opt.MapFrom(src => src.Users.Select(u => u.Id)))
+            ;
     }
 }

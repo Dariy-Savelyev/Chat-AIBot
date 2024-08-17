@@ -4,5 +4,6 @@ public class GetAllChatModel
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
-    public bool Join { get; set; }
+    public bool Joined { get; set; }
+    public ICollection<string> UserIds { get; set; } = [];
 }

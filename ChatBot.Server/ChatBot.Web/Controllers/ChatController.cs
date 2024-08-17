@@ -30,10 +30,4 @@ public class ChatController(IChatService service) : BaseController
     {
         return await service.GetAllChatsAsync(User.GetUserId());
     }
-
-    [HttpGet]
-    public async Task<string> GetCurrentUserId()
-    {
-        return await Task.Run(() => User.GetUserId());
-    }
 }

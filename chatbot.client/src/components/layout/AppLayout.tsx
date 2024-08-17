@@ -56,7 +56,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
       await post<string>('/api/chat/join', chatId);
 
-      dispatch(setChats([{ id: +response, name: chatName.name, join: true }, ...Object.values(chats).flat()]));
+      dispatch(setChats([{ id: +response, name: chatName.name, joined: true }, ...Object.values(chats).flat()]));
     }
     finally {
       setFormData({ name: '' });
@@ -91,7 +91,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         label:
           <>
             <Link href={`/chat/${chat.id}`}>{chat.name}</Link>
-            {!chat.join &&
+            {!chat.joined &&
               <Button
                 className='button-join'
                 type='primary'

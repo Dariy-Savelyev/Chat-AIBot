@@ -20,14 +20,8 @@ public class ChatController(IChatService service) : BaseController
     }
 
     [HttpGet]
-    public async Task<bool> IsUserJoined(int chatId)
-    {
-        return await service.IsUserInChatAsync(chatId, User.GetUserId());
-    }
-
-    [HttpGet]
     public async Task<IEnumerable<GetAllChatModel>> GetAllChats()
     {
-        return await service.GetAllChatsAsync(User.GetUserId());
+        return await service.GetAllChatsAsync();
     }
 }

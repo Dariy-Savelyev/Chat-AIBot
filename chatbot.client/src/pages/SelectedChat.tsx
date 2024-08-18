@@ -11,6 +11,7 @@ import { MessageStateModel } from "../store/models/MessageStateModel";
 import likeIcon from '../assets/images/likeIcon.png';
 import dislikeIcon from '../assets/images/dislikeIcon.png';
 import { EmoteModel } from "../models/EmoteModel";
+import { ChatStateModel } from "../store/models/ChatStateModel";
 
 export const SelectedChat = () => {
     const [isInChat, setIsInChat] = useState(false);
@@ -26,6 +27,7 @@ export const SelectedChat = () => {
         messageId: 0
     };
 
+    const chats = useSelector((state: ChatStateModel) => state.chats);
     const messages = useSelector((state: MessageStateModel) => state.messages);
     const { chatId } = useParams();
 
@@ -39,12 +41,14 @@ export const SelectedChat = () => {
 
         dispatch(setMessages(fetchedMessages));
     }, [dispatch]);
-
-    const isUserInChat = useCallback(async () => {
-        const isUserInChat = await get<boolean>(`/api/chat/isUserJoined?chatId=${chatId}`);
-
-        setIsInChat(isUserInChat);
-    }, []);
+    
+    const isUserInChat = useCallback(() => {
+        const userInChat = Object.values(chats).flat().find(chat => 
+            chat.id === Number(chatId) && chat.userIds.includes(userId)
+        );
+        
+        setIsInChat(!!userInChat);
+    }, [chats, chatId, userId]);
 
     const submitContent = useCallback(async (chatId: number) => {
         try {
@@ -80,9 +84,8 @@ export const SelectedChat = () => {
 
     useEffect(() => {
         isUserInChat();
-
         onReload();
-    }, []);
+    }, [isUserInChat, onReload]);
 
     return (
         <>

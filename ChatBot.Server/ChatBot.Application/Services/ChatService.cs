@@ -23,34 +23,12 @@ public class ChatService(IChatRepository chatRepository, IMapper mapper) : IChat
         await chatRepository.JoinUserAsync(userId, model.ChatId);
     }
 
-    public async Task<IEnumerable<GetAllChatModel>> GetAllChatsAsync(string userId)
+    public async Task<IEnumerable<GetAllChatModel>> GetAllChatsAsync()
     {
         var dataBaseChats = await chatRepository.GetAllAsync(y => y.Users);
 
-        var chats = mapper.Map<IEnumerable<GetAllChatModel>>(dataBaseChats);
+        var chats = mapper.Map<IEnumerable<GetAllChatModel>>(dataBaseChats.OrderByDescending(x => x.DateCreate));
 
-        foreach (var chat in chats)
-        {
-            chat.Joined = chat.UserIds.Contains(userId);
-        }
-
-        return chats.OrderByDescending(x => x.Id);
-    }
-
-    public async Task<bool> IsUserInChatAsync(int chatId, string userId)
-    {
-        var chat = await chatRepository.GetByIdAsync(chatId, y => y.Users.Where(x => x.Id == userId));
-
-        var usrId = chat!.Users.FirstOrDefault(y => y.Id == userId)?.Id;
-
-        var isUserJoined =
-            await chatRepository.IsExistWithExpressionAsync(x => Equals(usrId, userId));
-
-        if (isUserJoined)
-        {
-            return isUserJoined;
-        }
-
-        return false;
+        return chats;
     }
 }

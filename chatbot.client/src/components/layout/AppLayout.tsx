@@ -18,6 +18,7 @@ const { Header, Content, Footer } = Layout;
 
 const AppLayout = ({ children }: AppLayoutProps) => {
   const [showInput, setShowInput] = useState(false);
+  const [userId, setUserId] = useState('');
 
   const [chatName, setFormData] = useState<ChatNameModel>({
     name: ''
@@ -56,7 +57,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
       await post<string>('/api/chat/join', chatId);
 
-      dispatch(setChats([{ id: +response, name: chatName.name, joined: true }, ...Object.values(chats).flat()]));
+      dispatch(setChats([{ id: +response, name: chatName.name, joined: true, userIds: [userId] }, ...Object.values(chats).flat()]));
     }
     finally {
       setFormData({ name: '' });
@@ -65,7 +66,14 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   }, [chats, chatName, dispatch]);
 
   const onReload = useCallback(async () => {
+    const userId = await get<string>('/api/account/userInfo');
+    setUserId(userId);
+
     const fetchedChats = await get<GetAllChatModel[]>('/api/chat/getAllChats');
+
+    fetchedChats.forEach(chat => {
+      chat.joined = chat.userIds.includes(userId);
+    });
 
     dispatch(setChats(fetchedChats));
   }, [dispatch]);

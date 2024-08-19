@@ -1,4 +1,3 @@
-import { Button, Card, ConfigProvider, Input, List, Space, Typography } from "antd";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { MessageModel } from "../models/MessageModel";
 import { get, post } from "../services/ApiClient";
@@ -8,10 +7,10 @@ import { GetAllMessageModel } from "../models/GetAllMessageModel";
 import { useDispatch, useSelector } from "react-redux";
 import { setMessages } from "../store/slices/MessageSlice";
 import { MessageStateModel } from "../store/models/MessageStateModel";
-import likeIcon from '../assets/images/likeIcon.png';
-import dislikeIcon from '../assets/images/dislikeIcon.png';
 import { EmoteModel } from "../models/EmoteModel";
 import { ChatStateModel } from "../store/models/ChatStateModel";
+import { MessageList } from "../components/chat/MessageList";
+import { MessageInput } from "../components/chat/MessageInput";
 
 export const SelectedChat = () => {
     const [isInChat, setIsInChat] = useState(false);
@@ -41,12 +40,12 @@ export const SelectedChat = () => {
 
         dispatch(setMessages(fetchedMessages));
     }, [dispatch]);
-    
+
     const isUserInChat = useCallback(() => {
-        const userInChat = Object.values(chats).flat().find(chat => 
+        const userInChat = Object.values(chats).flat().find(chat =>
             chat.id === Number(chatId) && chat.userIds.includes(userId)
         );
-        
+
         setIsInChat(!!userInChat);
     }, [chats, chatId, userId]);
 
@@ -89,97 +88,19 @@ export const SelectedChat = () => {
 
     return (
         <>
-            <div className="chat-scrollbar">
-                <List
-                    itemLayout="horizontal"
-                    locale={{ emptyText: true }}
-                    dataSource={Object.values(messages).flat()}
-                    split={false}
-                    renderItem={(item) => (
-                        <List.Item className={`message-display ${item.userId === userId ? 'user-display' : 'other-user-display'}`}>
-                            <Card
-                                className="chat-bubble"
-                                onMouseEnter={(e) => {
-                                    if (isInChat) {
-                                        e.currentTarget.classList.add("show-reactions");
-                                    }
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.classList.remove("show-reactions");
-                                }}
-                            >
-                                <Typography.Text className="text-content-style">{item.content}</Typography.Text>
-                                <ConfigProvider wave={{ disabled: true }}>
-                                    {item.emote !== null ? (
-                                        <Button
-                                            className="button-emote button-position"
-                                            ghost
-                                            size="small"
-                                            type="primary"
-                                            icon={item.emote ? (
-                                                <img src={likeIcon} alt="unLike" className="icon-small" />
-                                            ) : (
-                                                <img src={dislikeIcon} alt="dislike" className="icon-small" />
-                                            )}
-                                            onClick={() => handleEmote(null, item.id)}
-                                            disabled={!isInChat}
-                                        />
-                                    ) : null}
-                                </ConfigProvider>
-                                {item.emote == null ? (
-                                    <div className="reactions">
-                                        <ConfigProvider wave={{ disabled: true }}>
-                                            <Button
-                                                className="button-emote"
-                                                ghost
-                                                size="small"
-                                                type="primary"
-                                                icon={<img src={likeIcon} alt="like" className="icon-small" />}
-                                                onClick={() => handleEmote(true, item.id)}
-                                            />
-                                            <span className="divider-color">│</span>
-                                            <Button
-                                                style={{ outline: 'none', boxShadow: 'none' }}
-                                                className="button-emote"
-                                                ghost
-                                                size="small"
-                                                type="primary"
-                                                icon={<img src={dislikeIcon} alt="dislike" className="icon-small" />}
-                                                onClick={() => handleEmote(false, item.id)}
-                                            />
-                                        </ConfigProvider>
-                                    </div>
-                                ) : null}
-                            </Card>
-                        </List.Item>
-                    )}
-                />
-            </div>
-            <Space.Compact className="space-compact-position">
-                <Input.TextArea
-                    className='textarea'
-                    disabled={!isInChat}
-                    autoSize={{ minRows: 1, maxRows: 1 }}
-                    value={content.content}
-                    onChange={handleTextAreaChange}
-                    placeholder="Write message..."
-                    onKeyDown={(event) => {
-                        if (event.key === 'Enter' && content.content.trim() !== '') {
-                            event.preventDefault();
-                            submitContent(Number(chatId));
-                        }
-                    }}
-                />
-                <Button
-                    className='button-chat'
-                    type='primary'
-                    htmlType='submit'
-                    onClick={() => submitContent(Number(chatId))}
-                    disabled={content.content.trim() === ''}
-                >
-                    Send
-                </Button>
-            </Space.Compact>
+            <MessageList
+                messages={messages}
+                userId={userId}
+                isInChat={isInChat}
+                handleEmote={handleEmote}
+            />
+            <MessageInput
+                isInChat={isInChat}
+                content={content}
+                handleTextAreaChange={handleTextAreaChange}
+                submitContent={submitContent}
+                chatId={chatId}
+            />
         </>
     );
 };

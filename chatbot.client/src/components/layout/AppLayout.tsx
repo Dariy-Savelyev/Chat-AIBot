@@ -12,7 +12,8 @@ import { ChatStateModel } from '../../store/models/ChatStateModel';
 import { useLocation } from 'react-router-dom';
 import '../../assets/styles/appLayout.css';
 import { AccesTokenService } from '../../services/AccessTokenService';
-import { AppLayoutProps } from '../../models/AppLayoutPropsModel';
+import { AppLayoutProps } from '../../models/PropsModels/AppLayoutProps';
+import { getChatsWithJoinedStatus } from '../../store/selectors/Selectors';
 
 const { Header, Content, Footer } = Layout;
 
@@ -24,7 +25,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     name: ''
   });
 
-  const chats = useSelector((state: ChatStateModel) => state.chats);
+  const chats = useSelector((state: ChatStateModel) => getChatsWithJoinedStatus(state, userId));
   const isHomePage = !['/registration', '/login'].includes(useLocation().pathname);
   const isLoggedIn = AccesTokenService.isLoggedIn();
 
@@ -70,10 +71,6 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     setUserId(userId);
 
     const fetchedChats = await get<GetAllChatModel[]>('/api/chat/getAllChats');
-
-    fetchedChats.forEach(chat => {
-      chat.joined = chat.userIds.includes(userId);
-    });
 
     dispatch(setChats(fetchedChats));
   }, [dispatch]);

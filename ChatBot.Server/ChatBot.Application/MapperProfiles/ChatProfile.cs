@@ -15,8 +15,7 @@ public class ChatProfile : Profile
             ;
 
         CreateMap<Chat, GetAllChatModel>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+            .ForMember(dest => dest.UserIds, opt => opt.MapFrom(src => src.Users.Select(u => u.Id)))
             ;
     }
 }

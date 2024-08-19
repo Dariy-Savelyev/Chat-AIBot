@@ -71,6 +71,14 @@ body {
 
 .sider-width {
     max-width: 400px !important;
-    flex: 0 0 400px !important; 
+    flex: 0 0 400px !important;
     width: 400px !important;
+}
+
+.button-join {
+    position: absolute;
+    right: 15px;
+    top: 4px;
+    border-radius: 0;
+    color: white !important;
 }

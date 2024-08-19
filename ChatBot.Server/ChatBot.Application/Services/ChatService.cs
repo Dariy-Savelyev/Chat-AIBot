@@ -25,13 +25,10 @@ public class ChatService(IChatRepository chatRepository, IMapper mapper) : IChat
 
     public async Task<IEnumerable<GetAllChatModel>> GetAllChatsAsync()
     {
-        var dataBaseChats = await chatRepository.GetAllAsync();
+        var dataBaseChats = await chatRepository.GetAllAsync(y => y.Users);
 
-        var chats = mapper.Map<IEnumerable<GetAllChatModel>>(dataBaseChats);
+        var chats = mapper.Map<IEnumerable<GetAllChatModel>>(dataBaseChats.OrderByDescending(x => x.DateCreate));
 
-        var listOfChats = new List<GetAllChatModel>();
-        listOfChats.AddRange(chats);
-
-        return listOfChats.OrderByDescending(x => x.Id);
+        return chats;
     }
 }

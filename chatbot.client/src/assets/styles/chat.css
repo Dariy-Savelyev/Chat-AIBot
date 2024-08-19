@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
 :root {
     --window-width: 100vw;
     --sider-width: 400px;
@@ -22,8 +24,10 @@
 .chat-bubble {
     background-color: #84c778;
     border-radius: 10px;
-    padding: 15px;
-    width: 400px;
+    padding: 10px;
+    max-width: 400px;
+    min-width: 50px;
+    width: auto;
     height: auto;
     margin-right: 20px;
     margin-bottom: 5px;
@@ -32,11 +36,11 @@
 .chat-bubble::before {
     content: "";
     position: absolute;
-    top: 70%;
+    bottom: 0;
     right: -20px;
     transform: translateY(-50%);
     border-style: solid;
-    border-width: 8px 0 8px 20px;
+    border-width: 10px 0 6px 23px;
     border-color: transparent transparent transparent #84c778;
 }
 
@@ -44,9 +48,8 @@
     padding: 0 !important;
 }
 
-.list-display {
-    display: flex;
-    flex-direction: row-reverse;
+.text-content-style {
+    font-family: 'Roboto', sans-serif;
 }
 
 .chat-scrollbar {
@@ -110,4 +113,22 @@
 
 .divider-color {
     color: #3f3f3f;
+}
+
+.message-display {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.user-display {
+    transform: rotateY(0deg);
+}
+
+.other-user-display {
+    transform: rotateY(180deg);
+}
+
+.other-user-display .chat-bubble .text-content-style {
+    display: flex;
+    transform: rotateY(180deg);
 }

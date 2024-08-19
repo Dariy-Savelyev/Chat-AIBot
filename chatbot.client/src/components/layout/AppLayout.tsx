@@ -5,25 +5,27 @@ import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import type { MenuProps } from 'antd';
 import { ChatNameModel } from '../../models/ChatNameModel';
 import { get, post } from '../../services/ApiClient';
-import { Chat } from '../../models/GetAllChatModel';
+import { GetAllChatModel } from '../../models/GetAllChatModel';
 import { useDispatch, useSelector } from 'react-redux';
 import { setChats } from '../../store/slices/ChatSlice';
 import { ChatStateModel } from '../../store/models/ChatStateModel';
 import { useLocation } from 'react-router-dom';
 import '../../assets/styles/appLayout.css';
 import { AccesTokenService } from '../../services/AccessTokenService';
-import { AppLayoutProps } from '../../models/AppLayoutPropsModel';
+import { AppLayoutProps } from '../../models/PropsModels/AppLayoutProps';
+import { getChatsWithJoinedStatus } from '../../store/selectors/Selectors';
 
 const { Header, Content, Footer } = Layout;
 
 const AppLayout = ({ children }: AppLayoutProps) => {
   const [showInput, setShowInput] = useState(false);
+  const [userId, setUserId] = useState('');
 
   const [chatName, setFormData] = useState<ChatNameModel>({
     name: ''
   });
 
-  const chats = useSelector((state: ChatStateModel) => state.chats);
+  const chats = useSelector((state: ChatStateModel) => getChatsWithJoinedStatus(state, userId));
   const isHomePage = !['/registration', '/login'].includes(useLocation().pathname);
   const isLoggedIn = AccesTokenService.isLoggedIn();
 
@@ -34,12 +36,6 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
     AccesTokenService.revokeAccessToken();
   }, []);
-
-  const onReload = useCallback(async () => {
-    const fetchedChats = await get<Chat[]>('/api/chat/getAllChats');
-
-    dispatch(setChats(fetchedChats));
-  }, [dispatch]);
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -56,13 +52,36 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     try {
       const response = await post<string>('/api/chat/create', chatName);
 
-      dispatch(setChats([{ id: +response, name: chatName.name }, ...Object.values(chats).flat()]));
+      const chatId = {
+        chatId: +response
+      }
+
+      await post<string>('/api/chat/join', chatId);
+
+      dispatch(setChats([{ id: +response, name: chatName.name, joined: true, userIds: [userId] }, ...Object.values(chats).flat()]));
     }
     finally {
       setFormData({ name: '' });
       setShowInput(false);
     }
   }, [chats, chatName, dispatch]);
+
+  const onReload = useCallback(async () => {
+    const userId = await get<string>('/api/account/userInfo');
+    setUserId(userId);
+
+    const fetchedChats = await get<GetAllChatModel[]>('/api/chat/getAllChats');
+
+    dispatch(setChats(fetchedChats));
+  }, [dispatch]);
+
+  const joinChat = useCallback(async (chatId: number) => {
+    const joinChatId = {
+      chatId: chatId
+    }
+
+    await post<string>('/api/chat/join', joinChatId);
+  }, [dispatch, chats]);
 
   useEffect(() => {
     if (isHomePage && isLoggedIn) {
@@ -74,7 +93,20 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     (chat) => {
       return {
         key: chat.id,
-        label: <Link href={`/chat/${chat.id}`}>{chat.name}</Link>
+        label:
+          <>
+            <Link href={`/chat/${chat.id}`}>{chat.name}</Link>
+            {!chat.joined &&
+              <Button
+                className='button-join'
+                type='primary'
+                onClick={() => joinChat(chat.id)}
+                href={`/chat/${chat.id}`}
+              >
+                Join
+              </Button>
+            }
+          </>
       };
     },
   );

@@ -1,7 +1,7 @@
 import { Button, Input, Space } from "antd";
-import { MessageInputProps } from '../../models/PropsModels/MessageInputProps';
+import { MessageFormProps } from '../../models/PropsModels/MessageFormProps';
 
-export const MessageInput = ({ isInChat, content, handleTextAreaChange, submitContent, chatId }: MessageInputProps) => (
+export const MessageForm = ({ isInChat, content, handleTextAreaChange, submitContent, chatId }: MessageFormProps) => (
     <Space.Compact className="space-compact-position">
         <Input.TextArea
             className='textarea'

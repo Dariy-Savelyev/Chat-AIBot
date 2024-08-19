@@ -10,7 +10,7 @@ import { MessageStateModel } from "../store/models/MessageStateModel";
 import { EmoteModel } from "../models/EmoteModel";
 import { ChatStateModel } from "../store/models/ChatStateModel";
 import { MessageList } from "../components/chat/MessageList";
-import { MessageInput } from "../components/chat/MessageInput";
+import { MessageForm } from "../components/chat/MessageForm";
 
 export const SelectedChat = () => {
     const [isInChat, setIsInChat] = useState(false);
@@ -94,7 +94,7 @@ export const SelectedChat = () => {
                 isInChat={isInChat}
                 handleEmote={handleEmote}
             />
-            <MessageInput
+            <MessageForm
                 isInChat={isInChat}
                 content={content}
                 handleTextAreaChange={handleTextAreaChange}

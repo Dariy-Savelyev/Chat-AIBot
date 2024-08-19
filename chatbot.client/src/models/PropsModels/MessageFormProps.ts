@@ -1,4 +1,4 @@
-export interface MessageInputProps {
+export interface MessageFormProps {
     isInChat: boolean;
     content: {
         content: string;

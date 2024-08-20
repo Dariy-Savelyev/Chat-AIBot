@@ -32,7 +32,6 @@ export const Login = () => {
             AccesTokenService.saveAccessToken(accessToken);
 
             navigate('/');
-            console.log('Login successful accessToken:', accessToken);
         }
         finally {
             setIsSubmitting(false);

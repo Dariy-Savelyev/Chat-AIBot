@@ -53,10 +53,12 @@ export const SelectedChat = () => {
         try {
             content.chatId = chatId;
 
-            const messageId = await post<string>('/api/message/send', content);
+            const response = await post<string>('/api/message/send', content);
 
-            dispatch(setMessages([...Object.values(messages).flat(),
-            { content: content.content, id: +messageId, emote: null, userId: userId }]));
+            if (response != '') {
+                dispatch(setMessages([...Object.values(messages).flat(),
+                { content: content.content, id: +response, emote: null, userId: userId }]));
+            }
         }
         finally {
             setContent((prevContent) => ({ ...prevContent, content: '' }));

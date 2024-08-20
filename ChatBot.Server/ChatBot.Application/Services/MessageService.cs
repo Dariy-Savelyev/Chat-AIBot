@@ -6,12 +6,21 @@ using ChatBot.Domain.RepositoryInterfaces;
 
 namespace ChatBot.Application.Services;
 
-public class MessageService(IMessageRepository messageRepository, IMapper mapper) : IMessageService
+public class MessageService(IMessageRepository messageRepository, IChatRepository chatRepository, IMapper mapper) : IMessageService
 {
-    public async Task<int> SendMessageAsync(MessageModel model, string userId)
+    public async Task<int?> SendMessageAsync(MessageModel model, string userId)
     {
         var message = mapper.Map<Message>(model);
         message.UserId = userId;
+
+        var chat = await chatRepository.GetByIdAsync(message.ChatId, y => y.Users);
+
+        var user = chat!.Users.FirstOrDefault(x => x.Id == userId);
+
+        if (user == null)
+        {
+            return null;
+        }
 
         await messageRepository.AddAsync(message);
 

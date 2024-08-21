@@ -42,6 +42,8 @@ apiClient.interceptors.response.use(response => {
   return response;
 }, error => {
   if (error.response && error.response.status === 401) {
+    AccesTokenService.revokeAccessToken();
+
     window.location.href = '/login';
   }
   return Promise.reject(error);

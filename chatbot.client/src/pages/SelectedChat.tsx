@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useContext, useEffect, useState } from "react";
 import { MessageModel } from "../models/MessageModel";
 import { get, post } from "../services/ApiClient";
 import { useParams } from "react-router-dom";
@@ -11,10 +11,15 @@ import { EmoteModel } from "../models/EmoteModel";
 import { ChatStateModel } from "../store/models/ChatStateModel";
 import { MessageList } from "../components/chat/MessageList";
 import { MessageForm } from "../components/chat/MessageForm";
+import { UserContext } from "../components/layout/AppLayout";
+import { Spin } from "antd";
+import { LoadingOutlined } from '@ant-design/icons';
+
+const loadingIcon = <LoadingOutlined style={{ fontSize: 60 }} spin />;
 
 export const SelectedChat = () => {
     const [isInChat, setIsInChat] = useState(false);
-    const [userId, setUserId] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const [content, setContent] = useState<MessageModel>({
         content: '',
@@ -26,6 +31,7 @@ export const SelectedChat = () => {
         messageId: 0
     };
 
+    const userId = useContext(UserContext);
     const chats = useSelector((state: ChatStateModel) => state.chats);
     const messages = useSelector((state: MessageStateModel) => state.messages);
     const { chatId } = useParams();
@@ -33,13 +39,14 @@ export const SelectedChat = () => {
     const dispatch = useDispatch();
 
     const onReload = useCallback(async () => {
-        const userId = await get<string>('/api/account/userInfo');
-        setUserId(userId);
-
-        const fetchedMessages = await get<GetAllMessageModel[]>(`/api/message/getAllMessages?chatId=${chatId}`);
-
-        dispatch(setMessages(fetchedMessages));
-    }, [dispatch]);
+        setIsLoading(true);
+        try {
+            const fetchedMessages = await get<GetAllMessageModel[]>(`/api/message/getAllMessages?chatId=${chatId}`);
+            dispatch(setMessages(fetchedMessages));
+        } finally {
+            setIsLoading(false);
+        }
+    }, [dispatch, chatId]);
 
     const isUserInChat = useCallback(() => {
         const userInChat = Object.values(chats).flat().find(chat =>
@@ -53,10 +60,12 @@ export const SelectedChat = () => {
         try {
             content.chatId = chatId;
 
-            const messageId = await post<string>('/api/message/send', content);
+            const response = await post<string>('/api/message/send', content);
 
-            dispatch(setMessages([...Object.values(messages).flat(),
-            { content: content.content, id: +messageId, emote: null, userId: userId }]));
+            if (response != '') {
+                dispatch(setMessages([...Object.values(messages).flat(),
+                { content: content.content, id: +response, emote: null, userId: userId }]));
+            }
         }
         finally {
             setContent((prevContent) => ({ ...prevContent, content: '' }));
@@ -83,8 +92,19 @@ export const SelectedChat = () => {
 
     useEffect(() => {
         isUserInChat();
+
+        dispatch(setMessages([]));
+
         onReload();
-    }, [isUserInChat, onReload]);
+    }, [isUserInChat, onReload, chatId]);
+
+    if (isLoading) {
+        return (
+            <div className='spin-container'>
+                <Spin size='large' indicator={loadingIcon} />
+            </div>
+        );
+    }
 
     return (
         <>

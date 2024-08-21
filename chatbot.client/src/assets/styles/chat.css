@@ -132,3 +132,10 @@
     display: flex;
     transform: rotateY(180deg);
 }
+
+.spin-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}

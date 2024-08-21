@@ -20,12 +20,22 @@ public class TokensService(
     public async Task<string> ValidateAndGetUserIdTokenAsync(string accessToken)
     {
         var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-        var claims = jwtSecurityTokenHandler.ValidateToken(
-            accessToken,
-            tokenValidationParameters,
-            out var validatedAccessToken);
+        string? userId;
 
-        var userId = claims.GetUserId();
+        try
+        {
+            var claims = jwtSecurityTokenHandler.ValidateToken(
+                accessToken,
+                tokenValidationParameters,
+                out var validatedAccessToken);
+
+            userId = claims.GetUserId();
+        }
+        catch (SecurityTokenExpiredException)
+        {
+            var jwtToken = jwtSecurityTokenHandler.ReadJwtToken(accessToken);
+            userId = jwtToken.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+        }
 
         if (userId is null)
         {
@@ -33,9 +43,9 @@ public class TokensService(
         }
 
         var refreshToken = await refreshTokenRepository.GetActiveRefreshTokenAsync(userId);
-        if (validatedAccessToken is not JwtSecurityToken || refreshToken is null || refreshToken.ExpirationDate < DateTime.UtcNow)
+        if (refreshToken is null || refreshToken.ExpirationDate < DateTime.UtcNow)
         {
-            throw ExceptionHelper.GetArgumentException(nameof(accessToken), "Invalid token");
+            throw ExceptionHelper.GetArgumentException(nameof(accessToken), "Invalid or expired refresh token");
         }
 
         return userId;

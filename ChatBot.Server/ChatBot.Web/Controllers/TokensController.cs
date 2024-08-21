@@ -12,11 +12,20 @@ public class TokensController(ITokensService service) : BaseController
     [AllowAnonymous]
     public async Task<ActionResult> Refresh(ValidateTokenModel request)
     {
-        var userId = await service.ValidateAndGetUserIdTokenAsync(request.AccessToken);
-
-        var result = await service.RefreshTokenAsync(userId);
-
-        return new JsonResult(result);
+        try
+        {
+            var userId = await service.ValidateAndGetUserIdTokenAsync(request.AccessToken);
+            var result = await service.RefreshTokenAsync(userId);
+            return new JsonResult(result);
+        }
+        catch (ArgumentException ex)
+        {
+            return Unauthorized(ex.Message);
+        }
+        catch (Exception)
+        {
+            return Unauthorized("An error occurred while refreshing the token");
+        }
     }
 
     [HttpPost]

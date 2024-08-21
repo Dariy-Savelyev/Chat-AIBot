@@ -1,7 +1,6 @@
 import { Button, Input, Layout, Menu } from 'antd';
 import Sider from 'antd/es/layout/Sider';
-import Link from 'antd/es/typography/Link';
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, createContext, useCallback, useEffect, useState } from 'react';
 import type { MenuProps } from 'antd';
 import { ChatNameModel } from '../../models/ChatNameModel';
 import { get, post } from '../../services/ApiClient';
@@ -9,15 +8,18 @@ import { GetAllChatModel } from '../../models/GetAllChatModel';
 import { useDispatch, useSelector } from 'react-redux';
 import { setChats } from '../../store/slices/ChatSlice';
 import { ChatStateModel } from '../../store/models/ChatStateModel';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import '../../assets/styles/appLayout.css';
 import { AccesTokenService } from '../../services/AccessTokenService';
 import { AppLayoutProps } from '../../models/PropsModels/AppLayoutProps';
 import { getChatsWithJoinedStatus } from '../../store/selectors/Selectors';
 
+export const UserContext = createContext('');
+
 const { Header, Content, Footer } = Layout;
 
 const AppLayout = ({ children }: AppLayoutProps) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(AccesTokenService.isLoggedIn());
   const [showInput, setShowInput] = useState(false);
   const [userId, setUserId] = useState('');
 
@@ -27,7 +29,6 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
   const chats = useSelector((state: ChatStateModel) => getChatsWithJoinedStatus(state, userId));
   const isHomePage = !['/registration', '/login'].includes(useLocation().pathname);
-  const isLoggedIn = AccesTokenService.isLoggedIn();
 
   const dispatch = useDispatch();
 
@@ -35,6 +36,8 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     await post<void>('/api/tokens/revoke', {});
 
     AccesTokenService.revokeAccessToken();
+
+    setIsLoggedIn(false);
   }, []);
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -84,10 +87,13 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   }, [dispatch, chats]);
 
   useEffect(() => {
-    if (isHomePage && isLoggedIn) {
-      onReload();
+    if (isHomePage) {
+      setIsLoggedIn(AccesTokenService.isLoggedIn());
+      if (isLoggedIn) {
+        onReload();
+      }
     }
-  }, [isHomePage]);
+  }, [isHomePage, isLoggedIn, onReload]);
 
   const userChats: MenuProps['items'] = Object.values(chats).flat().map(
     (chat) => {
@@ -95,7 +101,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         key: chat.id,
         label:
           <>
-            <Link href={`/chat/${chat.id}`}>{chat.name}</Link>
+            <Link to={`/chat/${chat.id}`}>{chat.name}</Link>
             {!chat.joined &&
               <Button
                 className='button-join'
@@ -113,75 +119,79 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
   const navigationItems = [
     {
-      label: <Link href='/'>Home</Link>,
+      label: <Link to='/'>Home</Link>,
       key: 'home',
     },
     {
-      label: <Link href='/registration'>Registration</Link>,
+      label: <Link to='/registration'>Registration</Link>,
       key: 'registration',
     },
     {
       label: isLoggedIn ? (
-        <Link href='/login' onClick={onLogout}>Logout</Link>
+        <Link to='/login' onClick={onLogout}>Logout</Link>
       ) : (
-        <Link href='/login'>Login</Link>
+        <Link to='/login'>Login</Link>
       ),
       key: 'login',
     },
   ];
 
   return (
-    <Layout>
-      <Header>
-        <Menu
-          className='menu'
-          theme='dark'
-          mode='horizontal'
-          items={navigationItems}
-        />
-      </Header>
+    <UserContext.Provider value={userId}>
+      <Layout>
+        <Header>
+          <Menu
+            className='menu'
+            theme='dark'
+            mode='horizontal'
+            items={navigationItems}
+            selectable={false}
+          />
+        </Header>
 
-      <Content>
-        <Layout>
-          {(isHomePage && isLoggedIn) && (
-            <>
-              <Sider className='sider-width'>
-                {showInput ? (
-                  <>
-                    <Input
-                      className='input'
-                      type='text'
-                      value={chatName.name}
-                      onChange={handleChange}
-                      placeholder='Enter chat name'
-                    />
-                    <Button
-                      className='button-input'
-                      type='primary'
-                      htmlType='submit'
-                      onClick={submitChatName}
-                      disabled={chatName.name.trim() === ''}
-                    >
-                      Create
-                    </Button>
-                  </>
-                ) : (
-                  <Button className='button' type='primary' onClick={showChatInput}>Create Chat</Button>
-                )}
-                <Menu
-                  className='hover-scrollbar'
-                  mode='inline'
-                  items={userChats}
-                />
-              </Sider>
-            </>
-          )}
-          <Content className='fit-content'>{children}</Content>
-        </Layout>
-      </Content>
+        <Content>
+          <Layout>
+            {(isHomePage && isLoggedIn) && (
+              <>
+                <Sider className='sider-width'>
+                  {showInput ? (
+                    <>
+                      <Input
+                        className='input'
+                        type='text'
+                        value={chatName.name}
+                        onChange={handleChange}
+                        placeholder='Enter chat name'
+                      />
+                      <Button
+                        className='button-input'
+                        type='primary'
+                        htmlType='submit'
+                        onClick={submitChatName}
+                        disabled={chatName.name.trim() === ''}
+                      >
+                        Create
+                      </Button>
+                    </>
+                  ) : (
+                    <Button className='button' type='primary' onClick={showChatInput}>Create Chat</Button>
+                  )}
+                  <Menu
+                    className='hover-scrollbar'
+                    mode='inline'
+                    items={userChats}
+                    selectedKeys={[location.pathname.split('/')[2]]}
+                  />
+                </Sider>
+              </>
+            )}
+            <Content className='fit-content'>{children}</Content>
+          </Layout>
+        </Content>
 
-      <Footer className='footer'>Chat Bot ©{new Date().getFullYear()}</Footer>
-    </Layout>
+        <Footer className='footer'>Chat Bot ©{new Date().getFullYear()}</Footer>
+      </Layout>
+    </UserContext.Provider>
   );
 };
 

@@ -20,7 +20,10 @@ public class MessageService(IMessageRepository messageRepository, IChatRepositor
 
         if (user != true)
         {
-            throw new ForbiddenException("User is not authorized to send messages in this chat");
+            throw new ForbiddenException(
+                [
+                    new(string.Empty, ["User is not authorized to send messages in this chat"])
+                ]);
         }
 
         await messageRepository.AddAsync(message);

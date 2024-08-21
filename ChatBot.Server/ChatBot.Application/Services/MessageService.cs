@@ -18,7 +18,7 @@ public class MessageService(IMessageRepository messageRepository, IChatRepositor
 
         var user = chat!.Users.Any(x => x.Id == userId);
 
-        if (user != true)
+        if (!user)
         {
             throw new ForbiddenException(
                 [

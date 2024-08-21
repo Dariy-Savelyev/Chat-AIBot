@@ -1,6 +1,6 @@
 import { useState, useCallback, ChangeEvent } from 'react';
 import { LoginFormData } from '../models/LoginFormData';
-import { Button, Form, Input, Typography } from 'antd';
+import { Alert, Button, Form, Input, Typography } from 'antd';
 import { AccesTokenService } from '../services/AccessTokenService';
 import { post } from '../services/ApiClient';
 import '../assets/styles/form.css';
@@ -22,8 +22,9 @@ export const Login = () => {
             [name]: value,
         }));
     }, []);
-
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const handleSubmit = useCallback(async () => {
+        setErrorMessage(null);
         setIsSubmitting(true);
         try {
             const response = await post<string>('/api/account/login', formData, { skipAuthHeader: true });
@@ -33,15 +34,36 @@ export const Login = () => {
 
             navigate('/');
         }
+        catch (error: any) {
+            if (error.response) {
+                if (error.response.status === 422) {
+                    setErrorMessage('Invalid email or password');
+                } else if (error.response.status === 403) {
+                    setErrorMessage('Please try again later');
+                } else {
+                    setErrorMessage('An error occurred. Please try again.');
+                }
+            }
+        }
         finally {
             setIsSubmitting(false);
         }
-
     }, [formData, setIsSubmitting]);
 
     return (
         <>
             <Typography.Title className='text-align-center'>Login</Typography.Title>
+
+            <div className="alert-container">
+                {errorMessage && (
+                    <Alert
+                        className='alert'
+                        message={errorMessage}
+                        type="error"
+                        showIcon
+                    />
+                )}
+            </div>
 
             <Form
                 className='form-center login'
@@ -53,7 +75,7 @@ export const Login = () => {
                     name='email'
                     rules={[
                         { required: true, message: 'Please enter an email' },
-                        { type: 'email', message: 'Please enter a valid email' },
+                        { type: 'email', message: 'Please enter a valid email' }
                     ]}
                 >
                     <Input

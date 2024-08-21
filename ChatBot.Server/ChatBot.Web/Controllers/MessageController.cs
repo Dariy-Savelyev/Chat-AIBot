@@ -8,7 +8,7 @@ namespace ChatBot.Web.Controllers;
 public class MessageController(IMessageService service) : BaseController
 {
     [HttpPost]
-    public async Task<int?> Send(MessageModel model)
+    public async Task<int> Send(MessageModel model)
     {
         return await service.SendMessageAsync(model, User.GetUserId());
     }

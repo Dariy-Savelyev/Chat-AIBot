@@ -20,7 +20,7 @@ public class TokensService(
     public async Task<string> ValidateAndGetUserIdTokenAsync(string accessToken)
     {
         var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-        string userId;
+        string? userId;
 
         try
         {

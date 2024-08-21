@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ChatBot.Application.Models;
 using ChatBot.Application.ServiceInterfaces;
+using ChatBot.CrossCutting.Exceptions;
 using ChatBot.Domain.Models;
 using ChatBot.Domain.RepositoryInterfaces;
 
@@ -8,18 +9,18 @@ namespace ChatBot.Application.Services;
 
 public class MessageService(IMessageRepository messageRepository, IChatRepository chatRepository, IMapper mapper) : IMessageService
 {
-    public async Task<int?> SendMessageAsync(MessageModel model, string userId)
+    public async Task<int> SendMessageAsync(MessageModel model, string userId)
     {
         var message = mapper.Map<Message>(model);
         message.UserId = userId;
 
         var chat = await chatRepository.GetByIdAsync(message.ChatId, y => y.Users);
 
-        var user = chat!.Users.FirstOrDefault(x => x.Id == userId);
+        var user = chat!.Users.Any(x => x.Id == userId);
 
-        if (user == null)
+        if (user != true)
         {
-            return null;
+            throw new ForbiddenException("User is not authorized to send messages in this chat");
         }
 
         await messageRepository.AddAsync(message);

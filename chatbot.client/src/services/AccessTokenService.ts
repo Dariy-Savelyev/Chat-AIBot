@@ -19,7 +19,7 @@ export class AccesTokenService {
         let currentTime = new Date().getTime();
         let lastRefreshAccessTokenTime = + storage.getLastRefreshAccessTokenDate()!;
         
-        if ((currentTime - lastRefreshAccessTokenTime) > ((ACCESS_TOKEN_VALIDITY_SECONDS - 60) * 1000)) {
+        if ((currentTime - lastRefreshAccessTokenTime) > ((ACCESS_TOKEN_VALIDITY_SECONDS - 5) * 1000)) {
             return true;
         }
 

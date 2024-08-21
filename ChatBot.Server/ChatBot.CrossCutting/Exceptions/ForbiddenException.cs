@@ -8,4 +8,9 @@ public sealed class ForbiddenException : BaseException
     public ForbiddenException(IReadOnlyCollection<ResponseError> errors)
         : base(errors, "Forbidden. One or more validation errors occurred")
         => Errors = errors;
+
+    public ForbiddenException(string message)
+        : base(null!, message)
+    {
+    }
 }

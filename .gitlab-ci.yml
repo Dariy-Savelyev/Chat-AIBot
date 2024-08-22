@@ -31,9 +31,6 @@ cache:
 
 before_script:
   - 'dotnet restore ChatBot.sln --packages $NUGET_PACKAGES_DIRECTORY'
-  - apt-get update -y
-  - apt-get install -y python3-pip
-  - pip3 install semver
 
 build:
   stage: build

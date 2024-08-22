@@ -4,7 +4,7 @@ stages:
   - build
   - test
   - sonarqube-check
-  - version
+  - versioning
   - docker-build
   - docker-deploy
 

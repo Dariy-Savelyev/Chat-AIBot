@@ -72,6 +72,8 @@ versioning:
     - master
   except:
     - /^Bump version to .*$/
+  tags:
+    - linux
 
 sonarqube-check:
   image: mcr.microsoft.com/dotnet/sdk:latest

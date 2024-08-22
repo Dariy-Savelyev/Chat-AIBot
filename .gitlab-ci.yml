@@ -40,6 +40,7 @@ build:
     - win
   except:
     - master
+    - tags
 
 tests:
   stage: test
@@ -47,6 +48,7 @@ tests:
     - 'dotnet test ChatBot.sln -p:BuildInParallel=false -m:1 --no-restore'
   except:
   - master
+  - tags
 
 versioning:
   stage: versioning
@@ -119,6 +121,7 @@ sonarqube-check:
     - win
   except:
   - master
+  - tags
 
 docker-build:
   stage: docker-build

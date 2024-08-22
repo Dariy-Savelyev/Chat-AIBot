@@ -62,7 +62,7 @@ versioning:
       python3 update_package_version.py $NEW_VERSION
       git config --global user.email "galaym@gmail.com"
       git config --global user.name "Mihail Galay"
-      git add $VERSION_FILE
+      git add -A
       git commit -m "Bump version to $NEW_VERSION"
       git tag $NEW_VERSION
       git remote set-url origin http://oauth2:$CI_ACCESS_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git

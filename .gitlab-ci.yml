@@ -133,10 +133,11 @@ docker-build:
   services:
     - docker:dind
   script:
+    - export CURRENT_VERSION=$(cat $VERSION_FILE)
     - echo ${CI_REGISTRY_PASSWORD} | docker login ${REGISTRY_URL} -u ${CI_REGISTRY_USER} --password-stdin
-    - docker build -t ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:latest -t ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${NEW_VERSION} -f ./ChatBot.Server/ChatBot.Web/Dockerfile .
+    - docker build -t ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:latest -t ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${CURRENT_VERSION} -f ./ChatBot.Server/ChatBot.Web/Dockerfile .
     - docker push ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:latest
-    - docker push ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${NEW_VERSION}
+    - docker push ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${CURRENT_VERSION}
   only:
     - tags
   tags:
@@ -146,11 +147,12 @@ docker-deploy:
   stage: docker-deploy
   image: alpine:latest
   script:
+    - export CURRENT_VERSION=$(cat $VERSION_FILE)
     - ssh ${DOCKER_DESTINATION} "docker login ${REGISTRY_URL} -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}"
-    - ssh ${DOCKER_DESTINATION} "docker pull ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${NEW_VERSION}"
+    - ssh ${DOCKER_DESTINATION} "docker pull ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${CURRENT_VERSION}"
     - ssh ${DOCKER_DESTINATION} "docker stop ${PROJECT_NAME} || true"
     - ssh ${DOCKER_DESTINATION} "docker rm ${PROJECT_NAME} || true"
-    - ssh ${DOCKER_DESTINATION} "docker run -d --name ${PROJECT_NAME} -p 18080:8080 -p 18081:8081 -e ASPNETCORE_ENVIRONMENT=Production -e ConnectionStrings_App='${CONNECTIONSTRINGS_APP}' -e ElasticSearch_UserName=service -e ElasticSearch_Password='${ELASTICSEARCH_PASSWORD}' -e APP_VERSION='${NEW_VERSION}' ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${NEW_VERSION}" 
+    - ssh ${DOCKER_DESTINATION} "docker run -d --name ${PROJECT_NAME} -p 18080:8080 -p 18081:8081 -e ASPNETCORE_ENVIRONMENT=Production -e ConnectionStrings_App='${CONNECTIONSTRINGS_APP}' -e ElasticSearch_UserName=service -e ElasticSearch_Password='${ELASTICSEARCH_PASSWORD}' -e APP_VERSION='${CURRENT_VERSION}' ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${CURRENT_VERSION}" 
   only:
     - tags
   tags:

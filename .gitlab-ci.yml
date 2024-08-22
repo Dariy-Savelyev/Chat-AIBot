@@ -68,12 +68,15 @@ versioning:
       git remote set-url origin http://oauth2:$CI_ACCESS_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
       git push origin --tags
       git push origin HEAD:master
-  only:
-    - master
-  except:
-    - tags
-    # variables:
-    #   - $CI_COMMIT_MESSAGE =~ /^Bump version to .*$/
+  rules:
+  - if: $CI_COMMIT_MESSAGE =~ /^Bump version to .*$/
+    when: never
+  - if: $CI_COMMIT_BRANCH == "master"
+  # only:
+  #   - master
+  # except:
+  #   variables:
+  #     - $CI_COMMIT_MESSAGE =~ /^Bump version to .*$/
 
   tags:
     - linux

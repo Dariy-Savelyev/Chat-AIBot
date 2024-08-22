@@ -54,19 +54,20 @@ tests:
 versioning:
   stage: versioning
   script:
-    - export CURRENT_VERSION=$(cat $VERSION_FILE)
-    - export NEW_VERSION=$(python3 bump_version.py $CURRENT_VERSION $RELEASE_TYPE)
-    - echo "Current Version: $CURRENT_VERSION"
-    - echo "New Version: $NEW_VERSION"
-    - echo $NEW_VERSION > $VERSION_FILE
-    - python3 update_package_version.py $NEW_VERSION
-    - git config --global user.email "galaym@gmail.com"
-    - git config --global user.name "Mihail Galay"
-    - git add $VERSION_FILE
-    - git commit -m "Bump version to $NEW_VERSION [skip ci]"
-    - git tag $NEW_VERSION
-    - git push origin --tags
-    - git push origin HEAD:master
+    - |
+      export CURRENT_VERSION=$(cat $VERSION_FILE)
+      export NEW_VERSION=$(python3 bump_version.py $CURRENT_VERSION $RELEASE_TYPE)
+      echo "Current Version: $CURRENT_VERSION"
+      echo "New Version: $NEW_VERSION"
+      echo $NEW_VERSION > $VERSION_FILE
+      python3 update_package_version.py $NEW_VERSION
+      git config --global user.email "galaym@gmail.com"
+      git config --global user.name "Mihail Galay"
+      git add $VERSION_FILE
+      git commit -m "Bump version to $NEW_VERSION [skip ci]"
+      git tag $NEW_VERSION
+      git push origin --tags
+      git push origin HEAD:master
   only:
     - master
   except:

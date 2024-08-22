@@ -1,4 +1,5 @@
 ﻿using ChatBot.Container;
+using ChatBot.CrossCutting.Apm.Configuration;
 using ChatBot.CrossCutting.Extensions;
 using ChatBot.Web.Middlewares;
 using FluentValidation.AspNetCore;
@@ -36,7 +37,14 @@ namespace ChatBot.Web
                 });
             }
 
+            builder.Host.ConfigureLogging();
+            //builder.Host.UseElasticApm();
+            builder.Services.AddLogging(builder);
+
             var app = builder.Build();
+
+            var logger = app.Services.GetService<ILogger<Program>>();
+            logger?.LogInformation("START Application");
 
             app.Migrate();
             app.Services.SeedRoles();
@@ -61,6 +69,8 @@ namespace ChatBot.Web
             app.MapFallbackToFile("/index.html");
 
             app.Run();
+
+            logger?.LogInformation("STOP Application");
         }
     }
 }

@@ -38,13 +38,12 @@ namespace ChatBot.Web
             }
 
             builder.Host.ConfigureLogging();
-            //builder.Host.UseElasticApm();
             builder.Services.AddLogging(builder);
 
             var app = builder.Build();
 
             var logger = app.Services.GetService<ILogger<Program>>();
-            logger?.LogInformation("START Application");
+            logger?.LogInformation("START Application!");
 
             app.Migrate();
             app.Services.SeedRoles();

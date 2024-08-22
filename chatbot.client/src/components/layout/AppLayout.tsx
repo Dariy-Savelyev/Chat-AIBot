@@ -1,4 +1,4 @@
-import { Button, Input, Layout, Menu } from 'antd';
+import { Button, Input, Layout, Menu, Typography } from 'antd';
 import Sider from 'antd/es/layout/Sider';
 import { ChangeEvent, createContext, useCallback, useEffect, useState } from 'react';
 import type { MenuProps } from 'antd';
@@ -7,16 +7,19 @@ import { get, post } from '../../services/ApiClient';
 import { GetAllChatModel } from '../../models/GetAllChatModel';
 import { useDispatch, useSelector } from 'react-redux';
 import { setChats } from '../../store/slices/ChatSlice';
+import { setApp } from '../../store/slices/AppSlice';
 import { ChatStateModel } from '../../store/models/ChatStateModel';
 import { Link, useLocation } from 'react-router-dom';
 import '../../assets/styles/appLayout.css';
 import { AccesTokenService } from '../../services/AccessTokenService';
 import { AppLayoutProps } from '../../models/PropsModels/AppLayoutProps';
 import { getChatsWithJoinedStatus } from '../../store/selectors/Selectors';
+import { AppStateModel } from '../../store/models/AppStateModel';
 
 export const UserContext = createContext('');
 
 const { Header, Content, Footer } = Layout;
+const { Text } = Typography;
 
 const AppLayout = ({ children }: AppLayoutProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(AccesTokenService.isLoggedIn());
@@ -73,9 +76,16 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     const userId = await get<string>('/api/account/userInfo');
     setUserId(userId);
 
-    const fetchedChats = await get<GetAllChatModel[]>('/api/chat/getAllChats');
+    const version = await get<string>('/api/home/AppVersion');
+    dispatch(setApp(version));
 
+    const fetchedChats = await get<GetAllChatModel[]>('/api/chat/getAllChats');
     dispatch(setChats(fetchedChats));
+  }, [dispatch]);
+
+  const onReloadAll = useCallback(async () => {
+    const version = await get<string>('/api/home/AppVersion');
+    dispatch(setApp(version));
   }, [dispatch]);
 
   const joinChat = useCallback(async (chatId: number) => {
@@ -87,6 +97,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   }, [dispatch, chats]);
 
   useEffect(() => {
+    onReloadAll();
     if (isHomePage) {
       setIsLoggedIn(AccesTokenService.isLoggedIn());
       if (isLoggedIn) {
@@ -135,6 +146,8 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       key: 'login',
     },
   ];
+
+  const appVersion = useSelector((state: AppStateModel) => state.Version);
 
   return (
     <UserContext.Provider value={userId}>
@@ -189,7 +202,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
           </Layout>
         </Content>
 
-        <Footer className='footer'>Chat Bot ©{new Date().getFullYear()}</Footer>
+        <Footer className='footer'>Chat Bot© {new Date().getFullYear()} <Text code>v.{appVersion}</Text></Footer>
       </Layout>
     </UserContext.Provider>
   );

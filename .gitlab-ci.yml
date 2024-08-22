@@ -52,7 +52,7 @@ tests:
   - master
 
 versioning:
-  stage: version
+  stage: versioning
   script:
     - export CURRENT_VERSION=$(cat $VERSION_FILE)
     - export NEW_VERSION=$(python3 bump_version.py $CURRENT_VERSION $RELEASE_TYPE)

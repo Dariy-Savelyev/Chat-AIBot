@@ -113,7 +113,7 @@ docker-deploy:
     - ssh ${DOCKER_DESTINATION} "docker pull ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${CI_COMMIT_SHA}"
     - ssh ${DOCKER_DESTINATION} "docker stop ${PROJECT_NAME} || true"
     - ssh ${DOCKER_DESTINATION} "docker rm ${PROJECT_NAME} || true"
-    - ssh ${DOCKER_DESTINATION} "docker run -d --name ${PROJECT_NAME} -p 18080:8080 -p 18081:8081 -e ASPNETCORE_ENVIRONMENT=Production -e ConnectionStrings_App='${CONNECTIONSTRINGS_APP}' ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${CI_COMMIT_SHA}" 
+    - ssh ${DOCKER_DESTINATION} "docker run -d --name ${PROJECT_NAME} -p 18080:8080 -p 18081:8081 -e ASPNETCORE_ENVIRONMENT=Production -e ConnectionStrings_App='${CONNECTIONSTRINGS_APP}' ElasticSearch_UserName=service ElasticSearch_Password='${ELASTICSEARCH_PASSWORD}' ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${CI_COMMIT_SHA}" 
   only:
     - master
   tags:

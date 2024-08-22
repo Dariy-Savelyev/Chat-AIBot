@@ -72,8 +72,8 @@ versioning:
     - master
   except:
     - tags
-    variables:
-      - $CI_COMMIT_MESSAGE =~ /^Bump version to .*$/
+    # variables:
+    #   - $CI_COMMIT_MESSAGE =~ /^Bump version to .*$/
 
   tags:
     - linux

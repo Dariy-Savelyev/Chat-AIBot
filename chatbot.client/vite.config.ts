@@ -2,7 +2,8 @@ import { fileURLToPath, URL } from 'node:url';
 
 import { defineConfig } from 'vite';
 import plugin from '@vitejs/plugin-react';
-import fs from 'fs';
+import fs, { readFileSync } from 'fs';
+import { resolve } from 'path';
 import path from 'path';
 import child_process from 'child_process';
 import { env } from 'process';
@@ -33,6 +34,11 @@ if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
 const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}` :
     env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'https://localhost:7286';
 
+const packageJson = JSON.parse(
+    readFileSync(resolve(__dirname, 'package.json'), 'utf-8')
+);
+process.env.APP_VERSION = packageJson.version;
+
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [plugin()],
@@ -55,6 +61,6 @@ export default defineConfig({
         }
     },
     define: {
-      'process.env': process.env
+        'process.env': process.env
     }
 })

@@ -34,7 +34,7 @@ public class TokensService(
         catch (SecurityTokenExpiredException)
         {
             var jwtToken = jwtSecurityTokenHandler.ReadJwtToken(accessToken);
-            userId = jwtToken.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            userId = jwtToken.Claims.FirstOrDefault(c => c.Type == "nameid")?.Value;
         }
 
         if (userId is null)

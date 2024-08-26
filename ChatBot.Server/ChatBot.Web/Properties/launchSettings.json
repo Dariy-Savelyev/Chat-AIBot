@@ -19,7 +19,9 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy",
-        "ConnectionStrings_App": "Data Source=.;Initial Catalog=ChatBot;Integrated Security=True;TrustServerCertificate=True"
+        "ConnectionStrings_App": "Data Source=.;Initial Catalog=ChatBot;Integrated Security=True;TrustServerCertificate=True",
+        "ElasticSearch_UserName": "service",
+        "ElasticSearch_Password": "WP8X2w7PmbkWeVMj"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7286;http://localhost:5225"

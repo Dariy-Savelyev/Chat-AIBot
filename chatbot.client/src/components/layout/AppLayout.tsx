@@ -1,4 +1,4 @@
-import { Button, Input, Layout, Menu } from 'antd';
+import { Button, Input, Layout, Menu, Typography } from 'antd';
 import Sider from 'antd/es/layout/Sider';
 import { ChangeEvent, createContext, useCallback, useEffect, useState } from 'react';
 import type { MenuProps } from 'antd';
@@ -17,6 +17,7 @@ import { getChatsWithJoinedStatus } from '../../store/selectors/Selectors';
 export const UserContext = createContext('');
 
 const { Header, Content, Footer } = Layout;
+const { Text } = Typography;
 
 const AppLayout = ({ children }: AppLayoutProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(AccesTokenService.isLoggedIn());
@@ -74,7 +75,6 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     setUserId(userId);
 
     const fetchedChats = await get<GetAllChatModel[]>('/api/chat/getAllChats');
-
     dispatch(setChats(fetchedChats));
   }, [dispatch]);
 
@@ -189,7 +189,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
           </Layout>
         </Content>
 
-        <Footer className='footer'>Chat Bot ©{new Date().getFullYear()}</Footer>
+        <Footer className='footer'>Chat Bot© {new Date().getFullYear()} <Text code>v.{process.env.APP_VERSION}</Text></Footer>
       </Layout>
     </UserContext.Provider>
   );

@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Elastic.Apm.NetCoreAll</id>
+    <version>1.20.0</version>
+    <authors>Elastic and contributors</authors>
+    <license type="file">LICENSE</license>
+    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+    <icon>nuget-icon.png</icon>
+    <projectUrl>https://github.com/elastic/apm-agent-dotnet</projectUrl>
+    <description>Elastic APM .NET agent. This is a convenient package that automatically pulls in ASP.NET Core, and Entity Framework Core auto instrumentation with the Elastic APM .NET Agent. If your application uses the Microsoft.AspNetCore.All package the easiest way to reference the Elastic APM project is to use this package. If you only need specific functionalities (e.g. EF Core monitoring, or ASP.NET Core without EF Core monitoring, etc) you can reference specific Elastic.Apm packages. See: https://github.com/elastic/apm-agent-dotnet/tree/main/docs</description>
+    <releaseNotes>See https://github.com/elastic/apm-agent-dotnet/releases/tag/1.20.0</releaseNotes>
+    <copyright>2022 Elasticsearch BV</copyright>
+    <tags>apm, monitoring, elastic, elasticapm, analytics, aspnetcore, entiryframeworkcore, efcore</tags>
+    <repository type="git" url="https://github.com/elastic/apm-agent-dotnet.git" commit="8b1b6c83522b19dfbcc415f7ef62059e24fc1398" />
+    <dependencies>
+      <group targetFramework=".NETCoreApp3.0">
+        <dependency id="Elastic.Apm.AspNetCore" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.Azure.CosmosDb" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.Azure.ServiceBus" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.Azure.Storage" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.Elasticsearch" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.EntityFrameworkCore" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.GrpcClient" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.MongoDb" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.SqlClient" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm" version="1.20.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net5.0">
+        <dependency id="Elastic.Apm.AspNetCore" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.Azure.CosmosDb" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.Azure.ServiceBus" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.Azure.Storage" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.Elasticsearch" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.EntityFrameworkCore" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.GrpcClient" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.MongoDb" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.SqlClient" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm" version="1.20.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Elastic.Apm.AspNetCore" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.Azure.CosmosDb" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.Azure.ServiceBus" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.Azure.Storage" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.Elasticsearch" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.EntityFrameworkCore" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.GrpcClient" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.MongoDb" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm.SqlClient" version="1.20.0" exclude="Build,Analyzers" />
+        <dependency id="Elastic.Apm" version="1.20.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

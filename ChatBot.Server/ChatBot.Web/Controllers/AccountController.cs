@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ChatBot.Web.Controllers;
 
-public class AccountController(IAccountService service) : BaseController
+public class AccountController(IAccountService service, ILogger<AccountController> logger) : BaseController
 {
     [AllowAnonymous]
     [HttpPost]
@@ -19,6 +19,8 @@ public class AccountController(IAccountService service) : BaseController
     [HttpPost]
     public async Task<string> Login(LoginModel model)
     {
+        logger.LogInformation("User visited: Login Page!");
+
         return await service.LoginAsync(model);
     }
 

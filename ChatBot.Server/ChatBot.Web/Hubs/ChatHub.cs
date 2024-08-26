@@ -10,7 +10,7 @@ public class ChatHub : Hub
     public async Task SendMessage(HubMessageModel model, IMessageService service, IMapper mapper)
     {
         var message = mapper.Map<MessageModel>(model);
-        
+
         var messageId = await service.SendMessageAsync(message, model.UserId);
         model.Id = messageId;
 

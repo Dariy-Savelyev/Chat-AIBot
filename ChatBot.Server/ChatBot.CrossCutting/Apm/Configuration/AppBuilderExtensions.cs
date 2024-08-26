@@ -2,13 +2,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 
-namespace ChatBot.CrossCutting.Apm.Configuration
+namespace ChatBot.CrossCutting.Apm.Configuration;
+
+public static class AppBuilderExtensions
 {
-    public static class AppBuilderExtensions
+    public static IApplicationBuilder UseApmTracingMiddleware(this IApplicationBuilder app)
     {
-        public static IApplicationBuilder UseApmTracingMiddleware(this IApplicationBuilder app)
-        {
             return app.UseMiddleware<HttpRequestTracingMiddleware>();
         }
-    }
 }

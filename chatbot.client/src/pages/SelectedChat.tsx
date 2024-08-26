@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import '../assets/styles/chat.css';
 import { GetAllMessageModel } from "../models/GetAllMessageModel";
 import { useDispatch, useSelector } from "react-redux";
-import { setMessages } from "../store/slices/MessageSlice";
+import { addMessage, setMessages } from "../store/slices/MessageSlice";
 import { MessageStateModel } from "../store/models/MessageStateModel";
 import { EmoteModel } from "../models/EmoteModel";
 import { ChatStateModel } from "../store/models/ChatStateModel";
@@ -14,6 +14,8 @@ import { MessageForm } from "../components/chat/MessageForm";
 import { UserContext } from "../components/layout/AppLayout";
 import { Spin } from "antd";
 import { LoadingOutlined } from '@ant-design/icons';
+import { hubService } from "../services/HubService";
+import { HubMessageModel } from "../models/HubMessageModel";
 
 const loadingIcon = <LoadingOutlined style={{ fontSize: 60 }} spin />;
 
@@ -63,14 +65,18 @@ export const SelectedChat = () => {
             const response = await post<string>('/api/message/send', content);
 
             if (response != '') {
-                dispatch(setMessages([...Object.values(messages).flat(),
-                { content: content.content, id: +response, emote: null, userId: userId }]));
+                dispatch(addMessage({
+                    content: content.content,
+                    id: +response,
+                    emote: null,
+                    userId: userId
+                }));
             }
         }
         finally {
             setContent((prevContent) => ({ ...prevContent, content: '' }));
         }
-    }, [content, dispatch, messages]);
+    }, [content, dispatch, chatId]);
 
     const handleTextAreaChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
         setContent(prevContent => ({
@@ -90,12 +96,34 @@ export const SelectedChat = () => {
         ))));
     }, [emoteModel, dispatch, messages]);
 
+    const messageListener = useCallback((message: HubMessageModel) => {
+        if (userId !== message.userId && chatId === message.chatId.toString()) {
+            dispatch(addMessage({
+                content: message.content,
+                id: message.id,
+                emote: null,
+                userId: message.userId
+            }));
+        }
+    }, [chatId, dispatch]);
+
+    useEffect(() => {
+        hubService.startConnection('https://localhost:7286/chatHub');
+        hubService.addMessageListener(messageListener);
+
+        return () => {
+            hubService.removeMessageListener();
+        };
+    }, [chatId]);
+
     useEffect(() => {
         isUserInChat();
 
         dispatch(setMessages([]));
 
         onReload();
+
+        setContent((prevContent) => ({ ...prevContent, content: '' }));
     }, [isUserInChat, onReload, chatId]);
 
     if (isLoading) {

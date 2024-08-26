@@ -7,6 +7,7 @@ import '../assets/styles/form.css';
 import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState<LoginFormData>({
         email: '',
@@ -22,7 +23,7 @@ export const Login = () => {
             [name]: value,
         }));
     }, []);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    
     const handleSubmit = useCallback(async () => {
         setErrorMessage(null);
         setIsSubmitting(true);

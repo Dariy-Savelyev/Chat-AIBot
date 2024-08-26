@@ -1,5 +1,6 @@
 ﻿using ChatBot.Container;
 using ChatBot.CrossCutting.Extensions;
+using ChatBot.Web.Hubs;
 using ChatBot.Web.Middlewares;
 using FluentValidation.AspNetCore;
 
@@ -15,6 +16,7 @@ namespace ChatBot.Web
 
             builder.Services.AddControllers();
             builder.Services.AddFluentValidationAutoValidation();
+            builder.Services.AddSignalR();
 
             builder.LoadDomainModule();
             builder.LoadApplicationModule();
@@ -31,7 +33,8 @@ namespace ChatBot.Web
                         {
                             corsPolicyBuilder.WithOrigins("https://localhost:5174", "https://localhost:5173")
                                 .AllowAnyHeader()
-                                .AllowAnyMethod();
+                                .AllowAnyMethod()
+                                .AllowCredentials();
                         });
                 });
             }
@@ -59,6 +62,8 @@ namespace ChatBot.Web
             app.MapControllers();
 
             app.MapFallbackToFile("/index.html");
+
+            app.MapHub<ChatHub>("/chatHub");
 
             app.Run();
         }

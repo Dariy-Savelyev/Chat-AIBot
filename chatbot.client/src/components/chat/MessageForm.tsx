@@ -1,10 +1,12 @@
 import { Button, Input, Space } from "antd";
 import { MessageFormProps } from '../../models/PropsModels/MessageFormProps';
+import React from "react";
 
-export const MessageForm = ({ isInChat, content, handleTextAreaChange, submitContent, chatId }: MessageFormProps) => (
+export const MessageForm = React.memo(({ isInChat, content, handleTextAreaChange, submitContent, chatId }: MessageFormProps) => (
     <Space.Compact className="space-compact-position">
         <Input.TextArea
             className='textarea'
+            name='input'
             disabled={!isInChat}
             autoSize={{ minRows: 1, maxRows: 1 }}
             value={content.content}
@@ -27,4 +29,4 @@ export const MessageForm = ({ isInChat, content, handleTextAreaChange, submitCon
             Send
         </Button>
     </Space.Compact>
-);
+));

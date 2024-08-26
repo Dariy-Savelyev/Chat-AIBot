@@ -1,20 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { MessageStateModel } from '../models/MessageStateModel';
 import { GetAllMessageModel } from '../../models/GetAllMessageModel';
-
-const initialState: MessageStateModel = {
-  messages: [],
-};
 
 export const messageSlice = createSlice({
   name: 'messages',
-  initialState,
+  initialState: [] as GetAllMessageModel[],
   reducers: {
-    setMessages: (state, action: PayloadAction<GetAllMessageModel[]>) => {
-      state.messages = action.payload;
+    setMessages: (_state, action: PayloadAction<GetAllMessageModel[]>) => {
+      return action.payload;
+    },
+    addMessage: (state, action: PayloadAction<GetAllMessageModel>) => {
+      state.push(action.payload);
     },
   },
 });
 
-export const { setMessages } = messageSlice.actions;
+export const { setMessages, addMessage } = messageSlice.actions;
 export default messageSlice.reducer;

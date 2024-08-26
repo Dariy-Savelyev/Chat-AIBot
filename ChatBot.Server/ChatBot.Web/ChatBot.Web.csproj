@@ -40,4 +40,8 @@
     <ProjectReference Include="..\ChatBot.CrossCutting\ChatBot.CrossCutting.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Hubs\" />
+  </ItemGroup>
+
 </Project>

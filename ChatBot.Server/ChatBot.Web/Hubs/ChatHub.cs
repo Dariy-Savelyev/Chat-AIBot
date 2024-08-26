@@ -1,19 +1,23 @@
 ﻿using AutoMapper;
 using ChatBot.Application.Models;
 using ChatBot.Application.ServiceInterfaces;
+using ChatBot.CrossCutting.Extensions;
 using Microsoft.AspNetCore.SignalR;
 
 namespace ChatBot.Web.Hubs;
 
 public class ChatHub : Hub
 {
-    public async Task SendMessage(HubMessageModel model, IMessageService service, IMapper mapper)
+    public async Task AddMessage(HubAddMessageModel model, IMessageService service, IMapper mapper)
     {
-        var message = mapper.Map<MessageModel>(model);
+        var userId = Context.User!.GetUserId();
 
-        var messageId = await service.SendMessageAsync(message, model.UserId);
-        model.Id = messageId;
+        var messageId = await service.SendMessageAsync(model, userId);
 
-        await Clients.All.SendAsync("ReceiveMessage", model);
+        var message = mapper.Map<HubMessageModel>(model);
+        message.Id = messageId;
+        message.UserId = userId;
+
+        await Clients.All.SendAsync("ReceiveMessage", message);
     }
 }

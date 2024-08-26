@@ -17,6 +17,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { hubService } from "../services/HubService";
 import { HubMessageModel } from "../models/HubMessageModel";
 import { CHAT_HUB_URL } from "../utils/Constants";
+import { HubAddMessageModel } from "../models/HubAddMessageModel";
 
 const loadingIcon = <LoadingOutlined style={{ fontSize: 60 }} spin />;
 
@@ -61,11 +62,9 @@ export const SelectedChat = () => {
 
     const submitContent = useCallback(async (chatId: number) => {
         try {
-            const hubMessage: HubMessageModel = {
-                id: 0,
+            const hubMessage: HubAddMessageModel = {
                 content: content.content,
-                chatId: chatId,
-                userId: userId
+                chatId: chatId
             };
 
             hubService.sendMessage(hubMessage);

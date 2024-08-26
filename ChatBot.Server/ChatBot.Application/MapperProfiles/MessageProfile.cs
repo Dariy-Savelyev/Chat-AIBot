@@ -8,7 +8,7 @@ public class MessageProfile : Profile
 {
     public MessageProfile()
     {
-        CreateMap<MessageModel, Message>()
+        CreateMap<HubAddMessageModel, Message>()
             .ForMember(
                 dest => dest.SendDate,
                 opt => opt.MapFrom(x => DateTime.UtcNow))
@@ -22,6 +22,6 @@ public class MessageProfile : Profile
                 opt => opt.MapFrom(x => x.MessageId))
             ;
 
-        CreateMap<HubMessageModel, MessageModel>();
+        CreateMap<HubAddMessageModel, HubMessageModel>();
     }
 }

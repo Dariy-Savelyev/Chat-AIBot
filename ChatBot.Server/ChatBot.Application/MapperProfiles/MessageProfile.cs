@@ -21,5 +21,7 @@ public class MessageProfile : Profile
                 dest => dest.Id,
                 opt => opt.MapFrom(x => x.MessageId))
             ;
+
+        CreateMap<HubMessageModel, MessageModel>();
     }
 }

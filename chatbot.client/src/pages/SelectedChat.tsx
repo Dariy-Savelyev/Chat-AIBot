@@ -61,12 +61,8 @@ export const SelectedChat = () => {
 
     const submitContent = useCallback(async (chatId: number) => {
         try {
-            content.chatId = chatId;
-
-            const response = await post<string>('/api/message/send', content);
-
             const hubMessage: HubMessageModel = {
-                id: +response,
+                id: 0,
                 content: content.content,
                 chatId: chatId,
                 userId: userId
@@ -74,14 +70,12 @@ export const SelectedChat = () => {
 
             hubService.sendMessage(hubMessage);
 
-            if (response != '') {
-                dispatch(addMessage({
-                    content: content.content,
-                    id: +response,
-                    emote: null,
-                    userId: userId
-                }));
-            }
+            dispatch(addMessage({
+                content: content.content,
+                id: 0,
+                emote: null,
+                userId: userId
+            }));
         }
         finally {
             setContent((prevContent) => ({ ...prevContent, content: '' }));
@@ -121,7 +115,7 @@ export const SelectedChat = () => {
         if (userId) {
             hubService.startConnection(CHAT_HUB_URL);
             hubService.addMessageListener(messageListener);
-    
+
             return () => {
                 hubService.removeMessageListener();
             };

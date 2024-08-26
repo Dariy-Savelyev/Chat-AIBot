@@ -27,6 +27,12 @@ class HubService {
       this.hubConnection.off('ReceiveMessage');
     }
   }
+
+  public sendMessage = (message: HubMessageModel) => {
+    if (this.hubConnection) {
+      this.hubConnection.invoke('SendMessage', message);
+    }
+  }
 }
 
 export const hubService = new HubService();

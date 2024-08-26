@@ -6,7 +6,7 @@ export const MessageForm = React.memo(({ isInChat, content, handleTextAreaChange
     <Space.Compact className="space-compact-position">
         <Input.TextArea
             className='textarea'
-            name='input'
+            name='messageInputTextArea'
             disabled={!isInChat}
             autoSize={{ minRows: 1, maxRows: 1 }}
             value={content.content}

@@ -5,8 +5,8 @@ namespace ChatBot.Web.Hubs;
 
 public class ChatHub : Hub
 {
-    public async Task SendMessage(MessageModel message)
+    public async Task SendMessage(HubMessageModel model)
     {
-        await Clients.All.SendAsync("ReceiveMessage", message);
+        await Clients.All.SendAsync("ReceiveMessage", model);
     }
 }

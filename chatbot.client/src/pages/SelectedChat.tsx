@@ -16,6 +16,7 @@ import { Spin } from "antd";
 import { LoadingOutlined } from '@ant-design/icons';
 import { hubService } from "../services/HubService";
 import { HubMessageModel } from "../models/HubMessageModel";
+import { CHAT_HUB_URL } from "../utils/Constants";
 
 const loadingIcon = <LoadingOutlined style={{ fontSize: 60 }} spin />;
 
@@ -64,6 +65,15 @@ export const SelectedChat = () => {
 
             const response = await post<string>('/api/message/send', content);
 
+            const hubMessage: HubMessageModel = {
+                id: +response,
+                content: content.content,
+                chatId: chatId,
+                userId: userId
+            };
+
+            hubService.sendMessage(hubMessage);
+
             if (response != '') {
                 dispatch(addMessage({
                     content: content.content,
@@ -76,7 +86,7 @@ export const SelectedChat = () => {
         finally {
             setContent((prevContent) => ({ ...prevContent, content: '' }));
         }
-    }, [content, dispatch, chatId]);
+    }, [content, dispatch, chatId, userId]);
 
     const handleTextAreaChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
         setContent(prevContent => ({
@@ -105,16 +115,18 @@ export const SelectedChat = () => {
                 userId: message.userId
             }));
         }
-    }, [chatId, dispatch]);
+    }, [chatId, dispatch, userId]);
 
     useEffect(() => {
-        hubService.startConnection('https://localhost:7286/chatHub');
-        hubService.addMessageListener(messageListener);
-
-        return () => {
-            hubService.removeMessageListener();
-        };
-    }, [chatId]);
+        if (userId) {
+            hubService.startConnection(CHAT_HUB_URL);
+            hubService.addMessageListener(messageListener);
+    
+            return () => {
+                hubService.removeMessageListener();
+            };
+        }
+    }, [chatId, userId]);
 
     useEffect(() => {
         isUserInChat();

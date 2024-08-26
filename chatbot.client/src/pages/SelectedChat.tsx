@@ -17,6 +17,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { hubService } from "../services/HubService";
 import { HubMessageModel } from "../models/HubMessageModel";
 import { CHAT_HUB_URL } from "../utils/Constants";
+import { HubAddMessageModel } from "../models/HubAddMessageModel";
 
 const loadingIcon = <LoadingOutlined style={{ fontSize: 60 }} spin />;
 
@@ -61,27 +62,19 @@ export const SelectedChat = () => {
 
     const submitContent = useCallback(async (chatId: number) => {
         try {
-            content.chatId = chatId;
-
-            const response = await post<string>('/api/message/send', content);
-
-            const hubMessage: HubMessageModel = {
-                id: +response,
+            const hubMessage: HubAddMessageModel = {
                 content: content.content,
-                chatId: chatId,
-                userId: userId
+                chatId: chatId
             };
 
             hubService.sendMessage(hubMessage);
 
-            if (response != '') {
-                dispatch(addMessage({
-                    content: content.content,
-                    id: +response,
-                    emote: null,
-                    userId: userId
-                }));
-            }
+            dispatch(addMessage({
+                content: content.content,
+                id: 0,
+                emote: null,
+                userId: userId
+            }));
         }
         finally {
             setContent((prevContent) => ({ ...prevContent, content: '' }));
@@ -121,7 +114,7 @@ export const SelectedChat = () => {
         if (userId) {
             hubService.startConnection(CHAT_HUB_URL);
             hubService.addMessageListener(messageListener);
-    
+
             return () => {
                 hubService.removeMessageListener();
             };

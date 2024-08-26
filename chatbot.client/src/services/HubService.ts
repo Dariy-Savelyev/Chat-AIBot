@@ -1,5 +1,6 @@
 import * as signalR from "@microsoft/signalr";
 import { HubMessageModel } from "../models/HubMessageModel";
+import { HubAddMessageModel } from "../models/HubAddMessageModel";
 
 class HubService {
   private hubConnection: signalR.HubConnection | null = null;
@@ -28,9 +29,9 @@ class HubService {
     }
   }
 
-  public sendMessage = (message: HubMessageModel) => {
+  public sendMessage = (message: HubAddMessageModel) => {
     if (this.hubConnection) {
-      this.hubConnection.invoke('SendMessage', message);
+      this.hubConnection.invoke('AddMessage', message);
     }
   }
 }

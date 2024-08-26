@@ -9,7 +9,7 @@ namespace ChatBot.Application.Services;
 
 public class MessageService(IMessageRepository messageRepository, IChatRepository chatRepository, IMapper mapper) : IMessageService
 {
-    public async Task<int> SendMessageAsync(MessageModel model, string userId)
+    public async Task<int> SendMessageAsync(HubAddMessageModel model, string userId)
     {
         var message = mapper.Map<Message>(model);
         message.UserId = userId;

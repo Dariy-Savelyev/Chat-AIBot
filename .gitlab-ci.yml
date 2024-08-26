@@ -4,6 +4,7 @@ stages:
   - build
   - test
   - sonarqube-check
+  - versioning
   - docker-build
   - docker-deploy
 
@@ -16,6 +17,8 @@ variables:
   PROJECT_NAME: "chat-bot"
   IMAGE_NAME: "chat-full"
   DOCKER_DESTINATION: "dockeruser@192.168.1.125"
+  VERSION_FILE: "VERSION"
+  RELEASE_TYPE: "patch"
 
 # Global cache rule
 cache:
@@ -37,6 +40,7 @@ build:
     - win
   except:
     - master
+    - tags
 
 tests:
   stage: test
@@ -44,6 +48,38 @@ tests:
     - 'dotnet test ChatBot.sln -p:BuildInParallel=false -m:1 --no-restore'
   except:
   - master
+  - tags
+
+versioning:
+  stage: versioning
+  script:
+    - |
+      export CURRENT_VERSION=$(cat $VERSION_FILE)
+      export NEW_VERSION=$(python3 bump_version.py $CURRENT_VERSION $RELEASE_TYPE)
+      echo "Current Version: $CURRENT_VERSION"
+      echo "New Version: $NEW_VERSION"
+      echo $NEW_VERSION > $VERSION_FILE
+      python3 update_package_version.py $NEW_VERSION
+      git config --global user.email "galaym@gmail.com"
+      git config --global user.name "Mihail Galay"
+      git add -A
+      git commit -m "Bump version to $NEW_VERSION"
+      git tag $NEW_VERSION
+      git remote set-url origin http://oauth2:$CI_ACCESS_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
+      git push origin --tags
+      git push origin HEAD:master
+  rules:
+  - if: $CI_COMMIT_MESSAGE =~ /.*Bump version to .*/
+    when: never
+  - if: $CI_COMMIT_BRANCH == "master"
+  # only:
+  #   - master
+  # except:
+  #   variables:
+  #     - $CI_COMMIT_MESSAGE =~ /^Bump version to .*$/
+
+  tags:
+    - linux
 
 sonarqube-check:
   image: mcr.microsoft.com/dotnet/sdk:latest
@@ -89,6 +125,7 @@ sonarqube-check:
     - win
   except:
   - master
+  - tags
 
 docker-build:
   stage: docker-build
@@ -96,12 +133,13 @@ docker-build:
   services:
     - docker:dind
   script:
+    - export CURRENT_VERSION=$(cat $VERSION_FILE)
     - echo ${CI_REGISTRY_PASSWORD} | docker login ${REGISTRY_URL} -u ${CI_REGISTRY_USER} --password-stdin
-    - docker build -t ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:latest -t ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${CI_COMMIT_SHA} -f ./ChatBot.Server/ChatBot.Web/Dockerfile .
+    - docker build -t ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:latest -t ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${CURRENT_VERSION} -f ./ChatBot.Server/ChatBot.Web/Dockerfile .
     - docker push ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:latest
-    - docker push ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${CI_COMMIT_SHA}
+    - docker push ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${CURRENT_VERSION}
   only:
-    - master
+    - tags
   tags:
     - linux
 
@@ -109,12 +147,13 @@ docker-deploy:
   stage: docker-deploy
   image: alpine:latest
   script:
+    - export CURRENT_VERSION=$(cat $VERSION_FILE)
     - ssh ${DOCKER_DESTINATION} "docker login ${REGISTRY_URL} -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}"
-    - ssh ${DOCKER_DESTINATION} "docker pull ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${CI_COMMIT_SHA}"
+    - ssh ${DOCKER_DESTINATION} "docker pull ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${CURRENT_VERSION}"
     - ssh ${DOCKER_DESTINATION} "docker stop ${PROJECT_NAME} || true"
     - ssh ${DOCKER_DESTINATION} "docker rm ${PROJECT_NAME} || true"
-    - ssh ${DOCKER_DESTINATION} "docker run -d --name ${PROJECT_NAME} -p 18080:8080 -p 18081:8081 -e ASPNETCORE_ENVIRONMENT=Production -e ConnectionStrings_App='${CONNECTIONSTRINGS_APP}' ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${CI_COMMIT_SHA}" 
+    - ssh ${DOCKER_DESTINATION} "docker run -d --name ${PROJECT_NAME} -p 18080:8080 -p 18081:8081 -e ASPNETCORE_ENVIRONMENT=Production -e ConnectionStrings_App='${CONNECTIONSTRINGS_APP}' -e ElasticSearch_UserName=service -e ElasticSearch_Password='${ELASTICSEARCH_PASSWORD}' -e APP_VERSION='${CURRENT_VERSION}' ${REGISTRY_URL}/${PROJECT_NAME}/${IMAGE_NAME}:${CURRENT_VERSION}" 
   only:
-    - master
+    - tags
   tags:
     - linux

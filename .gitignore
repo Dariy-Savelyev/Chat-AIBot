@@ -371,3 +371,4 @@ LocalFileStorage
 # Sonar
 SonarLint.xml
 .sonarlint/
+/ChatBot.Server/ChatBot.Web/Properties/launchSettings.json

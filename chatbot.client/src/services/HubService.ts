@@ -1,13 +1,14 @@
 import * as signalR from "@microsoft/signalr";
 import { HubMessageModel } from "../models/HubMessageModel";
 import { HubAddMessageModel } from "../models/HubAddMessageModel";
+import { AccesTokenService } from "./AccessTokenService";
 
 class HubService {
   private hubConnection: signalR.HubConnection | null = null;
 
   public startConnection = (url: string) => {
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(url)
+      .withUrl(url, { accessTokenFactory: () => AccesTokenService.getAccessToken()! })
       .withAutomaticReconnect()
       .build();
 

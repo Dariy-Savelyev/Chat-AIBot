@@ -1,16 +1,14 @@
 ﻿using ChatBot.Application.Models;
 using ChatBot.Application.ServiceInterfaces;
 using ChatBot.CrossCutting.Extensions;
-using ChatBot.Web.Hubs;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 
 namespace ChatBot.Web.Controllers;
 
 public class MessageController(IMessageService service) : BaseController
 {
     [HttpPost]
-    public async Task<int> Send(MessageModel model, IHubContext<ChatHub> hubContext)
+    public async Task<int> Send(MessageModel model)
     {
         return await service.SendMessageAsync(model, User.GetUserId());
     }

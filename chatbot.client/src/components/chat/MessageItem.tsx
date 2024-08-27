@@ -2,8 +2,9 @@ import { Button, Card, ConfigProvider, List, Typography } from "antd";
 import likeIcon from '../../assets/images/likeIcon.png';
 import dislikeIcon from '../../assets/images/dislikeIcon.png';
 import { MessageItemProps } from '../../models/PropsModels/MessageItemProps';
+import React from "react";
 
-export const MessageItem = ({ item, userId, isInChat, handleEmote }: MessageItemProps) => (
+export const MessageItem = React.memo(({ item, userId, isInChat, handleEmote }: MessageItemProps) => (
     <List.Item className={`message-display ${item.userId === userId ? 'user-display' : 'other-user-display'}`}>
         <Card
             className="chat-bubble"
@@ -60,4 +61,4 @@ export const MessageItem = ({ item, userId, isInChat, handleEmote }: MessageItem
             ) : null}
         </Card>
     </List.Item>
-);
+));

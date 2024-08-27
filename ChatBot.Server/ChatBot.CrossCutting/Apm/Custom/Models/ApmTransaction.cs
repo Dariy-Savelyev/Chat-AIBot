@@ -1,39 +1,37 @@
-﻿using Elastic.Apm;
-using Elastic.Apm.Api;
+﻿using Elastic.Apm.Api;
 using static ChatBot.CrossCutting.Apm.Shared.Constants;
 
-namespace ChatBot.CrossCutting.Apm.Custom.Models
+namespace ChatBot.CrossCutting.Apm.Custom.Models;
+
+public class ApmTransaction : IDisposable
 {
-    public class ApmTransaction : IDisposable
+    private readonly ITransaction? _transaction;
+    private bool _disposed;
+
+    internal ApmTransaction(ITransaction? transaction)
     {
-        private readonly ITransaction? _transaction;
+        _transaction = transaction;
+    }
 
-        internal ApmTransaction(ITransaction? transaction)
+    ~ApmTransaction() => Dispose(false);
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
         {
-            _transaction = transaction;
-        }
-
-        public string TraceId => _transaction?.TraceId ?? string.Empty;
-
-        [Obsolete("IApmTracer should be used instead")]
-        public static ApmTransaction StartNew(string name, string type, bool shouldLinkToExisting = true, DistributedTracingData? tracingData = null)
-        {
-            if (shouldLinkToExisting)
+            if (disposing)
             {
-                var currentTransaction = Agent.Tracer.CurrentTransaction;
-                tracingData = currentTransaction?.OutgoingDistributedTracingData;
+                _transaction?.End();
+                _transaction?.Custom.Add(TRANSACTION_HAS_ENDED, string.Empty);
             }
 
-            var newTransaction = Agent.Tracer.StartTransaction(name, type, tracingData);
-
-            return new ApmTransaction(newTransaction);
-        }
-
-        public void Dispose()
-        {
-            _transaction?.End();
-            _transaction?.Custom.Add(TRANSACTION_HAS_ENDED, string.Empty);
-            GC.SuppressFinalize(this);
+            _disposed = true;
         }
     }
 }

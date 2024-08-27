@@ -1,6 +1,6 @@
 ﻿namespace ChatBot.CrossCutting.Apm.Shared;
 
-public class Constants
+public static class Constants
 {
     public const string SERVICE_PROPERTY = "service";
     public const string SERVICE_INSTANCE_PROPERTY = "instance";

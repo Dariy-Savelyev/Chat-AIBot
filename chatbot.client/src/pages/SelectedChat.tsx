@@ -62,6 +62,8 @@ export const SelectedChat = () => {
 
     const submitContent = useCallback(async (chatId: number) => {
         try {
+            content.chatId = chatId;
+
             const hubMessage: HubAddMessageModel = {
                 content: content.content,
                 chatId: chatId

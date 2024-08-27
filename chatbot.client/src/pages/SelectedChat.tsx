@@ -70,18 +70,11 @@ export const SelectedChat = () => {
             };
 
             hubService.sendMessage(hubMessage);
-
-            dispatch(addMessage({
-                content: content.content,
-                id: 0,
-                emote: null,
-                userId: userId
-            }));
         }
         finally {
             setContent((prevContent) => ({ ...prevContent, content: '' }));
         }
-    }, [content, dispatch, chatId, userId]);
+    }, [content, dispatch, chatId]);
 
     const handleTextAreaChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
         setContent(prevContent => ({
@@ -102,7 +95,7 @@ export const SelectedChat = () => {
     }, [emoteModel, dispatch, messages]);
 
     const messageListener = useCallback((message: HubMessageModel) => {
-        if (userId !== message.userId && chatId === message.chatId.toString()) {
+        if (chatId === message.chatId.toString()) {
             dispatch(addMessage({
                 content: message.content,
                 id: message.id,
@@ -110,18 +103,16 @@ export const SelectedChat = () => {
                 userId: message.userId
             }));
         }
-    }, [chatId, dispatch, userId]);
+    }, [chatId, dispatch]);
 
     useEffect(() => {
-        if (userId) {
-            hubService.startConnection(CHAT_HUB_URL);
-            hubService.addMessageListener(messageListener);
+        hubService.startConnection(CHAT_HUB_URL);
+        hubService.addMessageListener(messageListener);
 
-            return () => {
-                hubService.removeMessageListener();
-            };
-        }
-    }, [chatId, userId]);
+        return () => {
+            hubService.removeMessageListener();
+        };
+    }, [chatId]);
 
     useEffect(() => {
         isUserInChat();

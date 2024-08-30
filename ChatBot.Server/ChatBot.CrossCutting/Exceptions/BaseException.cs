@@ -3,11 +3,8 @@
 namespace ChatBot.CrossCutting.Exceptions;
 
 [Serializable]
-public abstract class BaseException : ArgumentException
+public abstract class BaseException(IReadOnlyCollection<ResponseError> errors, string message)
+    : ArgumentException(message)
 {
-    protected BaseException(IReadOnlyCollection<ResponseError> errors, string message)
-        : base(message)
-        => Errors = errors;
-
-    public IReadOnlyCollection<ResponseError> Errors { get; protected set; }
+    public IReadOnlyCollection<ResponseError> Errors { get; protected set; } = errors;
 }

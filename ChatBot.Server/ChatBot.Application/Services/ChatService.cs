@@ -27,7 +27,8 @@ public class ChatService(IChatRepository chatRepository, IMapper mapper) : IChat
     {
         var dataBaseChats = await chatRepository.GetAllAsync(y => y.Users);
 
-        var chats = mapper.Map<IEnumerable<GetAllChatModel>>(dataBaseChats.OrderByDescending(x => x.DateCreate));
+        var source = dataBaseChats.OrderByDescending(x => x.DateCreate);
+        var chats = mapper.Map<IEnumerable<GetAllChatModel>>(source);
 
         return chats;
     }

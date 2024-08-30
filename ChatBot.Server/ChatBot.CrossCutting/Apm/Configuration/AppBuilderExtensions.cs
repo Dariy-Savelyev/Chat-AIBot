@@ -8,6 +8,6 @@ public static class AppBuilderExtensions
 {
     public static IApplicationBuilder UseApmTracingMiddleware(this IApplicationBuilder app)
     {
-            return app.UseMiddleware<HttpRequestTracingMiddleware>();
-        }
+        return app.UseMiddleware<HttpRequestTracingMiddleware>();
+    }
 }

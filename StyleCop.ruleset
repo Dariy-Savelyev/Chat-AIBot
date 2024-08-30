@@ -53,6 +53,7 @@
     <Rule Id="IDE0031WithoutSuggestion" Action="Error" />
     <Rule Id="IDE0034" Action="Error" />
     <Rule Id="IDE0034WithoutSuggestion" Action="Error" />
+    <Rule Id="IDE0270" Action="None" />
     <Rule Id="IDE1005" Action="Error" />
     <Rule Id="IDE1005WithoutSuggestion" Action="Error" />
     <Rule Id="IDE1006" Action="Error" />

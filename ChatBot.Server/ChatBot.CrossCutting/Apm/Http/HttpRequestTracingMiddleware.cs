@@ -9,20 +9,20 @@ public class HttpRequestTracingMiddleware(RequestDelegate next, IHttpContextAcce
 {
     public async Task Invoke(HttpContext context)
     {
-            using (LogContext.PushProperty(CUSTOMER_ID_PROPERTY, httpContextAccessor?.HttpContext?.User?.Identity?.Name ?? "Unauthorized", true))
+        using (LogContext.PushProperty(CUSTOMER_ID_PROPERTY, httpContextAccessor?.HttpContext?.User?.Identity?.Name ?? "Unauthorized", true))
+        {
+            var transaction = Agent.Tracer.CurrentTransaction;
+            if (transaction != null)
             {
-                var transaction = Agent.Tracer.CurrentTransaction;
-                if (transaction != null)
-                {
-                    using (LogContext.PushProperty(TRACE_PROPERTY, new { id = transaction.TraceId }, true))
-                    {
-                        await next(context);
-                    }
-                }
-                else
+                using (LogContext.PushProperty(TRACE_PROPERTY, new { id = transaction.TraceId }, true))
                 {
                     await next(context);
                 }
             }
+            else
+            {
+                await next(context);
+            }
         }
+    }
 }

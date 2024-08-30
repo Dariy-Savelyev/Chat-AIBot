@@ -1,14 +1,11 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using ChatBot.Application.ComponentInterfaces;
 using ChatBot.Application.Models;
-using ChatBot.Application.Models.Tokens;
 using ChatBot.Application.ServiceInterfaces;
 using ChatBot.CrossCutting.Constants;
 using ChatBot.CrossCutting.Extensions;
 using ChatBot.Domain.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace ChatBot.Application.Services;
 

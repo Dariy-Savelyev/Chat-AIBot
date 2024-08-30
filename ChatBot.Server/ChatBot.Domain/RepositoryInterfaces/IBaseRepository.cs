@@ -20,7 +20,7 @@ public interface IBaseRepository<TEntity, in TKey> : IRepository
 
     Task<IEnumerable<TEntity>> GetAllAsync<TProperty>(Expression<Func<TEntity, TProperty>> include);
 
-    IEnumerable<TEntity> GetAll(bool asNoTracking = false);
+    IList<TEntity> GetAll(bool asNoTracking = false);
 
     Task<List<TEntity>> GetAllWithExpressionAsync(Expression<Func<TEntity, bool>> where, bool asNoTracking = false);
 

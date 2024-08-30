@@ -14,13 +14,13 @@ public static class HostExtensions
 {
     public static IHostBuilder ConfigureLogging(this IHostBuilder hostBuilder)
     {
-            return hostBuilder.UseElasticApm(
-                new HttpDiagnosticsSubscriber(),
-                new AspNetCoreDiagnosticSubscriber(),
-                new EfCoreDiagnosticsSubscriber(),
-                new SqlClientDiagnosticSubscriber(),
-                new ElasticsearchDiagnosticsSubscriber(),
-                new GrpcClientDiagnosticSubscriber(),
-                new MongoDbDiagnosticsSubscriber());
-        }
+        return hostBuilder.UseElasticApm(
+            new HttpDiagnosticsSubscriber(),
+            new AspNetCoreDiagnosticSubscriber(),
+            new EfCoreDiagnosticsSubscriber(),
+            new SqlClientDiagnosticSubscriber(),
+            new ElasticsearchDiagnosticsSubscriber(),
+            new GrpcClientDiagnosticSubscriber(),
+            new MongoDbDiagnosticsSubscriber());
+    }
 }

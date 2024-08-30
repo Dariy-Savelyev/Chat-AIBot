@@ -1,18 +1,12 @@
 ﻿namespace ChatBot.CrossCutting.Models;
 
-public class ResponseError
+public class ResponseError(string fieldName, IReadOnlyCollection<string> messages)
 {
     public ResponseError(IReadOnlyCollection<string> messages)
         : this(string.Empty, messages)
     {
     }
 
-    public ResponseError(string fieldName, IReadOnlyCollection<string> messages)
-    {
-        FieldName = fieldName;
-        Messages = messages;
-    }
-
-    public string FieldName { get; }
-    public IReadOnlyCollection<string> Messages { get; }
+    public string FieldName { get; } = fieldName;
+    public IReadOnlyCollection<string> Messages { get; } = messages;
 }

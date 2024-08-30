@@ -4,22 +4,16 @@ using System.Text.Json;
 
 namespace ChatBot.Web.Middlewares;
 
-internal sealed class ExceptionHandlingMiddleware
+internal sealed class ExceptionHandlingMiddleware(RequestDelegate next)
 {
-    private readonly RequestDelegate _next;
     private ILogger<ExceptionHandlingMiddleware> _logger;
-
-    public ExceptionHandlingMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
 
     public async Task InvokeAsync(HttpContext context)
     {
         _logger = context.RequestServices.GetService<ILogger<ExceptionHandlingMiddleware>>()!;
         try
         {
-            await _next(context);
+            await next(context);
         }
         catch (Exception e)
         {

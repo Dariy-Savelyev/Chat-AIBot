@@ -6,22 +6,16 @@ using System.Linq.Expressions;
 
 namespace ChatBot.Domain.Repositories;
 
-public abstract class BaseRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey>
-        where TEntity : class, IBaseDomainModel<TKey>
+public abstract class BaseRepository<TEntity, TKey>(ApplicationContext context) : IBaseRepository<TEntity, TKey>
+    where TEntity : class, IBaseDomainModel<TKey>
 {
-    protected BaseRepository(ApplicationContext context)
-    {
-        Context = context ?? throw new NullReferenceException();
-        TableOriginal = context.Set<TEntity>();
-    }
-
     protected string TableName => typeof(TEntity).Name;
 
-    protected DbSet<TEntity> TableOriginal { get; }
+    protected DbSet<TEntity> TableOriginal { get; } = context.Set<TEntity>();
 
     protected virtual IQueryable<TEntity> Table => TableOriginal;
 
-    protected ApplicationContext Context { get; }
+    protected ApplicationContext Context { get; } = context ?? throw new NullReferenceException();
 
     public virtual async Task<TEntity?> GetByIdAsync(TKey id)
     {
@@ -70,7 +64,7 @@ public abstract class BaseRepository<TEntity, TKey> : IBaseRepository<TEntity, T
         return await Table.Include(include).ToListAsync().ConfigureAwait(false);
     }
 
-    public IEnumerable<TEntity> GetAll(bool asNoTracking = false)
+    public IList<TEntity> GetAll(bool asNoTracking = false)
     {
         var queryable = Table;
         if (asNoTracking)

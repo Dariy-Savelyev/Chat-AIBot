@@ -4,11 +4,11 @@ public static class TracingExtensions
 {
     public static object GetContainerTraceData()
     {
-            return new
-            {
-                id = Environment.MachineName
-            };
-        }
+        return new
+        {
+            id = Environment.MachineName
+        };
+    }
 
     public static object GetHostTraceData()
     {

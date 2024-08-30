@@ -35,8 +35,8 @@ public class ApmEnricher(IHostEnvironment hostEnvironment) : ILogEventEnricher
 
     private void AddEnvironment(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
     {
-            var property = propertyFactory.CreateProperty(TRACE_ENVIRONMENT, hostEnvironment.EnvironmentName);
+        var property = propertyFactory.CreateProperty(TRACE_ENVIRONMENT, hostEnvironment.EnvironmentName);
 
-            logEvent.AddPropertyIfAbsent(property);
-        }
+        logEvent.AddPropertyIfAbsent(property);
+    }
 }

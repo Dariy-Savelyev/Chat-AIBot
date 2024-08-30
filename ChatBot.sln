@@ -19,7 +19,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		StyleCop.ruleset = StyleCop.ruleset
+		VERSION = VERSION
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.Application.Tests", "ChatBot.Server\Tests\ChatBot.Application.Tests\ChatBot.Application.Tests.csproj", "{A1A59EE1-76D1-4A37-81DE-CC8A1FD44A68}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{AEE31056-535B-4939-9187-E590AB4C4398}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,9 +58,16 @@ Global
 		{532F4208-DED1-448B-889E-E5B8E94F6174}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{532F4208-DED1-448B-889E-E5B8E94F6174}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{532F4208-DED1-448B-889E-E5B8E94F6174}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1A59EE1-76D1-4A37-81DE-CC8A1FD44A68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1A59EE1-76D1-4A37-81DE-CC8A1FD44A68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1A59EE1-76D1-4A37-81DE-CC8A1FD44A68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1A59EE1-76D1-4A37-81DE-CC8A1FD44A68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A1A59EE1-76D1-4A37-81DE-CC8A1FD44A68} = {AEE31056-535B-4939-9187-E590AB4C4398}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B7CC2115-2DEA-453E-9F5C-2D34F1DC9E48}

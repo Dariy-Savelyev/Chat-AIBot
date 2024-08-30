@@ -46,6 +46,8 @@ tests:
   stage: test
   script:
     - 'dotnet test ChatBot.sln -p:BuildInParallel=false -m:1 --no-restore'
+  tags:
+    - win
   except:
   - master
   - tags

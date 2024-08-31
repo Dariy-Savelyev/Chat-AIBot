@@ -93,6 +93,6 @@ public class ChatServiceTests
         Assert.Equal(2, result.First().Id);
         Assert.Equal(1, result.Last().Id);
         _mockChatRepository.Verify(r => r.GetAllAsync(It.IsAny<Expression<Func<Chat, ICollection<User>>>>()), Times.Once);
-        _mockMapper.Verify(m => m.Map<IEnumerable<GetAllChatModel>>(It.Is<IEnumerable<Chat>>(c =>            c.First().Id == orderedChats.First().Id && c.Last().Id == orderedChats.Last().Id)), Times.Once);
+        _mockMapper.Verify(m => m.Map<IEnumerable<GetAllChatModel>>(It.Is<IEnumerable<Chat>>(c => c.First().Id == orderedChats.First().Id && c.Last().Id == orderedChats.Last().Id)), Times.Once);
     }
 }

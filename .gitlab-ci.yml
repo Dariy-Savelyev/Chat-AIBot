@@ -30,7 +30,6 @@ cache:
   policy: pull-push
 
 before_script:
-  - 'dotnet nuget locals all --clear'
   - 'dotnet restore ChatBot.sln --packages $NUGET_PACKAGES_DIRECTORY'
 
 build:

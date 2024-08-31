@@ -7,7 +7,6 @@ using ChatBot.CrossCutting.Exceptions;
 using ChatBot.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Moq;
-using System.Linq;
 
 namespace ChatBot.Application.Tests.Services;
 

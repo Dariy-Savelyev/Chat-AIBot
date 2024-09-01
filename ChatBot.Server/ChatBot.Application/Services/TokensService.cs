@@ -1,6 +1,4 @@
-﻿using Azure.Core;
-using ChatBot.Application.ComponentInterfaces;
-using ChatBot.Application.Models.Tokens;
+﻿using ChatBot.Application.ComponentInterfaces;
 using ChatBot.Application.ServiceInterfaces;
 using ChatBot.CrossCutting.Extensions;
 using ChatBot.Domain.Models;

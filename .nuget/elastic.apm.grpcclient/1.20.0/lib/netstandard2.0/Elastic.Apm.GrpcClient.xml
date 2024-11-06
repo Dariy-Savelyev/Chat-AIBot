@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<doc>
-    <assembly>
-        <name>Elastic.Apm.GrpcClient</name>
-    </assembly>
-    <members>
-    </members>
-</doc>
